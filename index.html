@@ -18,6 +18,13 @@
     <meta name="apple-mobile-web-app-title" content="ALGORAD.IO">
     <meta name="theme-color" content="#000000">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+        corePlugins: {
+            animation: false
+        }
+    }
+    </script>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -52,7 +59,7 @@
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #00000020; border-radius: 10px; }
 
 
-        .animate-overlay-in { animation: overlayIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .animate-overlay-in { animation: overlayIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards !important; }
         @keyframes overlayIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
 
@@ -68,11 +75,11 @@
         }
 
 
-        .animate-in { animation: fadein 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+        .animate-in { animation: fadein 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards !important; }
         @keyframes fadein { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
 
-        .animate-vibrate { animation: vibrate 3.5s ease-in-out infinite; }
+        .animate-vibrate { animation: vibrate 3.5s ease-in-out infinite !important; }
         @keyframes vibrate {
           0%, 100% { transform: translateZ(0) scale(1); }
           50% { transform: translateZ(6px) scale(1.01); }
@@ -87,25 +94,25 @@
         }
 
 
-        .animate-flip-y { animation: flip-3d-y 0.9s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .animate-flip-y { animation: flip-3d-y 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) !important; }
         @keyframes flip-3d-y { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
 
 
-        .animate-flip-y-reverse { animation: flip-3d-y-reverse 0.9s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .animate-flip-y-reverse { animation: flip-3d-y-reverse 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) !important; }
         @keyframes flip-3d-y-reverse { from { transform: rotateY(0deg); } to { transform: rotateY(-360deg); } }
 
 
-        .animate-flip-x { animation: flip-3d-x 0.9s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .animate-flip-x { animation: flip-3d-x 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) !important; }
         @keyframes flip-3d-x { from { transform: rotateX(0deg); } to { transform: rotateX(360deg); } }
 
 
-        .animate-flip-x-reverse { animation: flip-3d-x-reverse 0.9s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .animate-flip-x-reverse { animation: flip-3d-x-reverse 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) !important; }
         @keyframes flip-3d-x-reverse { from { transform: rotateX(0deg); } to { transform: rotateX(-360deg); } }
 
 
         .coin-container { perspective: 1200px; }
         @keyframes coin-spin { from { transform: rotateZ(0deg); } to { transform: rotateZ(360deg); } }
-        .coin-spinning { animation: coin-spin 8s linear infinite; transform-style: preserve-3d; }
+        .coin-spinning { animation: coin-spin 8s linear infinite !important; transform-style: preserve-3d; }
         button:focus, a:focus { outline: none !important; }
         
         /* Custom Slider Styling */
