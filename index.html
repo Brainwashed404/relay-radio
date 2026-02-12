@@ -1,0 +1,1749 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALGORAD.IO | Internet Radio</title>
+    <link rel="apple-touch-icon" href="/icons/icon-180x180.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180x180.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png">
+    <link rel="apple-touch-icon-precomposed" href="/icons/icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-96x96.png">
+    <meta property="og:image" content="/icons/icon-512x512.png">
+    <meta name="msapplication-TileImage" content="/icons/icon-144x144.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ALGORAD.IO">
+    <meta name="theme-color" content="#000000">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Young+Serif&display=swap');
+
+
+        :root {
+            --bg: #fcfcf5;
+            --teal: #7ec2ad;
+            --teal-dark: #4a8b78;
+            --yellow: #e5b84a;
+            --black: #000000;
+        }
+
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background-color: var(--bg);
+            margin: 0;
+            overflow: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+
+        .font-young-serif { font-family: 'Young Serif', serif; }
+
+
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #00000020; border-radius: 10px; }
+
+
+        .animate-overlay-in { animation: overlayIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes overlayIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+
+        .animate-brand-kinetic {
+          opacity: 0;
+          animation: brandKinetic 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+        @keyframes brandKinetic {
+          0% { opacity: 0; transform: translateY(10px) scale(0.95); background-color: var(--teal); }
+          30% { background-color: var(--yellow); }
+          60% { background-color: var(--black); color: var(--bg); }
+          100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+
+        .animate-in { animation: fadein 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+        @keyframes fadein { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+
+        .animate-vibrate { animation: vibrate 3.5s ease-in-out infinite; }
+        @keyframes vibrate {
+          0%, 100% { transform: translateZ(0) scale(1); }
+          50% { transform: translateZ(6px) scale(1.01); }
+        }
+
+
+        /* Pulse Mode Animation */
+        .animate-pulse-beat { animation: pulse-beat 0.5s ease-in-out infinite alternate; }
+        @keyframes pulse-beat {
+            0% { transform: scale(0.95); }
+            100% { transform: scale(1.05); }
+        }
+
+
+        .animate-flip-y { animation: flip-3d-y 0.9s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        @keyframes flip-3d-y { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
+
+
+        .animate-flip-y-reverse { animation: flip-3d-y-reverse 0.9s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        @keyframes flip-3d-y-reverse { from { transform: rotateY(0deg); } to { transform: rotateY(-360deg); } }
+
+
+        .animate-flip-x { animation: flip-3d-x 0.9s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        @keyframes flip-3d-x { from { transform: rotateX(0deg); } to { transform: rotateX(360deg); } }
+
+
+        .animate-flip-x-reverse { animation: flip-3d-x-reverse 0.9s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        @keyframes flip-3d-x-reverse { from { transform: rotateX(0deg); } to { transform: rotateX(-360deg); } }
+
+
+        .coin-container { perspective: 1200px; }
+        @keyframes coin-spin { from { transform: rotateZ(0deg); } to { transform: rotateZ(360deg); } }
+        .coin-spinning { animation: coin-spin 8s linear infinite; transform-style: preserve-3d; }
+        button:focus, a:focus { outline: none !important; }
+        
+        /* Custom Slider Styling */
+        .coin-slider-lg {
+            -webkit-appearance: none;
+            appearance: none;
+            background: transparent;
+            outline: none;
+            height: 24px;
+        }
+        .coin-slider-lg::-webkit-slider-runnable-track {
+            height: 4px;
+            background: var(--teal);
+            border-radius: 4px;
+        }
+        .coin-slider-lg::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--teal);
+            margin-top: -10px;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        .coin-slider-lg::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+
+        @media (hover: hover) {
+            .coin-btn:hover .coin-icon-hover { opacity: 0.8 !important; }
+            .group:hover .coin-icon-hover { opacity: 0.8 !important; }
+        }
+
+
+        /* Shape Classes */
+        .shape-circle { border-radius: 9999px; }
+
+        /* Pulse Ripple Animation */
+        @keyframes pulse-ripple {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            50% { opacity: 0.3; }
+            100% { transform: scale(3.5); opacity: 0; }
+        }
+
+        /* Bloom Background Blob Animations */
+        @keyframes bloom-blob-1 {
+            0%, 100% { transform: translate(-30px, -25px) scale(1); opacity: 0.6; }
+            33% { transform: translate(-40px, 10px) scale(1.15); opacity: 0.9; }
+            66% { transform: translate(-15px, -35px) scale(1.08); opacity: 0.7; }
+        }
+        @keyframes bloom-blob-2 {
+            0%, 100% { transform: translate(25px, 20px) scale(1); opacity: 0.5; }
+            33% { transform: translate(35px, -10px) scale(1.12); opacity: 0.8; }
+            66% { transform: translate(10px, 30px) scale(1.18); opacity: 0.65; }
+        }
+
+
+        /* Raised button hover logic */
+        .raised-button {
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+            color: var(--black) !important;
+            background-color: var(--bg);
+        }
+        .raised-button.selected {
+            background-color: var(--black) !important;
+            color: var(--bg) !important;
+        }
+        
+        @media (hover: hover) {
+            .raised-button:hover:not(.selected) {
+                background-color: var(--black) !important;
+                color: var(--bg) !important;
+                transform: translateY(-4px) !important;
+                box-shadow: 0 12px 24px rgba(0,0,0,0.15) !important;
+            }
+        }
+
+
+        header#header, .header, footer#footer, .footer { display: none !important; }
+        #root, .fixed.inset-0 { top: 0 !important; height: 100vh !important; }
+
+
+        @media (max-height: 500px) and (orientation: landscape) {
+            .short\:landscape\:h-\[20vh\] { height: 30vh !important; }
+            .short\:landscape\:text-4xl { font-size: 2.5rem !important; line-height: 2.5rem !important; }
+            .short\:landscape\:pt-8 { padding-top: 0.75rem !important; }
+            .short\:landscape\:mt-1 { margin-top: 0.25rem !important; }
+            .short\:landscape\:text-\[8px\] { font-size: 10px !important; line-height: 1.2 !important; opacity: 0.5 !important; }
+            .short\:landscape\:scale-75 { transform: scale(0.65) !important; }
+            
+            footer { 
+                padding-bottom: 0.25rem !important; 
+                min-height: 0 !important;
+                justify-content: flex-end !important;
+            }
+            .landscape-button-spacing {
+                margin-bottom: 0.25rem !important;
+                gap-y: 0 !important;
+                gap-x: 1rem !important;
+                display: flex !important;
+                flex-direction: row !important;
+            }
+            
+            .landscape-mood-grid { grid-template-columns: repeat(6, minmax(0, 1fr)) !important; }
+            .landscape-mood-container { padding-top: 1rem !important; padding-bottom: 2rem !important; }
+            .landscape-mood-title { margin-bottom: 0.75rem !important; font-size: 1.25rem !important; margin-top: 0 !important; }
+            
+            .mobile-landscape-hidden { display: none !important; }
+            .mobile-landscape-only { display: flex !important; }
+        }
+    </style>
+</head>
+<body id="app-body">
+    <div id="root"></div>
+
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef, useMemo, useCallback } = React;
+
+
+        const COIN_LOGO = 'data:image/png;base64,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';
+
+
+        /* ============================================================
+         * SECTION 1: DATA
+         * ============================================================ */
+
+
+        const MOODS = [
+            { emoji: "🥹", label: "Tender" }, { emoji: "🤪", label: "Pumped" },
+            { emoji: "🤯", label: "Weird" }, { emoji: "😴", label: "Low-energy" },
+            { emoji: "😎", label: "Confident" }, { emoji: "🧐", label: "Curious" },
+            { emoji: "☀️", label: "Clear" }, { emoji: "❄️", label: "Cold" },
+            { emoji: "☔️", label: "Rainy" },
+            { emoji: "💪", label: "Exercise" }, { emoji: "🚗", label: "Driving" }, { emoji: "🧑‍🍳", label: "Cooking" }
+        ];
+
+
+        const GENRES = [
+            "AMBIENT + CHILLOUT", "Classical", "Dub + Reggae", "Eclectic",
+            "ELECTRONIC + IDM", "Hip Hop + RnB", "HOUSE + UKG", "Jazz",
+            "JUNGLE + D'N'B", "Legends", "Rock + Indie", "Soul + Oldies"
+        ];
+
+
+        const GENRE_EMOJIS = {
+            "AMBIENT + CHILLOUT": "🔮", "Classical": "🎻", "Dub + Reggae": "🌴",
+            "Eclectic": "🧩", "ELECTRONIC + IDM": "⚡️", "Hip Hop + RnB": "🎤",
+            "HOUSE + UKG": "🏠", "Jazz": "🎷", "JUNGLE + D'N'B": "🚨",
+            "Legends": "🙌", "Rock + Indie": "🤘", "Soul + Oldies": "🕰️"
+        };
+
+
+        const INSPIRATION_LINKS = [
+            { name: "Cities and Memory", desc: "Stuart Fowkes\u2019s global sound map presents both the reality of a location and its imagined alternative. Each entry features a faithful field recording and a reimagined remix, creating a collaborative archive that explores the relationship between sound, geography, and human memory.", url: "https://citiesandmemory.com/" },
+            { name: "Drive & Listen", desc: "Erkam \u015Eeker\u2019s project allows you to virtually cruise through global cities via a dashboard camera paired with local radio. By combining high-definition street footage with live broadcasts, it captures the mundane beauty of everyday life and the unique atmosphere of being a passenger in a foreign land.", url: "https://driveandlisten.herokuapp.com/" },
+            { name: "Five Radio Stations", desc: "Seb Emina and Silvia Guerra present a group show comprising five artworks that also function as live radio stations. Although they are automated, the stations are not on-demand but streamed as live, meaning each listener hears the same thing at the same time as an invisible community of other people.", url: "https://www.fiveradiostations.com/" },
+            { name: "FMSTREAM", desc: "Gunther Zeilinger\u2019s fast, independent database project provides direct access to real stream sources for thousands of global stations. By focusing on bitrates, sample rates, and signal integrity rather than app-based wrappers, it serves as one of the world\u2019s most comprehensive tools for technical broadcast enthusiasts and high-fidelity listeners.", url: "https://fmstream.org/" },
+            { name: "Lofi.cafe", desc: "Fabrizio Rinaldi and Maria Di Vincenzo\u2019s Lofi.cafe minimalist tool gathers the best lofi music streams into a single, distraction-free interface. Designed for focus, the project uses simple keyboard shortcuts to flip through curated channels paired with retro GIF backdrops to create a cosy digital sanctuary for work.", url: "https://lofi.cafe/" },
+            { name: "MTV Rewind", desc: "Flexasaurus Rex recreates MTV\u2019s golden era with over 88,000 music videos across 56 channels. Built with zero ads, the project focuses on cultural preservation and the shared experience of broadcast television, featuring original commercials and Easter eggs to restore the format of human-curated media.", url: "https://wantmymtv.vercel.app/" },
+            { name: "Poolsuite FM", desc: "Marty Bell\u2019s virtual holiday portal is like living in a sun-drenched, 1980s summer. Using a retro Macintosh-inspired interface, it streams upbeat disco and electronic tracks alongside grainy VHS footage to transport listeners to a permanent state of leisure.", url: "https://poolsuite.net/" },
+            { name: "Project Random", desc: "Putting the web on shuffle by randomising the algorithms behind social media and streaming platforms, it unearths obscure content you might otherwise never see. It gives forgotten, unseen media from the depths of the internet a chance to be rediscovered by someone, somewhere in the world.", url: "https://0xbeef.co.uk/random/radio" },
+            { name: "Radio Garden", desc: "Jonathan Puckey\u2019s project invites you to explore live radio from across the globe via a cartographic window into the world\u2019s airwaves. By bringing distant voices close, it connects people across borders, allowing listeners to discover new cultures or re-connect with home from thousands of miles away.", url: "https://radio.garden/" },
+            { name: "Radiooooo", desc: "Benjamin Moreau and Noemi Ferst\u2019s iconic musical time machine allows users to select a country and a decade to hear what was playing there at that time. This collaborative project draws from a global library of music to open horizons through culture and beauty, encouraging users to discover timeless treasures from the collective memory of humanity.", url: "https://app.radiooooo.com/" },
+            { name: "RADIORADIORADIO", desc: "Peter Maxwell\u2019s project creates a beautiful, static filled exploratory mode for travelling between a vast array of today\u2019s independent internet radio stations. It is designed to encourage a more meditative and intentional way of listening to the global broadcasting landscape through a minimalist, tactile interface. It\u2019s a joy to zone out to.", url: "https://radioradiorad.io/" },
+            { name: "Sounds of the Forest", desc: "Wild Rumpus\u2019s growing soundmap bringing together the aural tones and textures of woodlands from all around the world. Supported by Arts Council England, it collects these unique environmental recordings to create a permanent, immersive record of nature\u2019s diverse and fragile ecosystems.", url: "https://timberfestival.org.uk/soundsoftheforest-soundmap/" },
+            { name: "Wild Memory Radio", desc: "Seb Emina has created a gallery that stores memories tied to specific locations rather than physical objects. It explores the \u201csense of place\u201d by pairing human narratives with AI-generated approximations of the locations and memories described.", url: "https://wild-memory-radio.wetransfer.com/" }
+        ];
+
+
+        const STATIONS = [
+            // ... (Stations data unchanged) ...
+            { name: "Dinamo Sleep", url: "https://channels.dinamo.fm/sleep-aac32", sourceUrl: "https://dinamo.fm/content/4/channels/", desc: "Lullabies for adults. Our selection of the best ambient electronica.", genre: "AMBIENT + CHILLOUT", moods: ["🥹", "😴", "❄️", "☔️"] },
+            { name: "NTS Field Recordings", url: "https://stream-mixtape-geo.ntslive.net/mixtape23", sourceUrl: "https://www.nts.live/infinite-mixtapes/field-recordings", desc: "Natural ambience and environmental sounds.", genre: "AMBIENT + CHILLOUT", moods: ["🤯"] },
+            { name: "NTS Labyrinth", url: "https://stream-mixtape-geo.ntslive.net/mixtape31", sourceUrl: "https://www.nts.live/infinite-mixtapes/labyrinth", desc: "Dark, atmospheric, and experimental \"void\" music.", genre: "AMBIENT + CHILLOUT", moods: ["🤪"] },
+            { name: "NTS Slow Focus", url: "https://stream-mixtape-geo.ntslive.net/mixtape", sourceUrl: "https://www.nts.live/infinite-mixtapes/slow-focus", desc: "Meditative and beatless: ambient, drone, and ragas.", genre: "AMBIENT + CHILLOUT", moods: ["😴", "🧐"] },
+            { name: "Radio Azathoth Revival", url: "https://cast4.asurahosting.com/proxy/aadu/stream", sourceUrl: "https://cast4.asurahosting.com/start/aadu/", desc: "Atmospheric mixes inspired by cosmic chaos.", genre: "AMBIENT + CHILLOUT", moods: ["🤯", "🧐", "❄️", "☔️"] },
+            { name: "Resonance Extra", url: "https://stream.resonance.fm/resonance-extra", sourceUrl: "https://extra.resonance.fm", desc: "Dedicated strictly to sound art and experimental musics.", genre: "AMBIENT + CHILLOUT", moods: ["🤯", "🧐"] },
+            { name: "Resonance FM", url: "https://stream.resonance.fm/resonance", sourceUrl: "https://www.resonancefm.com", desc: "London's artist-led broadcast for experimental music.", genre: "AMBIENT + CHILLOUT", moods: ["🤯", "🧐"] },
+            { name: "SomaFM Deep Space One", url: "https://ice.somafm.com/deepspaceone", sourceUrl: "https://somafm.com/deepspaceone/", desc: "Deep ambient electronic and experimental space music.", genre: "AMBIENT + CHILLOUT", moods: ["🤯", "🧐", "❄️"] },
+            { name: "SomaFM Drone Zone", url: "https://ice.somafm.com/dronezone", sourceUrl: "https://somafm.com/dronezone", desc: "Served best chilled. Atmospheric textures with minimal beats.", genre: "AMBIENT + CHILLOUT", moods: ["😴"] },
+            { name: "SomaFM Groove Salad", url: "https://ice.somafm.com/groovesalad", sourceUrl: "https://somafm.com/groovesalad", desc: "Downtempo beats and chilled grooves.", genre: "AMBIENT + CHILLOUT", moods: ["🧐"] },
+            { name: "SomaFM Mission Control", url: "https://ice.somafm.com/missioncontrol", sourceUrl: "https://somafm.com/missioncontrol", desc: "Ambient music mixed with real-time NASA audio.", genre: "AMBIENT + CHILLOUT", moods: [] },
+            { name: "SomaFM Space Station Soma", url: "https://ice.somafm.com/spacestation", sourceUrl: "https://somafm.com/spacestation", desc: "Tune in, turn on, space out. Ambient electronica.", genre: "AMBIENT + CHILLOUT", moods: ["🤯", "😴", "🧐"] },
+            { name: "NTS Sheet Music", url: "https://stream-mixtape-geo.ntslive.net/mixtape35", sourceUrl: "https://www.nts.live/infinite-mixtapes/sheet-music", desc: "The best of classical and contemporary composition.", genre: "Classical", moods: ["🥹", "🧐", "❄️"] },
+            { name: "Radio Swiss Classic", url: "https://livestreaming-node-2.srg-ssr.ch/srgssr/rsc_de/mp3/128", sourceUrl: "https://www.radioswissclassic.ch/en", desc: "Classic Music. 50% Swiss Artists.", genre: "Classical", moods: ["😴", "❄️", "☔️"] },
+            { name: "WFMT", url: "https://wfmt.streamguys1.com/main-mp3", sourceUrl: "https://www.wfmt.com/", desc: "Chicago's fine arts and classical station.", genre: "Classical", moods: ["🥹", "❄️"] },
+            { name: "Your Classical", url: "https://cms.stream.publicradio.org/cms.mp3", sourceUrl: "https://www.yourclassical.org/", desc: "Minneapolis's Best Classical Music station.", genre: "Classical", moods: ["☔️"] },
+            { name: "Dr Dick's Dub Shack", url: "https://streamer.radio.co/s0635c8b0d/listen", sourceUrl: "https://drdicksdubshack.com/index.html", desc: "Bermuda-based broadcast playing all species of dub.", genre: "Dub + Reggae", moods: ["😎", "☀️"] },
+            { name: "NTS Island Time", url: "https://stream-mixtape-geo.ntslive.net/mixtape21", sourceUrl: "https://www.nts.live/infinite-mixtapes/island-time", desc: "Easy skanking with reggae, dub, and rocksteady.", genre: "Dub + Reggae", moods: [] },
+            { name: "Only Dub Radio", url: "https://puma.streemlion.com:5500/stream", sourceUrl: "https://www.dubsideradio.com/", desc: "Jamaican pioneers to the new generation of global sound systems.", genre: "Dub + Reggae", moods: ["😎", "☀️", "🧑‍🍳"] },
+            { name: "Reggae Arte", url: "https://listen.radioking.com/radio/269104/stream/314461", sourceUrl: "https://reggaearte.wixsite.com/accueil", desc: "Roots and Dub diffusion featuring exclusive soundsystem sessions.", genre: "Dub + Reggae", moods: ["😎", "☀️"] },
+            { name: "SomaFM Heavyweight Reggae", url: "https://ice.somafm.com/reggae", sourceUrl: "https://somafm.com/reggae", desc: "Reggae, Ska, and Rocksteady classic deep tracks.", genre: "Dub + Reggae", moods: ["😎", "☀️"] },
+            { name: "20FT Radio", sortName: "Twenty FT Radio", url: "https://20ft-radio.radiocult.fm/stream", sourceUrl: "https://20ftradio.net/", desc: "Ukraine-based platform sharing music from all over the world.", genre: "Eclectic", moods: ["🤪", "💪"] },
+            { name: "Cashmere Radio", url: "https://cashmereradio.out.airtime.pro:8000/cashmereradio_b", sourceUrl: "https://cashmereradio.com", desc: "Berlin-based not-for-profit community station.", genre: "Eclectic", moods: ["🧐"] },
+            { name: "Dublab", url: "https://dublab.out.airtime.pro:8000/dublab_a", sourceUrl: "https://dublab.com", desc: "Forward-thinking \"future roots\" radio blending global soul.", genre: "Eclectic", moods: ["🧐"] },
+            { name: "EHFM", url: "https://ehfm.out.airtime.pro:8000/ehfm_a", sourceUrl: "https://ehfm.live", desc: "Community radio showcasing the sounds of Scotland's capital.", genre: "Eclectic", moods: ["🤪", "🧐"] },
+            { name: "Heady.FM", url: "https://c22.radioboss.fm:18364/stream", sourceUrl: "https://heady.fm", desc: "Transmissions from beyond.", genre: "Eclectic", moods: ["🧐"] },
+            { name: "LYL Radio", url: "https://icecast.lyl.live/live", sourceUrl: "https://lyl.live", desc: "Cultural project promoting sound exploration.", genre: "Eclectic", moods: ["🧐"] },
+            { name: "NTS 1", url: "https://stream-relay-geo.ntslive.net/stream", sourceUrl: "https://www.nts.live", apiId: "1", desc: "Live from London, Manchester, LA and beyond.", genre: "Eclectic", moods: ["😎", "🧐", "🚗", "🧑‍🍳"] },
+            { name: "NTS 2", url: "https://stream-relay-geo.ntslive.net/stream2", sourceUrl: "https://www.nts.live", apiId: "2", desc: "Live from London, Manchester, LA and beyond.", genre: "Eclectic", moods: ["🧐", "🚗", "🧑‍🍳"] },
+            { name: "NTS Otaku", url: "https://stream-mixtape-geo.ntslive.net/mixtape36", sourceUrl: "https://www.nts.live/infinite-mixtapes/otaku", desc: "Video game and anime soundtracks.", genre: "Eclectic", moods: ["🤯", "🧐"] },
+            { name: "NTS Poolside", url: "https://stream-mixtape-geo.ntslive.net/mixtape4", sourceUrl: "https://www.nts.live/infinite-mixtapes/poolside", desc: "Balearic, boogie, and sophisti-pop for beaches.", genre: "Eclectic", moods: ["😎", "☀️", "🚗", "🧑‍🍳"] },
+            { name: "Radio Buena Vida", url: "https://s4.radio.co/s69b281ac0/listen", sourceUrl: "https://www.buenavida.co.uk", desc: "Glasgow community radio broadcasting everything from experimental to disco.", genre: "Eclectic", moods: ["🧐"] },
+            { name: "Soho Radio", url: "https://sohoradiomusic.doughunt.co.uk:8010/128mp3", sourceUrl: "https://www.sohoradiolondon.com", desc: "Grass-roots amplifier for music and culture.", genre: "Eclectic", moods: ["🧐", "☀️"] },
+            { name: "SomaFM Fluid", url: "https://ice.somafm.com/fluid", sourceUrl: "https://somafm.com/fluid", desc: "Instrumental hiphop, future soul and liquid trap.", genre: "Eclectic", moods: ["🧐"] },
+            { name: "SomaFM Suburbs of Goa", url: "https://ice.somafm.com/suburbsofgoa", sourceUrl: "https://somafm.com/suburbsofgoa", desc: "Desi sounds and beyond. The future of the Eastern world.", genre: "Eclectic", moods: ["🤯", "🧐"] },
+            { name: "WFMU - Give the Drummer Radio", url: "https://stream0.wfmu.org/drummer.mp3", sourceUrl: "https://wfmu.org/drummer", desc: "Freeform web stream curated by WFMU's long-running show.", genre: "Eclectic", moods: ["🧐"] },
+            { name: "WFMU", url: "https://stream0.wfmu.org/freeform-128k.mp3", sourceUrl: "https://wfmu.org", desc: "Freeform radio featuring flat-out uncategorisable strangeness.", genre: "Eclectic", moods: ["🧐"] },
+            { name: "Dinamo Discotheque", url: "https://channels.dinamo.fm/discotheque-aac32", sourceUrl: "https://channels.dinamo.fm/discotheque-aac32", desc: "Let's go back to Studio 54.", genre: "ELECTRONIC + IDM", moods: ["😎", "☀️", "🚗", "🧑‍🍳"] },
+            { name: "SomaFM Beat Blender", url: "https://ice.somafm.com/beatblender", sourceUrl: "https://somafm.com/beatblender", desc: "Late-night blend of deep house and downtempo chill.", genre: "ELECTRONIC + IDM", moods: ["🧐"] },
+            { name: "SomaFM Cliqhop idm", url: "https://ice.somafm.com/cliqhop", sourceUrl: "https://somafm.com/cliqhop", desc: "Blips'n'beeps backed mostly with beats.", genre: "ELECTRONIC + IDM", moods: ["🧐", "❄️"] },
+            { name: "SomaFM Lush", url: "https://ice.somafm.com/lush", sourceUrl: "https://somafm.com/lush", desc: "Sensuous and mellow female vocals.", genre: "ELECTRONIC + IDM", moods: [] },
+            { name: "SomaFM Underground 80s", url: "https://ice.somafm.com/u80s", sourceUrl: "https://somafm.com/u80s", desc: "Early 80s UK Synthpop and New Wave.", genre: "ELECTRONIC + IDM", moods: ["🧐"] },
+            { name: "SomaFM Vaporwaves", url: "https://ice.somafm.com/vaporwaves", sourceUrl: "https://somafm.com/vaporwaves/", desc: "Hazy, nostalgic, and digitally processed sounds.", genre: "ELECTRONIC + IDM", moods: ["🧐"] },
+            { name: "90s 90s Hip Hop Rap", sortName: "Ninety 90s Hip Hop Rap", url: "https://regiocast.streamabc.net/regc-90s90shiphop9858510-mp3-192-3156332", sourceUrl: "https://www.90s90s.de/", desc: "Germany's Finest Boom Bap Station.", genre: "Hip Hop + RnB", moods: ["😎", "☀️", "🚗"] },
+            { name: "98DABOMB", sortName: "Ninety Eight DABOMB", url: "https://stream-175.zeno.fm/csqp40hg97nuv", sourceUrl: "https://zeno.fm/radio/98dabomb/", desc: "Arkansas' premier rap and RnB radio station.", genre: "Hip Hop + RnB", moods: ["😎", "☀️"] },
+            { name: "All Underground Hip Hop Radio", url: "https://n07.radiojar.com/c1912tk5rtzuv?rj-ttl=5&rj-tok=AAABnELC9IYAPYf1fRlIjxVbXA", sourceUrl: "https://musizman46.wixsite.com/allundergroundhiphop", desc: "Tru Underground Hip Hop from the 90's to the Present!", genre: "Hip Hop + RnB", moods: ["😎", "☀️"] },
+            { name: "Illsoundvibe", url: "https://15113.live.streamtheworld.com/SAM03AAC73.aac", sourceUrl: "https://illsoundvibe.com", desc: "Classic hip hop, from then to now.", genre: "Hip Hop + RnB", moods: ["🤪", "😎", "☀️", "🚗", "🧑‍🍳"] },
+            { name: "Jump 97.1", url: "https://n04.radiojar.com/swyduw8d41zuv?rj-ttl=5&rj-tok=AAABnEKfLjYA06eiDZm-wXTozw", sourceUrl: "https://www.lit971.com/", desc: "Knoxville's New Totally LIT station for Hip Hop and RnB.", genre: "Hip Hop + RnB", moods: ["🤪", "😎", "🚗"] },
+            { name: "NTS Low Key", url: "https://stream-mixtape-geo.ntslive.net/mixtape2", sourceUrl: "https://www.nts.live/infinite-mixtapes/100-percent-hip-hop", desc: "Pure rap and hip-hop culture, past and present.", genre: "Hip Hop + RnB", moods: ["😎", "☀️"] },
+            { name: "Vibe 92.7", url: "https://radio.thisisarealdomain.com/WMXR-LP", sourceUrl: "https://vibe927miami.com/", desc: "Classic Hip-Hop lives in Miami.", genre: "Hip Hop + RnB", moods: ["🤪"] },
+            { name: "WEFUNK", url: "https://s-09.wefunkradio.com:8000/wefunk64.mp3", sourceUrl: "https://www.wefunkradio.com", desc: "Legendary funk, soul and hip-hop radio show.", genre: "Hip Hop + RnB", moods: ["😎", "☀️", "🚗", "🧑‍🍳"] },
+            { name: "NTS 4 To The Floor", url: "https://stream-mixtape-geo.ntslive.net/mixtape5", sourceUrl: "https://www.nts.live/infinite-mixtapes/4-to-the-floor", desc: "Non-stop house and techno from past to present.", genre: "HOUSE + UKG", moods: ["🤪", "💪"] },
+            { name: "NTS Sweat", url: "https://stream-mixtape-geo.ntslive.net/mixtape24", sourceUrl: "https://www.nts.live/infinite-mixtapes/sweat", desc: "High-energy international party music and club sounds.", genre: "HOUSE + UKG", moods: ["🤪", "💪"] },
+            { name: "Pure FM", url: "https://phoebe.streamerr.co:1140/;", sourceUrl: "https://www.purefmuk.com/", desc: "Underground House, UK Garage, Jungle, Drum & Bass.", genre: "HOUSE + UKG", moods: ["🤪", "☀️", "🚗"] },
+            { name: "Subtle Radio", url: "https://subtle.out.airtime.pro:8000/subtle_c", sourceUrl: "https://cashmereradio.com", desc: "Connecting London's grassroots bass music scene.", genre: "HOUSE + UKG", moods: ["🤪", "💪"] },
+            { name: "UKG Radio", url: "https://streams.radio.co/s9549b306a/listen", sourceUrl: "https://www.ukgradio.co.uk/", desc: "High-quality breakbeats and authentic garage 24/7.", genre: "HOUSE + UKG", moods: ["🤪", "💪"] },
+            { name: "Bill Evans Radio", url: "https://nl4.mystreaming.net/uber/jjrbillevans/icecast.audio", sourceUrl: "https://en.wikipedia.org/wiki/Bill_Evans", desc: "All Bill Evans All the Time.", genre: "Jazz", moods: ["🥹"] },
+            { name: "KNKX", url: "https://knkx-live-a.edge.audiocdn.com/6285_128k", sourceUrl: "https://www.jazz24.org/", desc: "Tacoma's World Class Jazz Radio.", genre: "Jazz", moods: ["🥹", "🧐"] },
+            { name: "NRK Jazz", url: "https://cdn0-47115-liveicecast0.dna.contentdelivery.net/jazz_mp3_h", sourceUrl: "https://radio.nrk.no/direkte/jazz", desc: "Jazz 24/7 from The Norwegian Broadcasting Corporation.", genre: "Jazz", moods: ["🥹", "😴", "☔️"] },
+            { name: "NTS Expansions", url: "https://stream-mixtape-geo.ntslive.net/mixtape3", sourceUrl: "https://www.nts.live/infinite-mixtapes/expansions", desc: "Jazz and its many mind-expanding variations.", genre: "Jazz", moods: ["🥹", "😴", "❄️", "☔️"] },
+            { name: "Radio Swiss Jazz", url: "https://livestreaming-node-3.srg-ssr.ch/srgssr/rsj/mp3/128", sourceUrl: "https://radioswissjazz.ch", desc: "Smooth jazz, soul, and blues standards.", genre: "Jazz", moods: ["😴", "❄️", "☔️"] },
+            { name: "SomaFM Bossa Beyond", url: "https://ice.somafm.com/bossa", sourceUrl: "https://somafm.com/bossa/", desc: "Silky-smooth Brazilian rhythms of Bossa Nova and Samba.", genre: "Jazz", moods: ["😴", "☀️", "🧑‍🍳"] },
+            { name: "SomaFM Secret Agent", url: "https://ice.somafm.com/secretagent", sourceUrl: "https://somafm.com/secretagent", desc: "Soundtrack for your stylish, mysterious life.", genre: "Jazz", moods: ["🧐"] },
+            { name: "The Jazz Station", url: "https://das-edge11-live365-dal03.cdnstream.com/a74112", sourceUrl: "https://live365.com/station/THE-JAZZ-STATION-a74112", desc: "Modern, Classic, Latin + New Jazz every hour.", genre: "Jazz", moods: ["😴", "❄️", "☔️", "🧑‍🍳"] },
+            { name: "BROKENBEATS.NET", url: "https://brokenbeats.net/stream/aac", sourceUrl: "https://brokenbeats.net/", desc: "Atmospheric drum 'n' bass web radio since 2016.", genre: "JUNGLE + D'N'B", moods: ["🤪", "💪"] },
+            { name: "DINAMO FLUENT", url: "https://channels.dinamo.fm/fluent-mp3", sourceUrl: "https://dinamo.fm", desc: "Soulful & melodic escapades in drum & bass and liquid funk.", genre: "JUNGLE + D'N'B", moods: ["🤪", "😎", "☀️", "💪"] },
+            { name: "Al Green Radio", url: "https://streaming.exclusive.radio/er/algreen/icecast.audio", sourceUrl: "https://en.wikipedia.org/wiki/Al_Green", desc: "All Al Green All The Time", genre: "Legends", moods: [] },
+            { name: "Aretha Franklin Radio", url: "https://streaming.exclusive.radio/er/arethafranklin/icecast.audio", sourceUrl: "https://www.arethafranklin.net/", desc: "All Aretha Franklin All The Time", genre: "Legends", moods: [] },
+            { name: "Beach Boys Radio", url: "https://streaming.exclusive.radio/er/beachboys/icecast.audio", sourceUrl: "https://thebeachboys.com/", desc: "All Beach Boys All The Time", genre: "Legends", moods: [] },
+            { name: "Beastie Boys Radio", url: "https://streaming.exclusive.radio/er/beastieboys/icecast.audio", sourceUrl: "https://beastieboys.com/", desc: "All Beastie Boys All The Time", genre: "Legends", moods: [] },
+            { name: "The Beatles Radio", sortName: "Beatles", url: "https://streaming.exclusive.radio/er/beatles/icecast.audio", sourceUrl: "https://www.thebeatles.com/", desc: "The biggest band the world has ever seen.", genre: "Legends", moods: [] },
+            { name: "Beethoven Radio", url: "https://beethoven-one.stream.laut.fm/beethoven-one?t302=2026-02-08_08-19-25&uuid=00d238af-4c2f-4372-90f7-545b7fa83a3f", sourceUrl: "https://en.wikipedia.org/wiki/Ludwig_van_Beethoven", desc: "All Beethoven All The Time", genre: "Legends", moods: [] },
+            { name: "Bill Withers Radio", url: "https://streaming.exclusive.radio/er/billwithers/icecast.audio", sourceUrl: "https://billwithers.com/", desc: "All Bill Withers All The Time", genre: "Legends", moods: [] },
+            { name: "Black Sabbath Radio", url: "https://streaming.exclusive.radio/er/blacksabbath/icecast.audio", sourceUrl: "https://www.blacksabbath.com/", desc: "All Black Sabbath All The Time", genre: "Legends", moods: [] },
+            { name: "Black Uhuru Radio", url: "https://streaming.exclusive.radio/er/blackuhuru/icecast.audio", sourceUrl: "https://blackuhuruofficial.com/", desc: "All Black Uhuru All The Time", genre: "Legends", moods: [] },
+            { name: "Blur Radio", url: "https://streaming.exclusive.radio/er/blur/icecast.audio", sourceUrl: "https://www.blur.co.uk/", desc: "All Blur All The Time", genre: "Legends", moods: [] },
+            { name: "Bo Diddley Radio", url: "https://streaming.exclusive.radio/er/bodiddley/icecast.audio", sourceUrl: "https://www.bodiddley.com/", desc: "All Bo Diddley All The Time", genre: "Legends", moods: [] },
+            { name: "Bob Dylan Radio", url: "https://streaming.exclusive.radio/er/bobdylan/icecast.audio", sourceUrl: "https://www.bobdylan.com/", desc: "All Bob Dylan All The Time", genre: "Legends", moods: [] },
+            { name: "Bob Marley Radio", url: "https://streaming.exclusive.radio/er/bobmarley/icecast.audio", sourceUrl: "https://www.bobmarley.com/", desc: "All Bob Marley All The Time", genre: "Legends", moods: [] },
+            { name: "Booker T & The MG's Radio", url: "https://3.mystream.net/er/bookert/icecast.audio", sourceUrl: "https://bookert.com/", desc: "All Booker T & The MG's All The Time", genre: "Legends", moods: [] },
+            { name: "Brahms Radio", url: "http://streams.calmradio.com:7128/stream", sourceUrl: "https://www.brahms-institut.de/", desc: "All Brahms All The Time", genre: "Legends", moods: [] },
+            { name: "Burning Spear Radio", url: "https://streaming.exclusive.radio/er/burningspear/icecast.audio", sourceUrl: "https://www.burningspearwebsite.com/", desc: "All Burning Spear All The Time", genre: "Legends", moods: [] },
+            { name: "Carly Simon Radio", url: "https://streaming.exclusive.radio/er/carlysimon/icecast.audio", sourceUrl: "https://www.carlysimon.com/", desc: "All Carly Simon All The Time", genre: "Legends", moods: [] },
+            { name: "Carole King Radio", url: "https://streaming.exclusive.radio/er/caroleking/icecast.audio", sourceUrl: "https://www.caroleking.com/", desc: "All Carole King All The Time", genre: "Legends", moods: [] },
+            { name: "Carpenters Radio", url: "https://streaming.exclusive.radio/er/carpenters/icecast.audio", sourceUrl: "https://www.carpentersofficial.com/", desc: "All Carpenters All The Time", genre: "Legends", moods: [] },
+            { name: "Charlie Parker Radio", url: "https://streaming.exclusive.radio/er/charlieparker/icecast.audio", sourceUrl: "https://charlieparkermusic.com/", desc: "All Charlie Parker All The Time", genre: "Legends", moods: [] },
+            { name: "Chic Radio", url: "https://streaming.exclusive.radio/er/chic/icecast.audio", sourceUrl: "https://www.nilerodgers.com/", desc: "All Chic All The Time", genre: "Legends", moods: [] },
+            { name: "Chuck Berry Radio", url: "https://streaming.exclusive.radio/er/chuckberry/icecast.audio", sourceUrl: "http://www.chuckberry.com/", desc: "All Chuck Berry All The Time", genre: "Legends", moods: [] },
+            { name: "The Clash Radio", sortName: "Clash", url: "https://3.mystream.net/er/theclash/icecast.audio", sourceUrl: "https://www.theclash.com/", desc: "All The Clash All The Time", genre: "Legends", moods: [] },
+            { name: "Count Basie Radio", url: "https://nl4.mystreaming.net/uber/jjrcountbasie/icecast.audio", sourceUrl: "https://thebasie.org/", desc: "All Count Basie All The Time", genre: "Legends", moods: [] },
+            { name: "Cream Radio", url: "https://streaming.exclusive.radio/er/cream/icecast.audio", sourceUrl: "https://en.wikipedia.org/wiki/Cream_(band)", desc: "All Cream All The Time", genre: "Legends", moods: [] },
+            { name: "Creedence Clearwater Revival Radio", url: "https://nl4.mystreaming.net/er/creedence/icecast.audio", sourceUrl: "https://ccr.concord.com/", desc: "All CCR All The Time", genre: "Legends", moods: [] },
+            { name: "Crosby, Stills, Nash & Young Radio", url: "https://nl4.mystreaming.net/er/csny/icecast.audio", sourceUrl: "https://www.crosbystillsnash.com/", desc: "All CSNY All The Time", genre: "Legends", moods: [] },
+            { name: "The Cure Radio", sortName: "Cure", url: "https://streaming.exclusive.radio/er/thecure/icecast.audio", sourceUrl: "https://www.thecure.com/", desc: "All The Cure All The Time", genre: "Legends", moods: [] },
+            { name: "Daft Punk Radio", url: "https://streaming.exclusive.radio/er/daftpunk/icecast.audio", sourceUrl: "https://daftpunk.com/", desc: "All Daft Punk All The Time", genre: "Legends", moods: [] },
+            { name: "Dave Brubeck Radio", url: "https://streaming.exclusive.radio/er/davebrubeck/icecast.audio", sourceUrl: "https://davebrubeck.com/", desc: "All Dave Brubeck All The Time", genre: "Legends", moods: [] },
+            { name: "David Bowie Radio", url: "https://streaming.exclusive.radio/er/davidbowie/icecast.audio", sourceUrl: "https://www.davidbowie.com/", desc: "All David Bowie All The Time", genre: "Legends", moods: [] },
+            { name: "Debussy Radio", url: "https://streams.calmradio.com:10228/;", sourceUrl: "https://en.wikipedia.org/wiki/Claude_Debussy", desc: "All Debussy All The Time", genre: "Legends", moods: [] },
+            { name: "Depeche Mode Radio", url: "https://streaming.exclusive.radio/er/depechemode/icecast.audio", sourceUrl: "https://www.depechemode.com/", desc: "All Depeche Mode All The Time", genre: "Legends", moods: [] },
+            { name: "Diana Ross Radio", url: "https://streaming.exclusive.radio/er/dianaross/icecast.audio", sourceUrl: "https://www.dianaross.com/", desc: "All Diana Ross All The Time", genre: "Legends", moods: [] },
+            { name: "Dire Straits Radio", url: "https://streaming.exclusive.radio/er/direstraits/icecast.audio", sourceUrl: "https://www.direstraits.com/", desc: "All Dire Straits All The Time", genre: "Legends", moods: [] },
+            { name: "Dolly Parton Radio", url: "https://streaming.exclusive.radio/er/dollyparton/icecast.audio", sourceUrl: "https://dollyparton.com/", desc: "All Dolly Parton All The Time", genre: "Legends", moods: [] },
+            { name: "The Doobie Brothers Radio", sortName: "Doobie Brothers", url: "https://streaming.exclusive.radio/er/doobiebrothers/icecast.audio", sourceUrl: "https://thedoobiebrothers.com/", desc: "All Doobie Brothers All The Time", genre: "Legends", moods: [] },
+            { name: "The Doors Radio", sortName: "Doors", url: "https://3.mystream.net/er/doors/icecast.audio", sourceUrl: "https://thedoors.com/", desc: "All The Doors All The Time", genre: "Legends", moods: [] },
+            { name: "Dr. Dre Radio", url: "https://streaming.exclusive.radio/er/drdre/icecast.audio", sourceUrl: "https://www.drdre.com/", desc: "All Dr. Dre All The Time", genre: "Legends", moods: [] },
+            { name: "Duke Ellington Radio", url: "https://streaming.exclusive.radio/er/dukeellington/icecast.audio", sourceUrl: "http://www.dukeellington.com/", desc: "All Duke Ellington All The Time", genre: "Legends", moods: [] },
+            { name: "Eagles Radio", url: "https://streaming.exclusive.radio/er/eagles/icecast.audio", sourceUrl: "https://eagles.com/", desc: "All Eagles All The Time", genre: "Legends", moods: [] },
+            { name: "Earth, Wind & Fire Radio", url: "https://nl4.mystreaming.net/er/earthwindandfire/icecast.audio", sourceUrl: "https://www.earthwindandfire.com/", desc: "All Earth, Wind & Fire All The Time", genre: "Legends", moods: [] },
+            { name: "Electric Light Orchestra Radio", url: "https://streaming.exclusive.radio/er/elo/icecast.audio", sourceUrl: "https://jefflynneselo.com/", desc: "All ELO All The Time", genre: "Legends", moods: [] },
+            { name: "Elton John Radio", url: "https://streaming.exclusive.radio/er/eltonjohn/icecast.audio", sourceUrl: "https://www.eltonjohn.com/", desc: "All Elton John All The Time", genre: "Legends", moods: [] },
+            { name: "Elvis Presley Radio", url: "https://streaming.exclusive.radio/er/elvispresley/icecast.audio", sourceUrl: "https://www.elvisthemusic.com/", desc: "All Elvis Presley All The Time", genre: "Legends", moods: [] },
+            { name: "Eric Clapton Radio", url: "https://streaming.exclusive.radio/er/ericclapton/icecast.audio", sourceUrl: "https://ericclapton.com/", desc: "All Eric Clapton All The Time", genre: "Legends", moods: [] },
+            { name: "Fleetwood Mac Radio", url: "https://streaming.exclusive.radio/er/fleetwoodmac/icecast.audio", sourceUrl: "https://www.fleetwoodmacofficial.com/", desc: "All Fleetwood Mac All The Time", genre: "Legends", moods: [] },
+            { name: "Frank Sinatra Radio", url: "https://streaming.exclusive.radio/er/franksinatra/icecast.audio", sourceUrl: "https://www.sinatra.com/", desc: "All Frank Sinatra All The Time", genre: "Legends", moods: [] },
+            { name: "Genesis Radio", url: "https://streaming.exclusive.radio/er/genesis/icecast.audio", sourceUrl: "https://www.genesis-music.com/", desc: "All Genesis All The Time", genre: "Legends", moods: [] },
+            { name: "George Benson Radio", url: "https://streaming.exclusive.radio/er/georgebenson/icecast.audio", sourceUrl: "https://www.georgebenson.com/", desc: "All George Benson All The Time", genre: "Legends", moods: [] },
+            { name: "George Michael Radio", url: "https://streaming.exclusive.radio/er/georgemichael/icecast.audio", sourceUrl: "https://www.georgemichael.com/", desc: "All George Michael All The Time", genre: "Legends", moods: [] },
+            { name: "Glenn Miller Radio", url: "https://streaming.exclusive.radio/er/glennmiller/icecast.audio", sourceUrl: "https://glennmillerorchestra.com/", desc: "All Glenn Miller All The Time", genre: "Legends", moods: [] },
+            { name: "Grateful Dead Radio", url: "https://streaming.exclusive.radio/er/gratefuldead/icecast.audio", sourceUrl: "https://www.dead.net/", desc: "All Grateful Dead All The Time", genre: "Legends", moods: [] },
+            { name: "Green Day Radio", url: "https://streaming.exclusive.radio/er/greenday/icecast.audio", sourceUrl: "https://greenday.com/", desc: "All Green Day All The Time", genre: "Legends", moods: [] },
+            { name: "Guns N' Roses Radio", url: "https://streaming.exclusive.radio/er/gunsnroses/icecast.audio", sourceUrl: "https://www.gunsnroses.com/", desc: "All Guns N' Roses All The Time", genre: "Legends", moods: [] },
+            { name: "Hall & Oates Radio", url: "https://3.mystream.net/er/hallandoateshits/icecast.audio", sourceUrl: "https://en.wikipedia.org/wiki/Hall_%26_Oates_discography", desc: "All Hall & Oates All The Time", genre: "Legends", moods: [] },
+            { name: "Hank Williams Radio", url: "https://streaming.exclusive.radio/er/hankwilliams/icecast.audio", sourceUrl: "https://en.wikipedia.org/wiki/Hank_Williams", desc: "All Hank Williams All The Time", genre: "Legends", moods: [] },
+            { name: "Herbie Hancock Radio", url: "https://streaming.exclusive.radio/er/herbiehancock/icecast.audio", sourceUrl: "https://www.herbiehancock.com/", desc: "All Herbie Hancock All The Time", genre: "Legends", moods: [] },
+            { name: "Jack Johnson Radio", url: "https://streaming.exclusive.radio/er/jackjohnson/icecast.audio", sourceUrl: "https://jackjohnsonmusic.com/", desc: "All Jack Johnson All The Time", genre: "Legends", moods: [] },
+            { name: "James Brown Radio", url: "https://streaming.exclusive.radio/er/jamesbrown/icecast.audio", sourceUrl: "https://jamesbrown.com/", desc: "All James Brown All The Time", genre: "Legends", moods: [] },
+            { name: "James Taylor Radio", url: "https://streaming.exclusive.radio/er/jamestaylor/icecast.audio", sourceUrl: "https://www.jamestaylor.com/", desc: "All James Taylor All The Time", genre: "Legends", moods: [] },
+            { name: "Janet Jackson Radio", url: "https://streaming.exclusive.radio/er/janetjackson/icecast.audio", sourceUrl: "https://www.janetjackson.com/", desc: "All Janet Jackson All The Time", genre: "Legends", moods: [] },
+            { name: "Jefferson Airplane Radio", url: "https://streaming.exclusive.radio/er/jeffersonairplane/icecast.audio", sourceUrl: "https://www.jeffersonairplane.com/", desc: "All Jefferson Airplane All The Time", genre: "Legends", moods: [] },
+            { name: "Jerry Lee Lewis Radio", url: "https://streaming.exclusive.radio/er/jerryleelewis/icecast.audio", sourceUrl: "https://jerryleelewis.com/", desc: "All Jerry Lee Lewis All The Time", genre: "Legends", moods: [] },
+            { name: "Jimi Hendrix Radio", url: "https://nl4.mystreaming.net/er/hendrix/icecast.audio", sourceUrl: "https://www.jimihendrix.com/", desc: "All Jimi All The Time", genre: "Legends", moods: [] },
+            { name: "Jimmy Cliff Radio", url: "https://streaming.exclusive.radio/er/jimmycliff/icecast.audio", sourceUrl: "https://www.jimmycliff.com/", desc: "All Jimmy Cliff All The Time", genre: "Legends", moods: [] },
+            { name: "Johnny Cash Radio", url: "https://streaming.exclusive.radio/er/johnnycash/icecast.audio", sourceUrl: "https://www.johnnycash.com/", desc: "All Johnny Cash All The Time", genre: "Legends", moods: [] },
+            { name: "Johnny Mathis Radio", url: "https://streaming.exclusive.radio/er/johnnymathis/icecast.audio", sourceUrl: "https://johnnymathis.com/", desc: "All Johnny Mathis All The Time", genre: "Legends", moods: [] },
+            { name: "Joni Mitchell Radio", url: "https://streaming.exclusive.radio/er/jonimitchell/icecast.audio", sourceUrl: "https://jonimitchell.com/", desc: "All Joni Mitchell All The Time", genre: "Legends", moods: [] },
+            { name: "Kanye West Radio", url: "https://streaming.exclusive.radio/er/kanyewest/icecast.audio", sourceUrl: "https://en.wikipedia.org/wiki/Kanye_West", desc: "All Kanye West All The Time", genre: "Legends", moods: [] },
+            { name: "Kate Bush Radio", url: "https://streaming.exclusive.radio/er/katebush/icecast.audio", sourceUrl: "https://www.katebush.com/", desc: "All Kate Bush All The Time", genre: "Legends", moods: [] },
+            { name: "Kendrick Lamar Radio", url: "https://streaming.exclusive.radio/er/kendricklamar/icecast.audio", sourceUrl: "https://www.oklama.com/", desc: "All Kendrick Lamar All The Time", genre: "Legends", moods: [] },
+            { name: "The Kinks Radio", sortName: "Kinks", url: "https://3.mystream.net/er/thekinks/icecast.audio", sourceUrl: "https://thekinks.info/", desc: "All The Kinks All The Time", genre: "Legends", moods: [] },
+            { name: "Kraftwerk Radio", url: "https://streaming.exclusive.radio/er/kraftwerk/icecast.audio", sourceUrl: "https://kraftwerk.com/", desc: "All Kraftwerk All The Time", genre: "Legends", moods: [] },
+            { name: "Lana Del Rey Radio", url: "https://streaming.exclusive.radio/er/lanadelrey/icecast.audio", sourceUrl: "https://lanadelrey.com/", desc: "All Lana Del Rey All The Time", genre: "Legends", moods: [] },
+            { name: "Led Zeppelin Radio", url: "https://streaming.exclusive.radio/er/ledzeppelin/icecast.audio", sourceUrl: "https://www.ledzeppelin.com/", desc: "All Led Zeppelin All The Time", genre: "Legends", moods: [] },
+            { name: "Lynyrd Skynyrd Radio", url: "https://streaming.exclusive.radio/er/lynyrdskynyrd/icecast.audio", sourceUrl: "https://lynyrdskynyrd.com/", desc: "All Lynyrd Skynyrd All The Time", genre: "Legends", moods: [] },
+            { name: "Madonna Radio", url: "https://streaming.exclusive.radio/er/madonna/icecast.audio", sourceUrl: "https://www.madonna.com/", desc: "All Madonna All The Time", genre: "Legends", moods: [] },
+            { name: "Mariah Carey Radio", url: "https://streaming.exclusive.radio/er/mariahcarey/icecast.audio", sourceUrl: "https://mariahcarey.com/", desc: "All Mariah Carey All The Time", genre: "Legends", moods: [] },
+            { name: "Marvin Gaye Radio", url: "https://streaming.exclusive.radio/er/marvingaye/icecast.audio", sourceUrl: "https://www.marvingaye.net/", desc: "All Marvin Gaye All The Time", genre: "Legends", moods: [] },
+            { name: "Metallica Radio", url: "https://streaming.exclusive.radio/er/metallica/icecast.audio", sourceUrl: "https://www.metallica.com/", desc: "All Metallica All The Time", genre: "Legends", moods: [] },
+            { name: "Michael Jackson Radio", url: "https://streaming.exclusive.radio/er/michaeljackson/icecast.audio", sourceUrl: "https://www.michaeljackson.com/", desc: "All Michael Jackson All The Time", genre: "Legends", moods: [] },
+            { name: "Miles Davis Radio", url: "https://streaming.exclusive.radio/er/milesdavis/icecast.audio", sourceUrl: "https://www.milesdavis.com/", desc: "All Miles Davis All The Time", genre: "Legends", moods: [] },
+            { name: "Nat King Cole Radio", url: "https://streaming.exclusive.radio/er/natkingcole/icecast.audio", sourceUrl: "https://natkingcole.com/", desc: "All Nat King Cole All The Time", genre: "Legends", moods: [] },
+            { name: "New Order Radio", url: "https://streaming.exclusive.radio/er/neworder/icecast.audio", sourceUrl: "https://www.neworder.com/", desc: "All New Order All The Time", genre: "Legends", moods: [] },
+            { name: "Nirvana Radio", url: "https://streaming.exclusive.radio/er/nirvana/icecast.audio", sourceUrl: "https://www.nirvana.com/", desc: "All Nirvana All The Time", genre: "Legends", moods: [] },
+            { name: "Oasis Radio", url: "https://streaming.exclusive.radio/er/oasis/icecast.audio", sourceUrl: "https://oasisinet.com/", desc: "All Oasis All The Time", genre: "Legends", moods: [] },
+            { name: "Otis Redding Radio", url: "https://streaming.exclusive.radio/er/otisredding/icecast.audio", sourceUrl: "https://otisredding.com/", desc: "All Otis Redding All The Time", genre: "Legends", moods: [] },
+            { name: "Phil Collins Radio", url: "https://streaming.exclusive.radio/er/philcollins/icecast.audio", sourceUrl: "https://philcollins.com/", desc: "All Phil Collins All The Time", genre: "Legends", moods: [] },
+            { name: "Pink Floyd Radio", url: "https://streaming.exclusive.radio/er/pinkfloyd/icecast.audio", sourceUrl: "https://www.pinkfloyd.com/", desc: "All Pink Floyd All The Time", genre: "Legends", moods: [] },
+            { name: "Pixies Radio", url: "https://streaming.exclusive.radio/er/pixies/icecast.audio", sourceUrl: "https://www.pixiesmusic.com/", desc: "All Pixies All The Time", genre: "Legends", moods: [] },
+            { name: "The Police Radio", sortName: "Police", url: "https://streaming.exclusive.radio/er/police/icecast.audio", sourceUrl: "https://thepolice.com/", desc: "All The Police All The Time", genre: "Legends", moods: [] },
+            { name: "Prince Radio", url: "https://streaming.exclusive.radio/er/prince/icecast.audio", sourceUrl: "https://www.prince.com/", desc: "All Prince All The Time", genre: "Legends", moods: [] },
+            { name: "Queen Radio", url: "https://streaming.exclusive.radio/er/queen/icecast.audio", sourceUrl: "https://www.queenonline.com/", desc: "All Queen All The Time", genre: "Legends", moods: [] },
+            { name: "R.E.M. Radio", url: "https://streaming.exclusive.radio/er/rem/icecast.audio", sourceUrl: "https://remhq.com/", desc: "All R.E.M. All The Time", genre: "Legends", moods: [] },
+            { name: "Radiohead Radio", url: "https://streaming.exclusive.radio/er/radiohead/icecast.audio", sourceUrl: "https://www.radiohead.com/", desc: "All Radiohead All The Time", genre: "Legends", moods: [] },
+            { name: "Ramones Radio", url: "https://streaming.exclusive.radio/er/ramones/icecast.audio", sourceUrl: "https://www.ramones.com/", desc: "All Ramones All The Time", genre: "Legends", moods: [] },
+            { name: "Ray Charles Radio", url: "https://streaming.exclusive.radio/er/raycharles/icecast.audio", sourceUrl: "https://raycharles.com/", desc: "All Ray Charles All The Time", genre: "Legends", moods: [] },
+            { name: "Red Hot Chili Peppers Radio", url: "https://streaming.exclusive.radio/er/chilipeppers/icecast.audio", sourceUrl: "https://redhotchilipeppers.com/", desc: "All Red Hot Chili Peppers All The Time", genre: "Legends", moods: [] },
+            { name: "The Rolling Stones Radio", sortName: "Rolling Stones", url: "https://streaming.exclusive.radio/er/rollingstones/icecast.audio", sourceUrl: "https://rollingstones.com/", desc: "All Rolling Stones All The Time", genre: "Legends", moods: [] },
+            { name: "Sade Radio", url: "https://streaming.exclusive.radio/er/sade/icecast.audio", sourceUrl: "https://www.sade.com/", desc: "All Sade All The Time", genre: "Legends", moods: [] },
+            { name: "Sam Cooke Radio", url: "https://streaming.exclusive.radio/er/samcooke/icecast.audio", sourceUrl: "https://www.officialsamcooke.com/", desc: "All Sam Cooke All The Time", genre: "Legends", moods: [] },
+            { name: "Santana Radio", url: "https://streaming.exclusive.radio/er/santana/icecast.audio", sourceUrl: "https://www.santana.com/", desc: "All Santana All The Time", genre: "Legends", moods: [] },
+            { name: "The Smiths Radio", sortName: "Smiths", url: "https://streaming.exclusive.radio/er/thesmiths/icecast.audio", sourceUrl: "https://www.officialsmiths.co.uk/", desc: "All The Smiths All The Time", genre: "Legends", moods: [] },
+            { name: "Steely Dan Radio", url: "https://streaming.exclusive.radio/er/steelydan/icecast.audio", sourceUrl: "https://steelydanofficial.com/", desc: "All Steely Dan All The Time", genre: "Legends", moods: [] },
+            { name: "Steve Miller Band Radio", url: "https://streaming.exclusive.radio/er/stevemillerband/icecast.audio", sourceUrl: "https://www.stevemillerband.com/", desc: "All Steve Miller Band All The Time", genre: "Legends", moods: [] },
+            { name: "Stevie Wonder Radio", url: "https://streaming.exclusive.radio/er/steviewonder/icecast.audio", sourceUrl: "https://www.steviewonder.net/", desc: "All Stevie Wonder All The Time", genre: "Legends", moods: [] },
+            { name: "Supertramp Radio", url: "https://streaming.exclusive.radio/er/supertramp/icecast.audio", sourceUrl: "https://supertramp.com/", desc: "All Supertramp All The Time", genre: "Legends", moods: [] },
+            { name: "T. Rex Radio", url: "https://streaming.exclusive.radio/er/trex/icecast.audio", sourceUrl: "https://www.t-rex.co.uk/", desc: "All T. Rex All The Time", genre: "Legends", moods: [] },
+            { name: "Talking Heads Radio", url: "https://streaming.exclusive.radio/er/talkingheads/icecast.audio", sourceUrl: "https://talkingheadsofficial.com/", desc: "All Talking Heads All The Time", genre: "Legends", moods: [] },
+            { name: "The Velvet Underground Radio", sortName: "Velvet Underground", url: "https://streaming.exclusive.radio/er/velvetunderground/icecast.audio", sourceUrl: "https://www.velvetundergroundmusic.com/", desc: "All Velvet Underground All The Time", genre: "Legends", moods: [] },
+            { name: "Wham! Radio", url: "https://streaming.exclusive.radio/er/wham/icecast.audio", sourceUrl: "https://wham.world/", desc: "All Wham! All The Time", genre: "Legends", moods: [] },
+            { name: "Willie Nelson Radio", url: "https://streaming.exclusive.radio/er/willienelson/icecast.audio", sourceUrl: "https://willienelson.com/", desc: "All Willie Nelson All The Time", genre: "Legends", moods: [] },
+            { name: "The Yardbirds Radio", sortName: "Yardbirds", url: "https://3.mystream.net/er/theyardbirds/icecast.audio", sourceUrl: "https://www.theyardbirds.com/", desc: "All The Yardbirds All The Time", genre: "Legends", moods: [] },
+            { name: "ZZ Top Radio", url: "https://streaming.exclusive.radio/er/zztop/icecast.audio", sourceUrl: "https://www.zztop.com/", desc: "All ZZ Top All The Time", genre: "Legends", moods: [] },
+            { name: "Bagel Radio", url: "https://ais-sa3.cdnstream1.com/2606_128.mp3", sourceUrl: "https://bagelradio.com", desc: "Freshly toasted indie rock hits from then and now.", genre: "Rock + Indie", moods: ["🧐", "🚗"] },
+            { name: "DKFM CLASSIC", url: "https://radio.streemlion.com:4245/stream", sourceUrl: "https://decayfm.com/", desc: "First wave shoegaze and dream pop classics from Toronto.", genre: "Rock + Indie", moods: ["🧐"] },
+            { name: "DKFM EDGE", url: "https://radio.streemlion.com:4405/stream", sourceUrl: "https://decayfm.com/dkfm-edge-2/", desc: "A power rotation of the brightest and best new alt rock sounds.", genre: "Rock + Indie", moods: ["🧐"] },
+            { name: "NTS The Tube", url: "https://stream-mixtape-geo.ntslive.net/mixtape26", sourceUrl: "https://www.nts.live/infinite-mixtapes/the-tube", desc: "Oddball post-punk and minimal wave.", genre: "Rock + Indie", moods: ["🧐", "☔️"] },
+            { name: "SomaFM Digitalis", url: "https://ice.somafm.com/digitalis", sourceUrl: "https://somafm.com/digitalis", desc: "Digitally affected analog rock to calm the heart.", genre: "Rock + Indie", moods: ["🧐", "❄️"] },
+            { name: "SomaFM Folk Forward", url: "https://ice.somafm.com/folkfwd", sourceUrl: "https://somafm.com/folkfwd/", desc: "Indie Folk, Alt-folk and the occasional folk classics.", genre: "Rock + Indie", moods: ["🥹"] },
+            { name: "The Independent FM", url: "https://listen.radioking.com/radio/293701/stream/340078", sourceUrl: "https://welove.radio/radio/the-independent-fm-1/", desc: "The best Indie music. Past, Present and Future.", genre: "Rock + Indie", moods: ["🧐", "❄️", "☔️"] },
+            { name: "Boss Radio 66", url: "https://stream.rcast.net/261426", sourceUrl: "https://www.bossradio66.com/", desc: "All '60s all the time, with an obscure twist.", genre: "Soul + Oldies", moods: ["🧐", "🚗"] },
+            { name: "NTS Feelings", url: "https://stream-mixtape-geo.ntslive.net/mixtape27", sourceUrl: "https://www.nts.live/infinite-mixtapes/feelings", desc: "Sweet soul, gospel, and emotive pop.", genre: "Soul + Oldies", moods: ["🥹", "☀️", "🧑‍🍳"] },
+            { name: "NTS Memory Lane", url: "https://stream-mixtape-geo.ntslive.net/mixtape6", sourceUrl: "https://www.nts.live/infinite-mixtapes/memory-lane", desc: "Soul, rare groove, and nostalgic rhythm & blues.", genre: "Soul + Oldies", moods: ["🥹", "☀️", "❄️", "☔️", "🧑‍🍳"] },
+            { name: "SomaFM Seven Inch Soul", url: "https://ice.somafm.com/7soul", sourceUrl: "https://somafm.com/7soul", desc: "Vintage soul from original 45 RPM singles.", genre: "Soul + Oldies", moods: ["🥹", "☀️", "🧑‍🍳"] },
+            { name: "SomaFM The In-Sound", url: "https://ice.somafm.com/insound", sourceUrl: "https://somafm.com/insound/", desc: "60s/70s Hipster Euro Pop meets groovy vibes.", genre: "Soul + Oldies", moods: ["🥹", "😴"] },
+            { name: "SomaFM Tiki Time", url: "https://ice.somafm.com/tikitime", sourceUrl: "https://somafm.com/tikitime/", desc: "Vintage island rhythms to sip cocktails by.", genre: "Soul + Oldies", moods: ["🥹", "😴", "☀️", "🧑‍🍳"] },
+            { name: "WFMU - Rock n Soul", url: "https://stream0.wfmu.org/rocknsoul.mp3", sourceUrl: "https://wfmu.org/rocknsoul", desc: "Twenty-four hours a day featuring vintage rock'n'roll and soul.", genre: "Soul + Oldies", moods: ["🥹", "🧐"] }
+        ];
+
+
+        const SORTED_STATIONS = [...STATIONS].sort((a, b) => {
+            const nameA = a.sortName || a.name;
+            const nameB = b.sortName || b.name;
+            return nameA.localeCompare(nameB, 'en', { numeric: true, sensitivity: 'base' });
+        });
+
+
+        const shuffleArray = (array) => {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        };
+
+
+        const getFilteredStations = (selectedGenre, selectedMood) => {
+            return SORTED_STATIONS.filter(s => {
+                if (s.genre === "Legends") return selectedGenre === "Legends";
+                if (selectedGenre === "Legends") return false;
+                const genreMatch = selectedGenre === "All" || s.genre === selectedGenre;
+                const moodMatch = selectedMood === "All" || s.moods?.includes(selectedMood);
+                return genreMatch && moodMatch;
+            });
+        };
+
+
+        const getTitleFontSize = (name) => {
+            if (!name) return 'text-6xl sm:text-8xl';
+            const len = name.length;
+            if (len > 15) return 'text-3xl sm:text-5xl';
+            if (len > 10) return 'text-4xl sm:text-6xl';
+            return 'text-5xl sm:text-8xl';
+        };
+
+
+        const getColors = (isNightMode) => {
+            return isNightMode ? {
+                bg: '#000000',
+                text: '#fcfcf5',
+                teal: '#4a8b78',
+                tealDark: '#7ec2ad',
+                yellow: '#bfa15f',
+                black: '#fcfcf5',
+                border: '#333333',
+                overlayBg: 'rgba(0,0,0,0.95)',
+                indexActive: '#e5b84a',
+                indexInactive: '#fcfcf5',
+                buttonShadow: '0 8px 24px rgba(0,0,0,0.6)',
+                buttonShadowHover: '0 12px 32px rgba(0,0,0,0.8)'
+            } : {
+                bg: '#fcfcf5',
+                text: '#000000',
+                teal: '#7ec2ad',
+                tealDark: '#4a8b78',
+                yellow: '#e5b84a',
+                black: '#000000',
+                border: 'rgba(0,0,0,0.1)',
+                overlayBg: 'rgba(252, 252, 245, 0.96)',
+                indexActive: '#000000',
+                indexInactive: '#7ec2ad',
+                buttonShadow: '0 8px 20px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04)',
+                buttonShadowHover: '0 12px 28px rgba(0,0,0,0.12), 0 4px 8px rgba(0,0,0,0.06)'
+            };
+        };
+
+
+        const useFlip = () => {
+            const [flipState, setFlipState] = useState(null);
+            const flipTimeoutRef = useRef(null);
+            const triggerFlip = useCallback((type) => {
+                if (flipTimeoutRef.current) clearTimeout(flipTimeoutRef.current);
+                setFlipState(null);
+                requestAnimationFrame(() => {
+                    setFlipState(type);
+                    flipTimeoutRef.current = setTimeout(() => setFlipState(null), 900);
+                });
+            }, []);
+            return { flipState, triggerFlip };
+        };
+
+
+        const useAudioPlayer = () => {
+            const [isPlaying, setIsPlaying] = useState(false);
+            const [isMuted, setIsMuted] = useState(false);
+            const [hasStarted, setHasStarted] = useState(false);
+            const [isLoading, setIsLoading] = useState(false);
+            const [displayedName, setDisplayedName] = useState("");
+            const [displayedDesc, setDisplayedDesc] = useState("");
+            const audioContextRef = useRef(null);
+            const audioTagRef = useRef(null);
+            const playTimeoutRef = useRef(null);
+            const metadataIntervalRef = useRef(null);
+
+
+            const fetchMetadata = useCallback(async (station) => {
+                if (!station) return;
+                if (station.apiId) {
+                    try {
+                        const response = await fetch('https://www.nts.live/api/v2/live', { cache: 'no-store' });
+                        const data = await response.json();
+                        const channelData = data.results.find(res => res.channel_name === station.apiId);
+                        if (channelData && channelData.now) return channelData.now.embed_title || station.desc;
+                    } catch (err) { console.warn("Metadata sync pending."); }
+                }
+                return station.desc || "Continuous Broadcast";
+            }, []);
+
+
+            const connectToStream = useCallback((url, station) => {
+                if (!audioTagRef.current) return;
+                setIsLoading(true);
+                audioTagRef.current.pause();
+                audioTagRef.current.src = "";
+                audioTagRef.current.load();
+                audioTagRef.current.src = url;
+                audioTagRef.current.play()
+                    .then(async () => {
+                        setIsLoading(false);
+                        setIsPlaying(true);
+                        setDisplayedName(station.name);
+                        const meta = await fetchMetadata(station);
+                        setDisplayedDesc(meta);
+                    })
+                    .catch(err => {
+                        if (err.name !== 'AbortError') {
+                            setIsLoading(false);
+                            setIsPlaying(false);
+                        }
+                    });
+            }, [fetchMetadata]);
+
+
+            const initAudio = useCallback(() => {
+                if (!audioContextRef.current) {
+                    audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioContextRef.current.state === 'suspended') audioContextRef.current.resume();
+                setHasStarted(true);
+                setIsPlaying(true);
+            }, []);
+
+
+            const startStationPlayback = useCallback((station) => {
+                if (!hasStarted || !station) return;
+                setIsLoading(true);
+                if (playTimeoutRef.current) clearTimeout(playTimeoutRef.current);
+                playTimeoutRef.current = setTimeout(() => connectToStream(station.url, station), 200);
+                if (metadataIntervalRef.current) clearInterval(metadataIntervalRef.current);
+                metadataIntervalRef.current = setInterval(async () => {
+                    const meta = await fetchMetadata(station);
+                    setDisplayedDesc(meta);
+                }, 60000);
+                return () => clearInterval(metadataIntervalRef.current);
+            }, [hasStarted, connectToStream, fetchMetadata]);
+
+
+            const togglePlay = useCallback((currentStation) => {
+                if (!hasStarted) { initAudio(); return; }
+                if (isPlaying) { audioTagRef.current.pause(); setIsPlaying(false); }
+                else {
+                    audioTagRef.current.play()
+                        .then(() => setIsPlaying(true))
+                        .catch(() => connectToStream(currentStation.url, currentStation));
+                }
+            }, [hasStarted, isPlaying, initAudio, connectToStream]);
+
+
+            const toggleMute = useCallback(() => {
+                setIsMuted(prev => !prev);
+            }, []);
+
+
+            return {
+                isPlaying, isMuted, hasStarted, isLoading,
+                displayedName, displayedDesc,
+                setDisplayedName,
+                audioTagRef,
+                initAudio, togglePlay, toggleMute,
+                startStationPlayback
+            };
+        };
+
+
+        const useStationNav = ({ filteredStations, selectedGenre, selectedMood, setSelectedGenre, setSelectedMood, hasStarted, initAudio, triggerFlip }) => {
+            const [currentStation, setCurrentStation] = useState(null);
+            const [isShuffleMode, setIsShuffleMode] = useState(false);
+            const [shuffleSequence, setShuffleSequence] = useState([]);
+            const [shufflePointer, setShufflePointer] = useState(-1);
+            const historyRef = useRef([]);
+            const historyPosRef = useRef(-1);
+
+
+            useEffect(() => {
+                const validStartStations = SORTED_STATIONS.filter(s => s.genre !== "Legends");
+                const startStation = validStartStations[Math.floor(Math.random() * validStartStations.length)];
+                setCurrentStation(startStation);
+            }, []);
+
+
+            useEffect(() => {
+                if (isShuffleMode) {
+                    const newSequence = shuffleArray(filteredStations);
+                    setShuffleSequence(newSequence);
+                    setShufflePointer(0);
+                    if (newSequence.length > 0 && hasStarted) setCurrentStation(newSequence[0]);
+                }
+            }, [filteredStations, isShuffleMode]);
+
+
+            const handleNext = useCallback(() => {
+                triggerFlip(isShuffleMode ? 'x' : 'y');
+                if (filteredStations.length === 0) return;
+                if (currentStation) {
+                    historyRef.current = historyRef.current.slice(0, historyPosRef.current + 1);
+                    historyRef.current.push(currentStation);
+                    historyPosRef.current = historyRef.current.length - 1;
+                }
+                if (isShuffleMode) {
+                    const nextPointer = (shufflePointer + 1) % shuffleSequence.length;
+                    setShufflePointer(nextPointer);
+                    setCurrentStation(shuffleSequence[nextPointer]);
+                } else {
+                    const currentIndex = filteredStations.findIndex(s => s.url === currentStation?.url);
+                    const nextIndex = (currentIndex + 1) % filteredStations.length;
+                    setCurrentStation(filteredStations[nextIndex]);
+                }
+            }, [isShuffleMode, filteredStations, shufflePointer, shuffleSequence, currentStation, triggerFlip]);
+
+
+            const handlePrevious = useCallback(() => {
+                triggerFlip(isShuffleMode ? 'x-reverse' : 'y-reverse');
+                if (filteredStations.length === 0) return;
+                if (historyPosRef.current >= 0) {
+                    const prevStation = historyRef.current[historyPosRef.current];
+                    historyPosRef.current--;
+                    setCurrentStation(prevStation);
+                    if (isShuffleMode) {
+                        const idx = shuffleSequence.findIndex(s => s.url === prevStation.url);
+                        if (idx >= 0) setShufflePointer(idx);
+                    }
+                    return;
+                }
+                if (isShuffleMode) {
+                    const prevPointer = (shufflePointer - 1 + shuffleSequence.length) % shuffleSequence.length;
+                    setShufflePointer(prevPointer);
+                    setCurrentStation(shuffleSequence[prevPointer]);
+                } else {
+                    const currentIndex = filteredStations.findIndex(s => s.url === currentStation?.url);
+                    const prevIndex = (currentIndex - 1 + filteredStations.length) % filteredStations.length;
+                    setCurrentStation(filteredStations[prevIndex]);
+                }
+            }, [isShuffleMode, filteredStations, shufflePointer, shuffleSequence, currentStation, triggerFlip]);
+
+
+            const handleShuffleToggle = useCallback(() => {
+                triggerFlip('x');
+                const targetShuffle = !isShuffleMode;
+                setIsShuffleMode(targetShuffle);
+                if (targetShuffle) {
+                    historyRef.current = [];
+                    historyPosRef.current = -1;
+                    const sequence = shuffleArray(filteredStations);
+                    setShuffleSequence(sequence);
+                    setShufflePointer(0);
+                    setCurrentStation(sequence[0]);
+                }
+            }, [isShuffleMode, filteredStations, triggerFlip]);
+
+
+            const handleStationSelect = useCallback((station) => {
+                if (!hasStarted) initAudio();
+                setCurrentStation(station);
+            }, [hasStarted, initAudio]);
+
+
+            const handleGenreSelect = useCallback((genre) => {
+                triggerFlip('y');
+                const isDeselecting = selectedGenre === genre;
+                const nextGenre = isDeselecting ? "All" : genre;
+                setSelectedGenre(nextGenre);
+                
+                if (!isDeselecting || !currentStation) {
+                    const pool = STATIONS.filter(s => (nextGenre === "All" || s.genre === nextGenre) && (selectedMood === "All" || s.moods?.includes(selectedMood)));
+                    if (pool.length > 0) {
+                        const randomStation = pool[Math.floor(Math.random() * pool.length)];
+                        setCurrentStation(randomStation);
+                        if (!hasStarted) initAudio();
+                    }
+                }
+            }, [selectedGenre, selectedMood, currentStation, hasStarted, initAudio, triggerFlip, setSelectedGenre]);
+
+
+            const handleMoodSelect = useCallback((moodEmoji) => {
+                triggerFlip('y');
+                const isDeselecting = selectedMood === moodEmoji;
+                const nextMood = isDeselecting ? "All" : moodEmoji;
+                setSelectedMood(nextMood);
+                
+                if (!isDeselecting || !currentStation) {
+                    const pool = STATIONS.filter(s => (nextMood === "All" || s.moods?.includes(nextMood)) && (selectedGenre === "All" || s.genre === selectedGenre));
+                    if (pool.length > 0) {
+                        const randomStation = pool[Math.floor(Math.random() * pool.length)];
+                        setCurrentStation(randomStation);
+                        if (!hasStarted) initAudio();
+                    }
+                }
+            }, [selectedGenre, selectedMood, currentStation, hasStarted, initAudio, triggerFlip, setSelectedMood]);
+
+
+            const handleMainMoodToggle = useCallback(() => {
+                if (selectedMood !== "All") { setSelectedMood("All"); triggerFlip('y'); return true; }
+                return false;
+            }, [selectedMood, triggerFlip, setSelectedMood]);
+
+
+            const handleMainGenreToggle = useCallback(() => {
+                if (selectedGenre !== "All") { setSelectedGenre("All"); triggerFlip('y'); return true; }
+                return false;
+            }, [selectedGenre, triggerFlip, setSelectedGenre]);
+
+
+            return {
+                currentStation,
+                selectedGenre, selectedMood,
+                isShuffleMode,
+                handleNext, handlePrevious,
+                handleShuffleToggle, handleStationSelect,
+                handleGenreSelect, handleMoodSelect,
+                handleMainMoodToggle, handleMainGenreToggle
+            };
+        };
+
+
+        const useKeyboard = ({ hasStarted, isIndexOpen, isShuffleMode, filteredStations, stationRefs, handleNext, handlePrevious, handleTogglePlay, handleStationSelect, triggerFlip, closeAllOverlays }) => {
+            useEffect(() => {
+                const handleKeyDown = (e) => {
+                    if (e.key === 'Escape') { closeAllOverlays(); return; }
+                    const key = e.key.toLowerCase();
+                    if (isIndexOpen) {
+                        if (key.length === 1 && /[a-z0-9]/.test(key)) {
+                            const target = filteredStations.find(s =>
+                                (s.sortName && s.sortName.toLowerCase().startsWith(key)) ||
+                                s.name.toLowerCase().startsWith(key)
+                            );
+                            if (target) {
+                                handleStationSelect(target);
+                                const el = stationRefs.current.get(target.name);
+                                if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+                            }
+                            return;
+                        }
+                    } else if (key.length === 1 && /[a-z0-9]/.test(key) && hasStarted) {
+                        const target = filteredStations.find(s =>
+                            (s.sortName && s.sortName.toLowerCase().startsWith(key)) ||
+                            s.name.toLowerCase().startsWith(key)
+                        );
+                        if (target) {
+                            handleStationSelect(target);
+                            triggerFlip('y');
+                        }
+                        return;
+                    }
+                    if (e.code === 'Space' || e.key === ' ') {
+                        e.preventDefault();
+                        handleTogglePlay();
+                        return;
+                    }
+                    if (!hasStarted) return;
+                    if (e.key === 'ArrowRight') { handleNext(); }
+                    else if (e.key === 'ArrowLeft') { handlePrevious(); }
+                };
+                window.addEventListener('keydown', handleKeyDown);
+                return () => window.removeEventListener('keydown', handleKeyDown);
+            }, [hasStarted, isIndexOpen, isShuffleMode, filteredStations, stationRefs, handleNext, handlePrevious, handleTogglePlay, handleStationSelect, triggerFlip, closeAllOverlays]);
+        };
+
+
+        const Icon = ({ name, size = 24, fill = "none", strokeWidth = 2, className = "" }) => {
+            const iconRef = useRef(null);
+            useEffect(() => {
+                if (window.lucide && iconRef.current) {
+                    iconRef.current.innerHTML = `<i data-lucide="${name}"></i>`;
+                    window.lucide.createIcons({
+                        attrs: { width: size, height: size, fill: fill, 'stroke-width': strokeWidth }
+                    });
+                }
+            }, [name, size, fill, strokeWidth]);
+            return <span ref={iconRef} className={`inline-flex items-center justify-center leading-none ${className}`} />;
+        };
+
+
+        const CloseButton = ({ onClick, colors }) => (
+            <button onClick={onClick} className="absolute top-4 right-4 landscape:top-2 landscape:right-2 w-12 h-12 rounded-full transition-transform hover:rotate-90 active:scale-95 z-[110] outline-none shadow-lg overflow-hidden flex items-center justify-center" style={{ backgroundColor: colors.teal }}>
+                <div className="absolute inset-[9%] rounded-full shadow-inner" style={{ backgroundColor: colors.yellow }} />
+                <div className="absolute inset-[22.5%] rounded-full flex items-center justify-center bg-black">
+                    <Icon name="x" size="20" className="text-[#fcfcf5]" strokeWidth={3} />
+                </div>
+            </button>
+        );
+
+
+        const FooterBtn = ({ icon, label, onClick, active, text, colors, delay = 0 }) => (
+            <div className={`flex flex-col items-center group w-full ${delay ? 'animate-in' : ''}`} style={delay ? { animationDelay: `${delay}ms` } : {}}>
+                <button onClick={onClick} className={`w-11 h-11 sm:w-14 sm:h-14 rounded-2xl border flex items-center justify-center transition-all active:scale-95 outline-none`}
+                    style={{
+                        backgroundColor: active ? colors.text : 'transparent',
+                        borderColor: active ? colors.text : colors.border,
+                        color: active ? colors.bg : colors.text
+                    }}>
+                    {text ? <span className="leading-none text-xl sm:text-2xl">{text}</span> : (icon ? <Icon name={icon} size="20" className="sm:w-[22px]" strokeWidth={2} fill="none" /> : null)}
+                </button>
+                <span className="text-[7px] sm:text-[9px] font-black tracking-[0.15em] mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 uppercase text-center truncate w-full mobile-landscape-hidden" style={{ color: colors.text }}>
+                    {label}
+                </span>
+            </div>
+        );
+
+
+        const CoinMenuOverlay = ({ spinIntensity, setSpinIntensity, movementMode, setMovementMode, onClose, colors, isNightMode }) => {
+            const sliderLabels = {
+                float: ['Still', 'Tumble'],
+                boom: ['60 BPM', '170 BPM'],
+                ripple: ['Slow', 'Rapid'],
+                aerotrim: ['Drift', 'Chaos'],
+                bloom: ['Crisp', 'Blinding']
+            };
+            const [sliderLabelLeft, sliderLabelRight] = sliderLabels[movementMode] || ['Still', 'Wild'];
+
+
+            return (
+                <div className="fixed inset-0 z-[90] flex justify-center items-end landscape:items-center pb-52 sm:pb-48 landscape:pb-0 animate-overlay-in" onClick={onClose}>
+                    <div className="relative flex flex-col items-center gap-4 landscape:gap-2 px-6 landscape:px-4 py-5 landscape:py-3 rounded-3xl backdrop-blur-2xl shadow-2xl min-w-[320px] max-h-[90vh] overflow-y-auto" style={{ backgroundColor: isNightMode ? 'rgba(20,20,20,0.95)' : 'rgba(252,252,245,0.98)', border: '1px solid ' + colors.border }} onClick={e => e.stopPropagation()}>
+                        
+                        {/* Header Row: Modes */}
+                        <div className="flex items-center gap-2 w-full justify-between mb-1">
+                            <div className="flex gap-2 landscape:gap-1 flex-wrap">
+                                <button onClick={() => setMovementMode('float')} 
+                                    className={`px-3 py-1.5 rounded-lg flex items-center gap-2 text-[10px] font-black tracking-widest uppercase transition-colors ${movementMode === 'float' ? 'bg-black text-[#fcfcf5] dark:bg-white dark:text-black' : 'bg-transparent border'}`}
+                                    style={{ borderColor: colors.border, color: movementMode === 'float' ? colors.bg : colors.text, backgroundColor: movementMode === 'float' ? colors.text : 'transparent' }}>
+                                    <Icon name="wind" size="12" /> FLOAT
+                                </button>
+
+                                <button onClick={() => setMovementMode('ripple')} 
+                                    className={`px-3 py-1.5 rounded-lg flex items-center gap-2 text-[10px] font-black tracking-widest uppercase transition-colors ${movementMode === 'ripple' ? 'bg-black text-[#fcfcf5] dark:bg-white dark:text-black' : 'bg-transparent border'}`}
+                                    style={{ borderColor: colors.border, color: movementMode === 'ripple' ? colors.bg : colors.text, backgroundColor: movementMode === 'ripple' ? colors.text : 'transparent' }}>
+                                    <Icon name="radar" size="12" /> RIPPLE
+                                </button>
+                                <button onClick={() => setMovementMode('aerotrim')} 
+                                    className={`px-3 py-1.5 rounded-lg flex items-center gap-2 text-[10px] font-black tracking-widest uppercase transition-colors ${movementMode === 'aerotrim' ? 'bg-black text-[#fcfcf5] dark:bg-white dark:text-black' : 'bg-transparent border'}`}
+                                    style={{ borderColor: colors.border, color: movementMode === 'aerotrim' ? colors.bg : colors.text, backgroundColor: movementMode === 'aerotrim' ? colors.text : 'transparent' }}>
+                                    <Icon name="rotate-3d" size="12" /> AEROTRIM
+                                </button>
+                                <button onClick={() => setMovementMode('boom')} 
+                                    className={`px-3 py-1.5 rounded-lg flex items-center gap-2 text-[10px] font-black tracking-widest uppercase transition-colors ${movementMode === 'boom' ? 'bg-black text-[#fcfcf5] dark:bg-white dark:text-black' : 'bg-transparent border'}`}
+                                    style={{ borderColor: colors.border, color: movementMode === 'boom' ? colors.bg : colors.text, backgroundColor: movementMode === 'boom' ? colors.text : 'transparent' }}>
+                                    <Icon name="heart-pulse" size="12" /> BOOM
+                                </button>
+                                <button onClick={() => setMovementMode('bloom')} 
+                                    className={`px-3 py-1.5 rounded-lg flex items-center gap-2 text-[10px] font-black tracking-widest uppercase transition-colors ${movementMode === 'bloom' ? 'bg-black text-[#fcfcf5] dark:bg-white dark:text-black' : 'bg-transparent border'}`}
+                                    style={{ borderColor: colors.border, color: movementMode === 'bloom' ? colors.bg : colors.text, backgroundColor: movementMode === 'bloom' ? colors.text : 'transparent' }}>
+                                    <Icon name="sun" size="12" /> BLOOM
+                                </button>
+                            </div>
+                            <button onClick={onClose} className="p-1 opacity-40 hover:opacity-100 transition-opacity" style={{ color: colors.text }}>
+                                <Icon name="x" size="16" />
+                            </button>
+                        </div>
+
+
+                        {/* Middle Row: Slider */}
+                        <div className="flex items-center gap-4 w-full py-2">
+                            <span className="text-[10px] font-black uppercase tracking-widest opacity-40 whitespace-nowrap" style={{ color: colors.text }}>{sliderLabelLeft}</span>
+                            <input type="range" min="0" max="100" value={spinIntensity} onChange={e => setSpinIntensity(Number(e.target.value))} 
+                                   className="coin-slider-lg flex-grow" style={{ cursor: 'pointer' }} />
+                            <span className="text-[10px] font-black uppercase tracking-widest opacity-40 whitespace-nowrap" style={{ color: colors.text }}>{sliderLabelRight}</span>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+
+        const JotterLogoButton = ({ onClick, onNext, onPrev, isPlaying, hasStarted, isLoading, isShuffleMode, flipState, colors, genre, spinIntensity, movementMode }) => {
+            const [showIcon, setShowIcon] = React.useState(false);
+            const iconTimerRef = React.useRef(null);
+            React.useEffect(() => {
+                if (iconTimerRef.current) clearTimeout(iconTimerRef.current);
+                setShowIcon(true);
+                iconTimerRef.current = setTimeout(() => setShowIcon(false), 1500);
+                return () => { if (iconTimerRef.current) clearTimeout(iconTimerRef.current); };
+            }, [isPlaying]);
+            
+            const animationClass = flipState === 'y' ? 'animate-flip-y' :
+                                  flipState === 'y-reverse' ? 'animate-flip-y-reverse' :
+                                  flipState === 'x' ? 'animate-flip-x' :
+                                  flipState === 'x-reverse' ? 'animate-flip-x-reverse' : '';
+            
+            const rafRef = React.useRef(null);
+            const containerRef = React.useRef(null);
+            // Three ring refs for Aerotrim
+            const ring1Ref = React.useRef(null);
+            const ring2Ref = React.useRef(null);
+            const ring3Ref = React.useRef(null);
+
+
+            const driftRef = React.useRef({ t: Math.random() * 1000, rx: 0, ry: 0, rz: 0 });
+            const swipeRef = React.useRef({ x: 0, y: 0, swiped: false });
+            
+            const handleSwipeStart = (e) => {
+                const t = e.touches[0];
+                swipeRef.current = { x: t.clientX, y: t.clientY, swiped: false };
+            };
+            const handleSwipeEnd = (e) => {
+                const t = e.changedTouches[0];
+                const dx = t.clientX - swipeRef.current.x;
+                const dy = t.clientY - swipeRef.current.y;
+                const absDx = Math.abs(dx);
+                const absDy = Math.abs(dy);
+                if (absDx > 50 && absDx > absDy) {
+                    swipeRef.current.swiped = true;
+                    if (dx > 0) onPrev(); else onNext();
+                    if (!isPlaying && hasStarted) onClick();
+                } else if (absDy > 50 && absDy > absDx) {
+                    swipeRef.current.swiped = true;
+                    if (dy < 0) onNext(); else onPrev();
+                    if (!isPlaying && hasStarted) onClick();
+                }
+            };
+
+
+            React.useEffect(() => {
+                if (flipState) {
+                    const d = driftRef.current;
+                    d.rx = 0; d.ry = 0; d.rz = 0;
+                    if (containerRef.current) containerRef.current.style.transform = 'rotateX(0deg) rotateY(0deg) rotateZ(0deg)';
+                }
+            }, [flipState]);
+
+
+            const shouldSpin = isPlaying && hasStarted;
+            const genreIntensity = React.useMemo(() => {
+                const map = {
+                    'AMBIENT + CHILLOUT': 0.3, 'Classical': 0.35, 'Jazz': 0.5,
+                    'Soul + Oldies': 0.55, 'Dub + Reggae': 0.6, 'Legends': 0.6,
+                    'Rock + Indie': 0.75, 'Eclectic': 0.8, 'Hip Hop + RnB': 0.85,
+                    'ELECTRONIC + IDM': 0.9, 'HOUSE + UKG': 0.95, "JUNGLE + D'N'B": 1.0
+                };
+                return map[genre] || 0.6;
+            }, [genre]);
+
+
+            const intensityRef = React.useRef(spinIntensity / 100);
+            React.useEffect(() => { intensityRef.current = spinIntensity / 100; }, [spinIntensity]);
+
+
+            const shapeClass = 'shape-circle';
+            // Layer configuration for 3D depth
+            const layerCount = 48;
+            const layerSpacing = 0.34; 
+            const layerOffsetStart = -(layerCount * layerSpacing) / 2;
+
+
+            React.useEffect(() => {
+                if (rafRef.current) cancelAnimationFrame(rafRef.current);
+                const d = driftRef.current;
+                let last = performance.now();
+
+
+                // Main Animation Loop
+                const tick = (now) => {
+                    const dt = Math.min((now - last) / 1000, 0.05);
+                    last = now;
+                    d.t += dt;
+
+
+                    const s = intensityRef.current; // 0 to 1
+
+
+                    // --- FLOAT: Complex multi-sine idle with edgeBoost ---
+                    if ((movementMode === 'float' || !['boom','ripple','aerotrim','bloom'].includes(movementMode)) && shouldSpin) {
+                        const gi = genreIntensity;
+                        d.rz = (d.rz + (25 + s * gi * 175) * dt) % 360;
+
+                        if (s < 0.02) {
+                            let nx = ((d.rx % 360) + 540) % 360 - 180;
+                            let ny = ((d.ry % 360) + 540) % 360 - 180;
+                            d.rx = nx - nx * Math.min(dt * 8, 1);
+                            d.ry = ny - ny * Math.min(dt * 8, 1);
+                            if (containerRef.current) {
+                                containerRef.current.style.transform = `rotateX(${d.rx}deg) rotateY(${d.ry}deg) rotateZ(${d.rz}deg)`;
+                                containerRef.current.style.filter = 'none';
+                            }
+                        } else {
+                            const xWave = 0.5 + 0.22 * Math.sin(d.t * 0.31) + 0.15 * Math.sin(d.t * 0.53 + 1.7) + 0.10 * Math.sin(d.t * 0.89 + 3.1) + 0.03 * Math.sin(d.t * 1.41 + 0.5);
+                            const yWave = 0.5 + 0.22 * Math.sin(d.t * 0.23 + 2.3) + 0.15 * Math.sin(d.t * 0.61 + 0.9) + 0.10 * Math.sin(d.t * 0.79 + 4.2) + 0.03 * Math.sin(d.t * 1.17 + 1.8);
+                            const scale = 60 * s + s * gi * 240;
+                            const edgeBoost = (angle) => {
+                                const a = ((angle % 360) + 360) % 360;
+                                const fromFlat = a <= 180 ? a : 360 - a;
+                                if (fromFlat > 30 && fromFlat < 150) return 1.0 + 1.8 * Math.sin((fromFlat - 30) / 120 * Math.PI);
+                                return 1.0;
+                            };
+                            d.rx = (d.rx + xWave * scale * edgeBoost(d.rx) * dt) % 360;
+                            d.ry = (d.ry + yWave * scale * edgeBoost(d.ry) * dt) % 360;
+
+                            if (containerRef.current) {
+                                containerRef.current.style.transform = `rotateX(${d.rx}deg) rotateY(${d.ry}deg) rotateZ(${d.rz}deg)`;
+                                containerRef.current.style.filter = 'none';
+                            }
+                        }
+                    }
+                    // --- BOOM: Punchy heartbeat scale ---
+                    else if (movementMode === 'boom' && shouldSpin) {
+                        const bpm = 60 + (s * 110); // 60-170 BPM
+                        const phase = (d.t * (bpm / 60) * Math.PI) % Math.PI;
+                        // Asymmetric: fast punch out (pow 0.4), slower retract
+                        const beat = Math.pow(Math.sin(phase), 0.4);
+                        const scale = 1 + (beat * 0.15);
+                        
+                        // Slow constant Z-spin so coin stays readable
+                        d.rz = (d.rz + 15 * dt) % 360;
+                        // Flatten X/Y to keep face visible
+                        d.rx = d.rx - d.rx * Math.min(dt * 5, 1);
+                        d.ry = d.ry - d.ry * Math.min(dt * 5, 1);
+
+                        if (containerRef.current) {
+                            containerRef.current.style.transform = `scale(${scale}) rotateX(${d.rx}deg) rotateY(${d.ry}deg) rotateZ(${d.rz}deg)`;
+                            containerRef.current.style.filter = 'none';
+                        }
+                    }
+                    // --- RIPPLE: Sonar ripple (coin stays still, circles are separate DOM) ---
+                    else if (movementMode === 'ripple' && shouldSpin) {
+                        // Coin: slow steady spin, no tilt
+                        d.rz = (d.rz + 12 * dt) % 360;
+                        d.rx = d.rx - d.rx * Math.min(dt * 5, 1);
+                        d.ry = d.ry - d.ry * Math.min(dt * 5, 1);
+
+                        if (containerRef.current) {
+                            containerRef.current.style.transform = `rotateX(${d.rx}deg) rotateY(${d.ry}deg) rotateZ(${d.rz}deg)`;
+                            containerRef.current.style.filter = 'none';
+                        }
+                    }
+                    // --- AEROTRIM: Chaotic gyroscope tumble ---
+                    else if (movementMode === 'aerotrim' && shouldSpin) {
+                         const baseSpeed = 0.5 + (s * 4);
+                         const insaneMultiplier = s > 0.9 ? (1 + (s - 0.9) * 20) : 1; 
+                         const chaosSpeed = baseSpeed * insaneMultiplier;
+
+                         if (ring1Ref.current) ring1Ref.current.style.transform = `rotateX(${now * 0.05 * chaosSpeed}deg)`;
+                         if (ring2Ref.current) ring2Ref.current.style.transform = `rotateY(${now * 0.07 * chaosSpeed}deg)`;
+                         if (ring3Ref.current) ring3Ref.current.style.transform = `rotateZ(${now * 0.03 * chaosSpeed}deg) rotateX(45deg)`;
+
+                         d.rx = (d.rx + (60 * chaosSpeed) * dt) % 360;
+                         d.ry = (d.ry + (90 * chaosSpeed) * dt) % 360;
+                         d.rz = (d.rz + (40 * chaosSpeed) * dt) % 360;
+
+                         if (containerRef.current) {
+                             containerRef.current.style.transform = `rotateX(${d.rx}deg) rotateY(${d.ry}deg) rotateZ(${d.rz}deg)`;
+                             containerRef.current.style.filter = 'none';
+                         }
+                    }
+                    // --- BLOOM: Radioactive glow ---
+                    else if (movementMode === 'bloom' && shouldSpin) {
+                        // Steady spin
+                        d.rz = (d.rz + (15 + s * 25) * dt) % 360;
+                        // Flatten gently
+                        d.rx = d.rx - d.rx * Math.min(dt * 3, 1);
+                        d.ry = d.ry - d.ry * Math.min(dt * 3, 1);
+                        
+                        const blurPx = s * 10;
+                        const brightness = 1 + (s * 0.6);
+
+                        if (containerRef.current) {
+                            containerRef.current.style.transform = `rotateX(${d.rx}deg) rotateY(${d.ry}deg) rotateZ(${d.rz}deg)`;
+                            containerRef.current.style.filter = `blur(${blurPx}px) brightness(${brightness})`;
+                        }
+                    }
+                    else {
+                        // Reset when stopped — smooth deceleration
+                        let nx = ((d.rx % 360) + 540) % 360 - 180;
+                        let ny = ((d.ry % 360) + 540) % 360 - 180;
+                        d.rx = nx - nx * Math.min(dt * 6, 1);
+                        d.ry = ny - ny * Math.min(dt * 6, 1);
+                        d.rz = d.rz - d.rz * Math.min(dt * 3, 1);
+                        if (containerRef.current) {
+                            containerRef.current.style.transform = `rotateX(${d.rx}deg) rotateY(${d.ry}deg) rotateZ(${d.rz}deg)`;
+                            containerRef.current.style.filter = 'none';
+                        }
+                        
+                        if (Math.abs(nx) <= 0.5 && Math.abs(ny) <= 0.5 && Math.abs(d.rz) <= 0.5) {
+                            d.rx = 0; d.ry = 0; d.rz = 0;
+                            if (containerRef.current) containerRef.current.style.transform = 'rotateX(0deg) rotateY(0deg) rotateZ(0deg)';
+                        }
+                    }
+                    rafRef.current = requestAnimationFrame(tick);
+                };
+                rafRef.current = requestAnimationFrame(tick);
+                return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
+            }, [shouldSpin, genreIntensity, movementMode]);
+
+
+            return (
+                <div onTouchStart={handleSwipeStart} onTouchEnd={handleSwipeEnd} className="relative flex items-center justify-center" style={{ width: '300px', height: '300px' }}>
+                    
+                    {/* Aerotrim Rings */}
+                    {movementMode === 'aerotrim' && shouldSpin && (
+                        <div className="absolute inset-0 pointer-events-none flex items-center justify-center animate-in">
+                            <div ref={ring1Ref} className="absolute w-[280px] h-[280px] rounded-full border-[2px] border-opacity-60 shadow-[0_0_10px_rgba(126,194,173,0.2)]" style={{ borderColor: colors.teal, transformStyle: 'preserve-3d' }}></div>
+                            <div ref={ring2Ref} className="absolute w-[240px] h-[240px] rounded-full border-[2px] border-opacity-60 shadow-[0_0_10px_rgba(229,184,74,0.2)]" style={{ borderColor: colors.yellow, transformStyle: 'preserve-3d' }}></div>
+                            <div ref={ring3Ref} className="absolute w-[200px] h-[200px] rounded-full border-[2px] border-opacity-60 shadow-[0_0_10px_rgba(0,0,0,0.15)]" style={{ borderColor: colors.text, transformStyle: 'preserve-3d' }}></div>
+                        </div>
+                    )}
+
+                    {/* Ripple Circles — regular intervals, speed scales with slider */}
+                    {movementMode === 'ripple' && shouldSpin && (() => {
+                        const s = spinIntensity / 100;
+                        const speed = Math.max(0.8, 3.5 - s * 2.7);
+                        const circleCount = Math.max(1, Math.round(1 + s * 5));
+                        const spacing = speed / circleCount;
+                        return (
+                        <div key={`ripple-${circleCount}-${Math.round(speed*10)}`} className="absolute inset-0 pointer-events-none flex items-center justify-center animate-in">
+                            {[...Array(circleCount)].map((_, i) => (
+                                <div key={i} className="absolute rounded-full"
+                                     style={{
+                                         width: '160px', height: '160px',
+                                         border: '2px solid #88BBAA',
+                                         animation: `pulse-ripple ${speed}s ease-out infinite`,
+                                         animationDelay: `${i * spacing}s`,
+                                         opacity: 0
+                                     }} />
+                            ))}
+                        </div>
+                        );
+                    })()}
+
+                    {/* Bloom Background Blobs — large diffused glow that grows with slider */}
+                    {movementMode === 'bloom' && shouldSpin && (() => {
+                        const blobSize = 250 + (spinIntensity / 100) * 350;
+                        const blobOpacity = 0.25 + (spinIntensity / 100) * 0.45;
+                        return (
+                        <div className="absolute inset-0 pointer-events-none flex items-center justify-center animate-in" style={{ overflow: 'visible' }}>
+                            <div className="absolute rounded-full"
+                                 style={{
+                                     width: `${blobSize}px`, height: `${blobSize}px`,
+                                     background: `radial-gradient(circle, rgba(126,194,173,${blobOpacity}) 0%, rgba(126,194,173,${blobOpacity * 0.3}) 40%, transparent 70%)`,
+                                     animation: 'bloom-blob-1 4s ease-in-out infinite',
+                                     transform: 'translate(-30px, -25px)'
+                                 }} />
+                            <div className="absolute rounded-full"
+                                 style={{
+                                     width: `${blobSize * 0.9}px`, height: `${blobSize * 0.9}px`,
+                                     background: `radial-gradient(circle, rgba(229,184,74,${blobOpacity * 0.8}) 0%, rgba(229,184,74,${blobOpacity * 0.25}) 40%, transparent 70%)`,
+                                     animation: 'bloom-blob-2 4.5s ease-in-out infinite',
+                                     transform: 'translate(25px, 20px)'
+                                 }} />
+                            <div className="absolute rounded-full"
+                                 style={{
+                                     width: `${blobSize * 0.7}px`, height: `${blobSize * 0.7}px`,
+                                     background: `radial-gradient(circle, rgba(126,194,173,${blobOpacity * 0.5}) 0%, transparent 60%)`,
+                                     animation: 'bloom-blob-1 5s ease-in-out infinite 1s',
+                                     transform: 'translate(15px, -30px)'
+                                 }} />
+                        </div>
+                        );
+                    })()}
+
+
+                    <div className="group" style={{ position: 'relative', width: '180px', height: '180px', clipPath: 'circle(50%)' }}>
+                        <div className="coin-container">
+                        <div ref={containerRef} style={{ transformStyle: 'preserve-3d' }}>
+                        <button
+                            onClick={onClick}
+                            className={`relative group coin-btn transition-all duration-500 active:scale-95 flex-shrink-0 touch-manipulation block bg-transparent outline-none
+                                ${isLoading ? 'animate-pulse' : ('')}
+                                ${animationClass} ${shapeClass}`}
+                            style={{
+                                width: '180px', height: '180px',
+                                transformStyle: 'preserve-3d',
+                                transform: 'translateZ(0px)',
+                                transition: 'transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)'
+                            }}
+                        >
+                            {[...Array(layerCount)].map((_, i) => (
+                                <div key={i} className={`absolute inset-0 ${shapeClass}`}
+                                     style={{ 
+                                         backgroundImage: `url(${COIN_LOGO})`,
+                                         backgroundSize: 'cover',
+                                         backgroundPosition: 'center',
+                                         transform: `translateZ(${layerOffsetStart + (i * layerSpacing)}px)`, 
+                                         backfaceVisibility: 'visible'
+                                     }} />
+                            ))}
+                            
+                            {/* Front Face - Logo Image */}
+                            <div className={`absolute inset-0 flex items-center justify-center overflow-hidden ${shapeClass}`}
+                                 style={{ transform: `translateZ(${Math.abs(layerOffsetStart)}px)`, backfaceVisibility: 'hidden' }}>
+                                <img src={COIN_LOGO} alt="" className="absolute inset-0 w-full h-full object-cover pointer-events-none" draggable="false" />
+                                {/* Play/Pause Icon Overlay */}
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                    <div className={`absolute transition-all duration-700 flex items-center justify-center ${(!hasStarted) ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`} style={{ color: '#fcfcf5' }}>
+                                        <Icon name="play" size="40" fill="currentColor" className="translate-x-0.5" />
+                                    </div>
+                                    <div className={`absolute flex items-center justify-center ${hasStarted ? 'coin-icon-hover' : ''} ${(hasStarted) ? ((isPlaying && !showIcon) ? 'opacity-0 scale-100' : 'opacity-80 scale-100') : 'opacity-0 scale-150'}`} style={{ color: '#fcfcf5', transition: 'opacity 0.8s ease, transform 0.7s' }}>
+                                        {isPlaying ? <Icon name="pause" size="40" fill="currentColor" /> : <Icon name="play" size="40" fill="currentColor" className="translate-x-0.5" />}
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            {/* Back Face - Logo Image */}
+                            <div className={`absolute inset-0 flex items-center justify-center overflow-hidden ${shapeClass}`}
+                                 style={{ transform: `translateZ(${layerOffsetStart - 0.5}px) rotateY(180deg)`, backfaceVisibility: 'hidden' }}>
+                                <img src={COIN_LOGO} alt="" className="absolute inset-0 w-full h-full object-cover pointer-events-none" draggable="false" />
+                                {/* Play/Pause Icon Overlay */}
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                    <div className={`absolute transition-all duration-700 flex items-center justify-center ${(!hasStarted) ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`} style={{ color: '#fcfcf5' }}>
+                                        <Icon name="play" size="40" fill="currentColor" className="translate-x-0.5" />
+                                    </div>
+                                    <div className={`absolute flex items-center justify-center ${hasStarted ? 'coin-icon-hover' : ''} ${(hasStarted) ? ((isPlaying && !showIcon) ? 'opacity-0 scale-100' : 'opacity-80 scale-100') : 'opacity-0 scale-150'}`} style={{ color: '#fcfcf5', transition: 'opacity 0.8s ease, transform 0.7s' }}>
+                                        {isPlaying ? <Icon name="pause" size="40" fill="currentColor" /> : <Icon name="play" size="40" fill="currentColor" className="translate-x-0.5" />}
+                                    </div>
+                                </div>
+                            </div>
+                        </button>
+                        </div>
+                    </div>
+                        <div onClick={onClick} className={`absolute inset-0 cursor-pointer z-10 ${shapeClass}`} style={{ background: 'transparent' }} />
+                        </div>
+                </div>
+            );
+        };
+
+
+        const MoodOverlay = ({ onSelect, onClose, selected, colors }) => (
+            <div className="fixed inset-0 z-[100] flex flex-col animate-overlay-in backdrop-blur-2xl" style={{ backgroundColor: colors.overlayBg }}>
+                <CloseButton onClick={onClose} colors={colors} />
+                <div className="flex-grow overflow-y-auto px-6 pt-20 pb-40 landscape:pt-6 landscape:pb-10 landscape-mood-container custom-scrollbar">
+                    <div className="max-w-4xl mx-auto flex flex-col items-center">
+                        <h4 className="font-young-serif text-3xl sm:text-4xl landscape-mood-title font-black tracking-tight mb-8 text-center uppercase" style={{ color: colors.text }}>Vibe check</h4>
+                        <div className="grid grid-cols-3 landscape:grid-cols-6 landscape-mood-grid gap-4 sm:gap-6 w-full max-w-sm landscape:max-w-4xl">
+                            {MOODS.map((mood, idx) => (
+                                <button
+                                    key={mood.label}
+                                    onClick={() => onSelect(mood.emoji)}
+                                    className={`aspect-square flex items-center justify-center text-3xl sm:text-4xl rounded-[1.5rem] border transition-all animate-brand-kinetic outline-none group raised-button ${selected === mood.emoji ? 'selected' : ''}`}
+                                    style={{
+                                        animationDelay: `${idx * 40}ms`,
+                                        borderColor: selected === mood.emoji ? colors.text : colors.border,
+                                        boxShadow: selected === mood.emoji ? 'inset 0 4px 8px rgba(0,0,0,0.2)' : colors.buttonShadow,
+                                        transform: selected === mood.emoji ? 'translateY(2px)' : 'translateY(0)',
+                                    }}
+                                >
+                                    <span className="group-hover:scale-110 group-active:scale-95 transition-transform duration-300">
+                                        {mood.emoji}
+                                    </span>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+
+
+        const GenreOverlay = ({ onSelect, onClose, selected, colors }) => (
+            <div className="fixed inset-0 z-[100] flex flex-col animate-overlay-in backdrop-blur-2xl" style={{ backgroundColor: colors.overlayBg }}>
+                <CloseButton onClick={onClose} colors={colors} />
+                <div className="flex-grow overflow-y-auto px-6 pt-20 pb-40 landscape:pt-6 landscape:pb-10 landscape-genre-container custom-scrollbar">
+                    <div className="max-w-5xl mx-auto flex flex-col items-center">
+                        <h4 className="font-young-serif text-3xl sm:text-4xl landscape-genre-title font-black tracking-tight mb-8 text-center uppercase" style={{ color: colors.text }}>Genre</h4>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 landscape:grid-cols-3 landscape-genre-grid gap-3 w-full">
+                            {GENRES.map((genre, idx) => (
+                                <button key={genre} onClick={() => onSelect(genre)}
+                                    className={`flex items-center justify-between px-5 py-4 rounded-[1.2rem] border animate-brand-kinetic outline-none group raised-button ${selected === genre ? 'selected' : ''}`}
+                                    style={{
+                                        borderColor: selected === genre ? colors.text : colors.border,
+                                        animationDelay: `${idx * 40}ms`,
+                                        boxShadow: selected === genre ? 'inset 0 4px 8px rgba(0,0,0,0.15)' : colors.buttonShadow,
+                                        transform: selected === genre ? 'translateY(2px)' : 'translateY(0)'
+                                    }}>
+                                    <span className="font-young-serif text-base sm:text-lg font-black uppercase tracking-tight truncate mr-2 transition-transform duration-300 group-hover:translate-x-1" 
+                                          >
+                                        {genre}
+                                    </span>
+                                    {selected === genre && <Icon name="check" size="20" strokeWidth={3} className="animate-in" />}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+
+
+        const IndexOverlay = ({ current, onSelect, onClose, stations, refs, colors }) => {
+            useEffect(() => {
+                const timer = setTimeout(() => {
+                    if (current) {
+                        const activeElement = refs.current.get(current.name);
+                        if (activeElement) {
+                            activeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    }
+                }, 100);
+                return () => clearTimeout(timer);
+            }, [current]);
+
+
+            return (
+                <div className="fixed inset-0 z-[100] flex flex-col animate-overlay-in backdrop-blur-3xl" style={{ backgroundColor: colors.overlayBg, color: colors.text }}>
+                    <CloseButton onClick={onClose} colors={colors} />
+                    <div className="flex-grow overflow-y-auto p-4 custom-scrollbar scroll-smooth pt-20">
+                        <div className="max-w-3xl mx-auto flex flex-col">
+                            <h3 className="font-young-serif text-xl sm:text-3xl font-black mb-8 px-6 uppercase text-center">Station index</h3>
+                            {stations.map((station) => (
+                                <div key={station.name} ref={el => { if (el) refs.current.set(station.name, el); }} className="w-full transition-all border-b last:border-0 flex items-stretch hover:opacity-70" style={{ borderColor: colors.border, backgroundColor: current?.name === station.name ? colors.border : 'transparent' }}>
+                                    <button onClick={() => onSelect(station)} className="flex-grow text-left py-5 px-6 outline-none group flex items-center justify-between">
+                                        <div className="flex flex-col">
+                                            <span className={`font-young-serif text-xl sm:text-2xl font-black tracking-tighter uppercase`} style={{ color: current?.name === station.name ? colors.indexActive : colors.indexInactive }}>{station.name}</span>
+                                            <span className="text-[9px] uppercase tracking-widest font-black opacity-40 mt-0.5" style={{ color: colors.text }}>{station.desc.split('.')[0]}</span>
+                                        </div>
+                                        {current?.name === station.name && <div className="w-3.5 h-3.5 rounded-full animate-pulse" style={{ backgroundColor: colors.yellow }} />}
+                                    </button>
+                                    <a href={station.sourceUrl} target="_blank" rel="noopener noreferrer" className="px-8 flex items-center justify-center opacity-20 hover:opacity-100 transition-opacity outline-none" style={{ color: colors.text }}><Icon name="external-link" size="18" /></a>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+
+        const AboutOverlay = ({ onClose, colors }) => (
+            <div className="fixed inset-0 z-[100] flex flex-col animate-overlay-in backdrop-blur-2xl" style={{ backgroundColor: colors.overlayBg, color: colors.text }}>
+                <CloseButton onClick={onClose} colors={colors} />
+                <div className="flex-grow overflow-y-auto p-6 sm:p-20 custom-scrollbar pt-20">
+                    <div className="max-w-2xl mx-auto space-y-16 pb-24 text-sm sm:text-base leading-relaxed tracking-tight" style={{ color: colors.text }}>
+                        <section className="space-y-6">
+                            <h4 className="font-young-serif text-3xl sm:text-4xl font-black tracking-tight leading-tight uppercase" style={{ color: colors.text }}>ALGORAD.<span style={{ color: colors.yellow }}>I</span><span style={{ color: colors.teal }}>O</span></h4>
+                            <p>Today’s musical algorithms are designed to keep us addicted to subscriptions and to push major label artist drops, trapping us in soul-numbing content loops while the indie artists and communities who actually create music culture are left behind.</p>
+                            <p>ALGORAD.IO is an attempt to use advanced technology for something better.</p>
+                            <p>The internet is built on algorithms, but they aren’t all dystopian by design. Some algorithms can be used for utopian purposes – like the ones that host independent radio streams, or the co-coding tools that allow a non-coder like me to build a platform to celebrate my favourite music communities.</p>
+                            <p>Designed to live amongst your browser tabs, ALGORAD.IO lets you filter my favourite internet radio stations by mood, genre, or weather. Choose whatever fits your current vibe.</p>
+                            <p>In the age of <a href="https://algotopia.xyz" target="_blank" rel="noopener noreferrer" className="hover:underline font-bold" style={{ color: colors.text }}>Algotopia</a>, this is my way of using technology to highlight human curation and return to the foundations of the internet: community and creativity.</p>
+                        </section>
+
+
+                        <section className="space-y-6 pt-12 border-t" style={{ borderColor: colors.border }}>
+                            <h4 className="font-young-serif text-2xl sm:text-3xl font-black tracking-tight leading-tight uppercase" style={{ color: colors.teal }}>Who's The Selector?</h4>
+                            <p>My name’s <a href="https://www.timnoakes.com/" target="_blank" rel="noopener noreferrer" className="hover:underline font-bold" style={{ color: colors.text }}>Tim</a> and I’m an algoholic.</p>
+                            <p>I’ve also spent a lifetime being obsessed with the radio, as both a listener and host.</p>
+                            <p>My broadcasting journey began producing student radio at London Guildhall University in the late 90s. This foundation led to a career scouting new talent for John Kennedy’s X-Posure show on Radio X, curating new music playlists for Dazed Digital, leading an editorial team at Boiler Room, and being a repeat guest on BBC Radio 1’s Review Show. I was also one of the original DJs at NTS Radio, hosting the <a href="https://www.timnoakes.com/ntslive" target="_blank" rel="noopener noreferrer" className="hover:underline font-bold" style={{ color: colors.text }}>Synth Hero Show</a> from the station’s launch in 2011 through to 2019.</p>
+                            <p>ALGORAD.IO is my latest audio adventure – a human curated sidequest co-coded with AI to discover and listen to my favourite indie stations in a new way. I’ve really enjoyed making it, so I thought I’d share it with other like-minded music fans. There’s links to all of the stations in the index, so click through and support them.</p>
+                            <p className="font-black pt-4">– <a href="https://www.timnoakes.com/" target="_blank" rel="noopener noreferrer" className="hover:underline" style={{ color: colors.text }}>Tim Noakes</a></p>
+                        </section>
+
+
+                        <section className="space-y-8 pt-12 border-t" style={{ borderColor: colors.border }}>
+                            <h4 className="font-young-serif text-2xl sm:text-3xl font-black tracking-tight leading-tight uppercase" style={{ color: colors.yellow }}>Boost Your Signal</h4>
+                            <p>The following indie radio projects have all helped inspire ALGORAD.IO. Please explore them in depth and support their creators.</p>
+                            <div className="grid gap-8">
+                                {INSPIRATION_LINKS.map((link) => (
+                                    <a key={link.name} href={link.url} target="_blank" rel="noopener noreferrer" className="group block space-y-2 pb-6 -mx-4 px-4 rounded-xl transition-all outline-none" 
+                                        onMouseEnter={e => e.currentTarget.style.backgroundColor = colors.bg === '#000000' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)'}
+                                        onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}
+                                        style={{ borderColor: colors.border }}>
+                                        <div className="flex items-center justify-between">
+                                            <span className="font-young-serif text-xl font-black tracking-tight uppercase group-hover:underline" style={{ color: colors.text }}>{link.name}</span>
+                                            <Icon name="external-link" size="18" className="opacity-20 group-hover:opacity-40 transition-opacity" />
+                                        </div>
+                                        <span className="opacity-60 leading-relaxed block">{link.desc}</span>
+                                    </a>
+                                ))}
+                            </div>
+                        </section>
+
+
+                        <section className="space-y-6 pt-12 border-t text-[10px] sm:text-xs uppercase tracking-widest leading-relaxed opacity-40 font-black" style={{ borderColor: colors.border }}>
+                            <h5 className="font-young-serif text-xl font-black uppercase tracking-tight" style={{ color: colors.text }}>Disclaimer</h5>
+                            <p>ALGORAD.IO is strictly a non-commercial project dedicated to the appreciation of internet radio. We do not host, store, or modify any audio content.</p>
+                            <p>All intellectual property, copyright, and licensing for the broadcasts belong exclusively to the original stations. If you are a rights holder and would prefer your stream not to be included, please contact us for immediate removal.</p>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        );
+
+
+        const App = () => {
+            const [isNightMode, setIsNightMode] = useState(() => { try { return localStorage.getItem('algoradio-nightmode') === 'true'; } catch(e) { return false; } });
+            const [spinIntensity, setSpinIntensity] = useState(0);
+            const [movementMode, setMovementMode] = useState('float'); // 'float', 'boom', 'ripple', 'aerotrim', 'bloom'
+            const [isCoinSliderOpen, setIsCoinSliderOpen] = useState(false);
+            const [isLandscapeMenuOpen, setIsLandscapeMenuOpen] = useState(false);
+            const [isIndexOpen, setIsIndexOpen] = useState(false);
+            const [isGenreOpen, setIsGenreOpen] = useState(false);
+            const [isMoodOpen, setIsMoodOpen] = useState(false);
+            const [isAboutOpen, setIsAboutOpen] = useState(false);
+            const stationRefs = useRef(new Map());
+            const colors = useMemo(() => getColors(isNightMode), [isNightMode]);
+            useEffect(() => { try { localStorage.setItem('algoradio-nightmode', isNightMode); } catch(e) {} }, [isNightMode]);
+            const { flipState, triggerFlip } = useFlip();
+            const [selectedGenre, setSelectedGenre] = useState("All");
+            const [selectedMood, setSelectedMood] = useState("All");
+            const audio = useAudioPlayer();
+
+
+            const filteredStations = useMemo(
+                () => getFilteredStations(selectedGenre, selectedMood),
+                [selectedGenre, selectedMood]
+            );
+
+
+            const nav = useStationNav({
+                filteredStations,
+                selectedGenre, selectedMood,
+                setSelectedGenre, setSelectedMood,
+                hasStarted: audio.hasStarted,
+                initAudio: audio.initAudio,
+                triggerFlip
+            });
+
+
+            const closeAllOverlays = useCallback(() => {
+                setIsGenreOpen(false); setIsMoodOpen(false);
+                setIsIndexOpen(false); setIsAboutOpen(false); setIsLandscapeMenuOpen(false);
+                setIsCoinSliderOpen(false);
+            }, []);
+
+
+            const handleTogglePlay = () => {
+                triggerFlip(nav.isShuffleMode ? 'x' : 'y');
+                audio.togglePlay(nav.currentStation);
+            };
+
+
+            useKeyboard({
+                hasStarted: audio.hasStarted,
+                isIndexOpen,
+                isShuffleMode: nav.isShuffleMode,
+                filteredStations,
+                stationRefs,
+                handleNext: nav.handleNext,
+                handlePrevious: nav.handlePrevious,
+                handleTogglePlay,
+                handleStationSelect: nav.handleStationSelect,
+                triggerFlip,
+                closeAllOverlays
+            });
+
+
+            useEffect(() => {
+                if (nav.currentStation) audio.setDisplayedName(nav.currentStation.name);
+            }, [nav.currentStation]);
+
+
+            useEffect(() => {
+                return audio.startStationPlayback(nav.currentStation);
+            }, [nav.currentStation, audio.hasStarted]);
+
+
+            useEffect(() => {
+                // Update CSS variables for the body and root buttons to follow theme
+                const body = document.getElementById('app-body');
+                if (body) {
+                    body.style.setProperty('--bg', colors.bg);
+                    body.style.setProperty('--black', colors.black);
+                    body.style.setProperty('--teal', colors.teal);
+                    body.style.setProperty('--yellow', colors.yellow);
+                }
+            }, [colors, isNightMode]);
+
+
+
+
+            const handleMoodBtnClick = () => {
+                if (nav.selectedMood !== "All") {
+                    nav.handleMainMoodToggle();
+                } else {
+                    setIsMoodOpen(true);
+                }
+            };
+
+
+            const handleGenreBtnClick = () => {
+                if (nav.selectedGenre !== "All") {
+                    nav.handleMainGenreToggle();
+                } else {
+                    setIsGenreOpen(true);
+                }
+            };
+
+
+            const handleGenreSelectAndClose = (genre) => {
+                nav.handleGenreSelect(genre);
+                setIsGenreOpen(false);
+            };
+
+
+            const handleMoodSelectAndClose = (moodEmoji) => {
+                nav.handleMoodSelect(moodEmoji);
+                setIsMoodOpen(false);
+            };
+
+
+            const handleStationSelectAndClose = (station) => {
+                nav.handleStationSelect(station);
+            };
+
+
+            const Slug = ({ extraClasses = "" }) => (
+                <p className={`text-[10px] sm:text-xs uppercase tracking-[0.25em] font-black ${extraClasses}`} style={{ color: colors.teal }}>
+                    created by <a href="https://www.jotter.media" target="_blank" rel="noopener noreferrer" className="hover:text-current transition-colors outline-none" style={{ color: colors.text }}>jotter.media</a>
+                </p>
+            );
+
+
+            return (
+                <div className="fixed inset-0 flex flex-col items-center select-none transition-colors duration-500 overflow-hidden touch-none" style={{ backgroundColor: colors.bg, color: colors.text }}>
+                    <audio ref={audio.audioTagRef} />
+                    <div className="fixed inset-0 pointer-events-none z-50 opacity-[0.03] grayscale bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+
+
+                    <button onClick={() => setIsAboutOpen(true)}
+                        className="absolute top-4 left-4 z-50 p-3 rounded-full transition-all duration-500 hover:scale-110 active:scale-90 outline-none group"
+                        style={{ backgroundColor: isNightMode ? '#333333' : 'rgba(0,0,0,0.05)' }}>
+                        <div className="relative w-6 h-6 flex items-center justify-center">
+                            <Icon name="info" size="24" strokeWidth={1.5} fill="none" style={{ color: isNightMode ? '#fcfcf5' : '#000000' }} />
+                        </div>
+                    </button>
+
+
+                    {audio.hasStarted && (
+                        <button onClick={() => setIsLandscapeMenuOpen(true)}
+                            className="absolute top-4 right-4 z-50 p-3 rounded-full transition-all duration-500 hover:scale-110 active:scale-90 outline-none hidden mobile-landscape-only items-center justify-center"
+                            style={{ backgroundColor: isNightMode ? '#333333' : 'rgba(0,0,0,0.05)' }}>
+                            <div className="relative w-6 h-6 flex items-center justify-center">
+                                <Icon name="menu" size="24" strokeWidth={1.5} fill="none" style={{ color: isNightMode ? '#fcfcf5' : '#000000' }} />
+                            </div>
+                        </button>
+                    )}
+
+                    <header className="w-full h-[25vh] md:h-[33vh] short:landscape:h-[25vh] flex flex-col items-center justify-center text-center px-4 pt-16 short:landscape:pt-8 flex-shrink-0 z-10 overflow-visible relative">
+                        <div className={`absolute transition-all duration-1000 ease-in-out flex flex-col items-center px-4 ${audio.hasStarted ? 'opacity-0 scale-95 blur-xl pointer-events-none' : 'opacity-100 scale-100 blur-0'}`}>
+                            <h2 className="font-young-serif text-5xl sm:text-7xl md:text-8xl short:landscape:text-4xl font-black tracking-tighter uppercase" style={{ color: colors.text }}>
+                                ALGORAD.<span style={{ color: colors.yellow }}>I</span><span style={{ color: colors.teal }}>O</span>
+                            </h2>
+                        </div>
+                        
+                        <div className={`absolute transition-all duration-1000 ease-in-out w-full flex flex-col items-center px-2 ${!audio.hasStarted ? 'opacity-0 scale-105 blur-xl pointer-events-none' : 'opacity-100 scale-100 blur-0'}`}>
+                            <h2 className={`font-young-serif tracking-tighter leading-[0.85] uppercase transition-all duration-1000 w-full break-words ${getTitleFontSize(audio.displayedName)} short:landscape:text-4xl ${audio.isLoading ? 'opacity-20 blur-md' : 'opacity-100'}`} style={{ color: colors.text }}>
+                                {audio.displayedName}
+                            </h2>
+                            <div className={`mt-2 short:landscape:mt-1 transition-all duration-1000 ${audio.isLoading ? 'opacity-0 blur-md translate-y-2' : 'opacity-40 translate-y-0'}`}>
+                                <p className="text-[10px] sm:text-xs short:landscape:text-[8px] uppercase tracking-widest font-bold max-w-full" style={{ color: colors.text }}>{audio.displayedDesc}</p>
+                            </div>
+                        </div>
+                    </header>
+
+
+                    <main className="flex-grow flex items-center justify-center w-full space-x-6 sm:space-x-12 md:space-x-20 z-10">
+                        <div className={`transition-all duration-700 ${audio.hasStarted ? 'opacity-20 scale-100' : 'opacity-0 scale-75 pointer-events-none'}`}>
+                            <button onClick={nav.handlePrevious} className="p-2 outline-none transition-all active:scale-90" style={{ color: colors.text }}><Icon name="skip-back" size="48" strokeWidth={0} fill="currentColor" /></button>
+                        </div>
+                        
+                        <JotterLogoButton 
+                            onClick={handleTogglePlay} 
+                            onNext={nav.handleNext} 
+                            onPrev={nav.handlePrevious} 
+                            isPlaying={audio.isPlaying} 
+                            hasStarted={audio.hasStarted} 
+                            isLoading={audio.isLoading} 
+                            isShuffleMode={nav.isShuffleMode} 
+                            flipState={flipState} 
+                            colors={colors} 
+                            genre={nav.currentStation?.genre} 
+                            spinIntensity={spinIntensity}
+                            movementMode={movementMode}
+                        />
+                        
+                        <div className={`transition-all duration-700 ${audio.hasStarted ? 'opacity-20 scale-100' : 'opacity-0 scale-75 pointer-events-none'}`}>
+                            <button onClick={nav.handleNext} className="p-2 outline-none transition-all active:scale-90" style={{ color: colors.text }}><Icon name="skip-forward" size="48" strokeWidth={0} fill="currentColor" /></button>
+                        </div>
+                    </main>
+
+
+                    <footer className="w-full flex flex-col items-center justify-end pb-12 md:pb-16 flex-shrink-0 z-10 min-h-[160px] sm:min-h-[120px]">
+                        <div className="flex flex-col items-center w-full">
+                            {audio.hasStarted && (
+                                <div className="grid grid-cols-3 sm:flex sm:flex-row items-center justify-center gap-y-6 gap-x-4 px-6 w-full max-w-sm mx-auto mb-8 landscape-button-spacing">
+                                    <FooterBtn icon={isNightMode ? "sun" : "moon"} label={isNightMode ? "Day" : "Night"} onClick={() => setIsNightMode(!isNightMode)} active={isNightMode} colors={colors} delay={100} />
+                                    <FooterBtn label="Vibe" onClick={handleMoodBtnClick} active={nav.selectedMood !== "All"} text={nav.selectedMood !== "All" ? nav.selectedMood : ""} icon={nav.selectedMood !== "All" ? "" : "smile"} colors={colors} delay={200} />
+                                    <FooterBtn icon="shuffle" label="Shuffle" onClick={nav.handleShuffleToggle} active={nav.isShuffleMode} colors={colors} delay={300} />
+                                    <div className="flex flex-col items-center group w-full animate-in" style={{ animationDelay: '400ms' }}
+                                        onTouchStart={() => { window._coinHoldTimer = setTimeout(() => { setIsCoinSliderOpen(true); window._coinHeld = true; }, 400); window._coinHeld = false; }}
+                                        onTouchEnd={() => { clearTimeout(window._coinHoldTimer); if (!window._coinHeld) setIsCoinSliderOpen(p => !p); }}
+                                        onTouchCancel={() => { clearTimeout(window._coinHoldTimer); }}
+                                    >
+                                        <button onClick={() => setIsCoinSliderOpen(p => !p)} className={`w-11 h-11 sm:w-14 sm:h-14 rounded-2xl border flex items-center justify-center transition-all active:scale-95 outline-none touch-manipulation`}
+                                            style={{
+                                                backgroundColor: isCoinSliderOpen ? colors.text : 'transparent',
+                                                borderColor: isCoinSliderOpen ? colors.text : colors.border,
+                                                color: isCoinSliderOpen ? colors.bg : colors.text
+                                            }}>
+                                            <Icon name="target" size="20" className="sm:w-[22px]" strokeWidth={2} fill="none" />
+                                        </button>
+                                        <span className="text-[7px] sm:text-[9px] font-black tracking-[0.15em] mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 uppercase text-center truncate w-full mobile-landscape-hidden" style={{ color: colors.text }}>Coin</span>
+                                    </div>
+                                    <FooterBtn label="Genre" onClick={handleGenreBtnClick} active={nav.selectedGenre !== "All"} text={nav.selectedGenre !== "All" ? GENRE_EMOJIS[nav.selectedGenre] : ""} icon={nav.selectedGenre !== "All" ? "" : "music"} colors={colors} delay={500} />
+                                    <FooterBtn icon="list" label="Index" onClick={() => setIsIndexOpen(true)} colors={colors} delay={600} />
+                                </div>
+                            )}
+                            <div className="mobile-landscape-hidden h-6 flex items-center justify-center">
+                                <Slug extraClasses={`transition-all duration-1000 ${audio.hasStarted ? 'opacity-20 hover:opacity-60' : 'opacity-100 animate-in'}`} />
+                            </div>
+                        </div>
+                    </footer>
+
+
+                    {isCoinSliderOpen && (
+                        <CoinMenuOverlay 
+                            spinIntensity={spinIntensity} 
+                            setSpinIntensity={setSpinIntensity}
+                            movementMode={movementMode}
+                            setMovementMode={setMovementMode}
+                            onClose={() => setIsCoinSliderOpen(false)} 
+                            colors={colors}
+                            isNightMode={isNightMode}
+                        />
+                    )}
+                    {isMoodOpen && <MoodOverlay onSelect={handleMoodSelectAndClose} onClose={() => setIsMoodOpen(false)} selected={nav.selectedMood} colors={colors} />}
+                    {isGenreOpen && <GenreOverlay onSelect={handleGenreSelectAndClose} onClose={() => setIsGenreOpen(false)} selected={nav.selectedGenre} colors={colors} />}
+                    {isIndexOpen && <IndexOverlay current={nav.currentStation} onSelect={handleStationSelectAndClose} onClose={() => setIsIndexOpen(false)} stations={filteredStations} refs={stationRefs} colors={colors} />}
+                    {isAboutOpen && <AboutOverlay onClose={() => setIsAboutOpen(false)} colors={colors} />}
+                    {isLandscapeMenuOpen && (
+                        <div className="fixed inset-0 z-[100] flex items-center justify-center animate-overlay-in" onClick={() => setIsLandscapeMenuOpen(false)}>
+                            <div className="rounded-3xl backdrop-blur-2xl shadow-2xl p-6 min-w-[280px] max-w-[360px]"
+                                 style={{ backgroundColor: isNightMode ? 'rgba(20,20,20,0.9)' : 'rgba(252,252,245,0.92)', border: '1px solid ' + colors.border }}
+                                 onClick={e => e.stopPropagation()}>
+                                <div className="flex items-center justify-between mb-4">
+                                    <span className="text-[10px] font-black uppercase tracking-widest opacity-40" style={{ color: colors.text }}>Menu</span>
+                                    <button onClick={() => setIsLandscapeMenuOpen(false)} className="p-1 opacity-40 hover:opacity-100 transition-opacity" style={{ color: colors.text }}>
+                                        <Icon name="x" size="16" />
+                                    </button>
+                                </div>
+                                <div className="grid grid-cols-3 gap-3">
+                                    <FooterBtn icon={isNightMode ? "sun" : "moon"} label={isNightMode ? "Day" : "Night"} onClick={() => { setIsNightMode(!isNightMode); }} active={isNightMode} colors={colors} />
+                                    <FooterBtn label="Vibe" onClick={() => { setIsLandscapeMenuOpen(false); handleMoodBtnClick(); }} active={nav.selectedMood !== "All"} text={nav.selectedMood !== "All" ? nav.selectedMood : ""} icon={nav.selectedMood !== "All" ? "" : "smile"} colors={colors} />
+                                    <FooterBtn icon="shuffle" label="Shuffle" onClick={() => { nav.handleShuffleToggle(); }} active={nav.isShuffleMode} colors={colors} />
+                                    <FooterBtn icon="target" label="Coin" onClick={() => { setIsLandscapeMenuOpen(false); setIsCoinSliderOpen(p => !p); }} active={isCoinSliderOpen} colors={colors} />
+                                    <FooterBtn label="Genre" onClick={() => { setIsLandscapeMenuOpen(false); handleGenreBtnClick(); }} active={nav.selectedGenre !== "All"} text={nav.selectedGenre !== "All" ? GENRE_EMOJIS[nav.selectedGenre] : ""} icon={nav.selectedGenre !== "All" ? "" : "music"} colors={colors} />
+                                    <FooterBtn icon="list" label="Index" onClick={() => { setIsLandscapeMenuOpen(false); setIsIndexOpen(true); }} colors={colors} />
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
