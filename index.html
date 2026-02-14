@@ -41,6 +41,7 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@300;400;500;600;700&family=Young+Serif&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Bitter:wght@300;400;500;600;700&family=Young+Serif&display=swap');
@@ -950,7 +951,8 @@
                 boom: ['60 BPM', '170 BPM'],
                 ripple: ['Slow', 'Rapid'],
                 aerotrim: ['Drift', 'Chaos'],
-                bloom: ['Crisp', 'Blinding']
+                bloom: ['Crisp', 'Blinding'],
+                orbit: ['Calm', 'Warp']
             };
             const [sliderLabelLeft, sliderLabelRight] = sliderLabels[movementMode] || ['Still', 'Wild'];
 
@@ -987,6 +989,11 @@
                                     className={`px-3 py-1.5 rounded-lg flex items-center gap-2 text-[10px] font-black tracking-widest uppercase transition-colors ${movementMode === 'bloom' ? 'bg-black text-[#fcfdf2] dark:bg-white dark:text-black' : 'bg-transparent border'}`}
                                     style={{ borderColor: colors.border, color: movementMode === 'bloom' ? colors.bg : colors.text, backgroundColor: movementMode === 'bloom' ? colors.text : 'transparent' }}>
                                     <Icon name="sun" size="12" /> BLOOM
+                                </button>
+                                <button onClick={() => setMovementMode('orbit')} 
+                                    className={`px-3 py-1.5 rounded-lg flex items-center gap-2 text-[10px] font-black tracking-widest uppercase transition-colors ${movementMode === 'orbit' ? 'bg-black text-[#fcfdf2] dark:bg-white dark:text-black' : 'bg-transparent border'}`}
+                                    style={{ borderColor: colors.border, color: movementMode === 'orbit' ? colors.bg : colors.text, backgroundColor: movementMode === 'orbit' ? colors.text : 'transparent' }}>
+                                    <Icon name="orbit" size="12" /> ORBIT
                                 </button>
                             </div>
                             <button onClick={onClose} className="p-1 opacity-40 hover:opacity-100 transition-opacity" style={{ color: colors.text }}>
@@ -1029,6 +1036,8 @@
             const ring1Ref = React.useRef(null);
             const ring2Ref = React.useRef(null);
             const ring3Ref = React.useRef(null);
+            const orbitCanvasRef = React.useRef(null);
+            const orbitSceneRef = React.useRef(null);
 
 
             const driftRef = React.useRef({ t: Math.random() * 1000, rx: 0, ry: 0, rz: 0 });
@@ -1105,7 +1114,7 @@
 
 
                     // --- FLOAT: Complex multi-sine idle with edgeBoost ---
-                    if ((movementMode === 'float' || !['boom','ripple','aerotrim','bloom'].includes(movementMode)) && shouldSpin) {
+                    if ((movementMode === 'float' || !['boom','ripple','aerotrim','bloom','orbit'].includes(movementMode)) && shouldSpin) {
                         const gi = genreIntensity;
                         d.rz = (d.rz + (25 + s * gi * 175) * dt) % 360;
 
@@ -1187,6 +1196,14 @@
                              containerRef.current.style.filter = 'none';
                          }
                     }
+                    // --- ORBIT: Three.js handles its own animation ---
+                    else if (movementMode === 'orbit' && shouldSpin) {
+                        // No-op: Three.js runs its own animation loop
+                        if (containerRef.current) {
+                            containerRef.current.style.transform = 'rotateX(0deg) rotateY(0deg) rotateZ(0deg)';
+                            containerRef.current.style.filter = 'none';
+                        }
+                    }
                     // --- BLOOM: Radioactive glow ---
                     else if (movementMode === 'bloom' && shouldSpin) {
                         // Steady spin
@@ -1225,6 +1242,244 @@
                 rafRef.current = requestAnimationFrame(tick);
                 return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
             }, [shouldSpin, genreIntensity, movementMode]);
+
+
+            // --- ORBIT: Three.js 3D coin scene ---
+            React.useEffect(() => {
+                if (movementMode !== 'orbit' || !orbitCanvasRef.current || typeof THREE === 'undefined') return;
+                
+                const canvas = orbitCanvasRef.current;
+                const width = 300, height = 300;
+                
+                // Scene
+                const scene = new THREE.Scene();
+                scene.background = new THREE.Color(0x050505);
+                scene.fog = new THREE.FogExp2(0x050505, 0.008);
+                
+                // Camera
+                const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+                camera.position.set(0, 0, 6);
+                
+                // Renderer
+                const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+                renderer.setSize(width, height);
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                renderer.shadowMap.enabled = true;
+                renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+                renderer.toneMapping = THREE.ACESFilmicToneMapping;
+                renderer.toneMappingExposure = 1.2;
+                
+                // Coin group
+                const coinGroup = new THREE.Group();
+                
+                // Materials
+                const tealMat = new THREE.MeshPhysicalMaterial({
+                    color: 0x82c0ad, metalness: 0.6, roughness: 0.15,
+                    clearcoat: 1.0, clearcoatRoughness: 0.05,
+                    emissive: 0x82c0ad, emissiveIntensity: 0.08
+                });
+                const yellowMat = new THREE.MeshPhysicalMaterial({
+                    color: 0xe5b74c, metalness: 0.6, roughness: 0.15,
+                    clearcoat: 1.0, clearcoatRoughness: 0.05,
+                    emissive: 0xe5b74c, emissiveIntensity: 0.08
+                });
+                const blackMat = new THREE.MeshPhysicalMaterial({
+                    color: 0x111111, metalness: 0.9, roughness: 0.1,
+                    clearcoat: 1.0, clearcoatRoughness: 0.02
+                });
+                
+                // Geometries
+                const outerRing = new THREE.Mesh(new THREE.TorusGeometry(1.6, 0.35, 32, 64), tealMat);
+                outerRing.castShadow = true;
+                outerRing.receiveShadow = true;
+                coinGroup.add(outerRing);
+                
+                const middleRing = new THREE.Mesh(new THREE.TorusGeometry(1.1, 0.28, 32, 64), yellowMat);
+                middleRing.castShadow = true;
+                middleRing.receiveShadow = true;
+                coinGroup.add(middleRing);
+                
+                const core = new THREE.Mesh(new THREE.SphereGeometry(0.75, 48, 48), blackMat);
+                core.scale.set(1, 1, 0.5);
+                core.castShadow = true;
+                core.receiveShadow = true;
+                coinGroup.add(core);
+                
+                scene.add(coinGroup);
+                
+                // Starfield
+                const starGeo = new THREE.BufferGeometry();
+                const starCount = 400;
+                const starPos = new Float32Array(starCount * 3);
+                for (let i = 0; i < starCount * 3; i++) starPos[i] = (Math.random() - 0.5) * 60;
+                starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+                const starMat = new THREE.PointsMaterial({ color: 0xffffff, size: 0.08, sizeAttenuation: true });
+                scene.add(new THREE.Points(starGeo, starMat));
+                
+                // Lights
+                const light1 = new THREE.PointLight(0xffffff, 80, 30);
+                light1.position.set(4, 3, 5);
+                light1.castShadow = true;
+                scene.add(light1);
+                
+                const light2 = new THREE.PointLight(0xffffff, 40, 25);
+                light2.position.set(-3, -2, 4);
+                scene.add(light2);
+                
+                const fillLight = new THREE.PointLight(0x82c0ad, 20, 20);
+                fillLight.position.set(0, 0, -4);
+                scene.add(fillLight);
+                
+                scene.add(new THREE.AmbientLight(0x222233, 0.5));
+                
+                // Traces (ghost echoes)
+                const traces = [];
+                const maxTraces = 70;
+                let traceTimer = 0;
+                
+                const createTraceMaterials = () => ({
+                    teal: tealMat.clone(),
+                    yellow: yellowMat.clone(),
+                    black: blackMat.clone()
+                });
+                
+                // Camera orbit via drag
+                let isDragging = false;
+                let dragStart = { x: 0, y: 0 };
+                let cameraAngle = { theta: 0, phi: Math.PI / 2 };
+                const cameraRadius = 6;
+                
+                const onPointerDown = (e) => {
+                    isDragging = true;
+                    dragStart = { x: e.clientX || e.touches?.[0]?.clientX || 0, y: e.clientY || e.touches?.[0]?.clientY || 0 };
+                };
+                const onPointerMove = (e) => {
+                    if (!isDragging) return;
+                    const cx = e.clientX || e.touches?.[0]?.clientX || 0;
+                    const cy = e.clientY || e.touches?.[0]?.clientY || 0;
+                    cameraAngle.theta -= (cx - dragStart.x) * 0.005;
+                    cameraAngle.phi = Math.max(0.3, Math.min(Math.PI - 0.3, cameraAngle.phi - (cy - dragStart.y) * 0.005));
+                    dragStart = { x: cx, y: cy };
+                };
+                const onPointerUp = () => { isDragging = false; };
+                
+                canvas.addEventListener('mousedown', onPointerDown);
+                canvas.addEventListener('mousemove', onPointerMove);
+                canvas.addEventListener('mouseup', onPointerUp);
+                canvas.addEventListener('touchstart', onPointerDown, { passive: true });
+                canvas.addEventListener('touchmove', onPointerMove, { passive: true });
+                canvas.addEventListener('touchend', onPointerUp);
+                
+                // Animation loop
+                let animId;
+                const clock = new THREE.Clock();
+                
+                const animate = () => {
+                    animId = requestAnimationFrame(animate);
+                    const dt = clock.getDelta();
+                    const elapsed = clock.getElapsedTime();
+                    const s = intensityRef.current;
+                    
+                    // Speed multiplier from slider
+                    const speedMult = 0.3 + s * 2.5;
+                    
+                    // Spin coin on all axes at non-synchronized speeds
+                    coinGroup.rotation.x += dt * 0.7 * speedMult;
+                    coinGroup.rotation.y += dt * 1.1 * speedMult;
+                    coinGroup.rotation.z += dt * 0.4 * speedMult;
+                    
+                    // Trace spawn rate scales with intensity
+                    traceTimer += dt;
+                    const traceInterval = Math.max(0.03, 0.2 - s * 0.17);
+                    
+                    if (traceTimer >= traceInterval) {
+                        traceTimer = 0;
+                        
+                        // Create ghost clone
+                        const ghost = new THREE.Group();
+                        const mats = createTraceMaterials();
+                        
+                        const gOuter = new THREE.Mesh(outerRing.geometry, mats.teal);
+                        const gMiddle = new THREE.Mesh(middleRing.geometry, mats.yellow);
+                        const gCore = new THREE.Mesh(core.geometry, mats.black);
+                        gCore.scale.copy(core.scale);
+                        
+                        ghost.add(gOuter, gMiddle, gCore);
+                        ghost.rotation.copy(coinGroup.rotation);
+                        ghost.userData = { age: 0, maxAge: 1.5 + s * 1.5, mats };
+                        scene.add(ghost);
+                        traces.push(ghost);
+                        
+                        // Remove old traces
+                        while (traces.length > maxTraces) {
+                            const old = traces.shift();
+                            old.children.forEach(c => { c.geometry && c.geometry.dispose(); });
+                            Object.values(old.userData.mats).forEach(m => m.dispose());
+                            scene.remove(old);
+                        }
+                    }
+                    
+                    // Update traces
+                    for (let i = traces.length - 1; i >= 0; i--) {
+                        const t = traces[i];
+                        t.userData.age += dt;
+                        const progress = t.userData.age / t.userData.maxAge;
+                        
+                        if (progress >= 1) {
+                            t.children.forEach(c => { c.geometry && c.geometry.dispose(); });
+                            Object.values(t.userData.mats).forEach(m => m.dispose());
+                            scene.remove(t);
+                            traces.splice(i, 1);
+                        } else {
+                            const opacity = 1 - progress;
+                            const scale = 1 - progress * 0.3;
+                            t.scale.setScalar(scale);
+                            Object.values(t.userData.mats).forEach(m => {
+                                m.opacity = opacity * 0.3;
+                                m.transparent = true;
+                            });
+                        }
+                    }
+                    
+                    // Camera orbit (auto-rotate slowly + user drag)
+                    if (!isDragging) {
+                        cameraAngle.theta += dt * 0.15 * speedMult;
+                    }
+                    camera.position.x = cameraRadius * Math.sin(cameraAngle.phi) * Math.sin(cameraAngle.theta);
+                    camera.position.y = cameraRadius * Math.cos(cameraAngle.phi);
+                    camera.position.z = cameraRadius * Math.sin(cameraAngle.phi) * Math.cos(cameraAngle.theta);
+                    camera.lookAt(0, 0, 0);
+                    
+                    renderer.render(scene, camera);
+                };
+                
+                animate();
+                orbitSceneRef.current = { renderer, scene, animId };
+                
+                return () => {
+                    cancelAnimationFrame(animId);
+                    // Clean up traces
+                    traces.forEach(t => {
+                        t.children.forEach(c => { if (c.geometry) c.geometry.dispose(); });
+                        if (t.userData.mats) Object.values(t.userData.mats).forEach(m => m.dispose());
+                        scene.remove(t);
+                    });
+                    traces.length = 0;
+                    // Dispose main meshes
+                    [outerRing, middleRing, core].forEach(m => { m.geometry.dispose(); m.material.dispose(); });
+                    [tealMat, yellowMat, blackMat, starMat].forEach(m => m.dispose());
+                    starGeo.dispose();
+                    renderer.dispose();
+                    // Remove listeners
+                    canvas.removeEventListener('mousedown', onPointerDown);
+                    canvas.removeEventListener('mousemove', onPointerMove);
+                    canvas.removeEventListener('mouseup', onPointerUp);
+                    canvas.removeEventListener('touchstart', onPointerDown);
+                    canvas.removeEventListener('touchmove', onPointerMove);
+                    canvas.removeEventListener('touchend', onPointerUp);
+                    orbitSceneRef.current = null;
+                };
+            }, [movementMode, shouldSpin]);
 
 
             return (
@@ -1293,7 +1548,16 @@
                     })()}
 
 
-                    <div className="group" style={{ position: 'relative', width: '180px', height: '180px', clipPath: 'circle(50%)' }}>
+                    {/* ORBIT: Three.js 3D Canvas */}
+                    {movementMode === 'orbit' && shouldSpin && (
+                        <div className="absolute inset-0 flex items-center justify-center animate-in" style={{ zIndex: 5 }}>
+                            <canvas ref={orbitCanvasRef} width={300} height={300} 
+                                    style={{ width: '300px', height: '300px', borderRadius: '50%', cursor: 'grab' }} 
+                                    onClick={(e) => { if (!swipeRef.current.swiped) onClick(); }} />
+                        </div>
+                    )}
+
+                    <div className="group" style={{ position: 'relative', width: '180px', height: '180px', clipPath: 'circle(50%)', opacity: movementMode === 'orbit' && shouldSpin ? 0 : 1 }}>
                         <div className="coin-container">
                         <div ref={containerRef} style={{ transformStyle: 'preserve-3d' }}>
                         <button
