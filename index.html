@@ -950,7 +950,7 @@
                 float: ['Still', 'Tumble'],
                 boom: ['60 BPM', '170 BPM'],
                 ripple: ['Slow', 'Rapid'],
-                aerotrim: ['Drift', 'Chaos'],
+                orbit: ['Drift', 'Chaos'],
                 bloom: ['Crisp', 'Blinding'],
                 orbit: ['Calm', 'Warp']
             };
@@ -975,10 +975,10 @@
                                     style={{ borderColor: colors.border, color: movementMode === 'ripple' ? colors.bg : colors.text, backgroundColor: movementMode === 'ripple' ? colors.text : 'transparent' }}>
                                     <Icon name="radar" size="12" /> RIPPLE
                                 </button>
-                                <button onClick={() => setMovementMode('aerotrim')} 
-                                    className={`px-3 py-1.5 rounded-lg flex items-center gap-2 text-[10px] font-black tracking-widest uppercase transition-colors ${movementMode === 'aerotrim' ? 'bg-black text-[#fcfdf2] dark:bg-white dark:text-black' : 'bg-transparent border'}`}
-                                    style={{ borderColor: colors.border, color: movementMode === 'aerotrim' ? colors.bg : colors.text, backgroundColor: movementMode === 'aerotrim' ? colors.text : 'transparent' }}>
-                                    <Icon name="rotate-3d" size="12" /> AEROTRIM
+                                <button onClick={() => setMovementMode('orbit')} 
+                                    className={`px-3 py-1.5 rounded-lg flex items-center gap-2 text-[10px] font-black tracking-widest uppercase transition-colors ${movementMode === 'orbit' ? 'bg-black text-[#fcfdf2] dark:bg-white dark:text-black' : 'bg-transparent border'}`}
+                                    style={{ borderColor: colors.border, color: movementMode === 'orbit' ? colors.bg : colors.text, backgroundColor: movementMode === 'orbit' ? colors.text : 'transparent' }}>
+                                    <Icon name="rotate-3d" size="12" /> ORBIT
                                 </button>
                                 <button onClick={() => setMovementMode('boom')} 
                                     className={`px-3 py-1.5 rounded-lg flex items-center gap-2 text-[10px] font-black tracking-widest uppercase transition-colors ${movementMode === 'boom' ? 'bg-black text-[#fcfdf2] dark:bg-white dark:text-black' : 'bg-transparent border'}`}
@@ -990,10 +990,10 @@
                                     style={{ borderColor: colors.border, color: movementMode === 'bloom' ? colors.bg : colors.text, backgroundColor: movementMode === 'bloom' ? colors.text : 'transparent' }}>
                                     <Icon name="sun" size="12" /> BLOOM
                                 </button>
-                                <button onClick={() => setMovementMode('orbit')} 
-                                    className={`px-3 py-1.5 rounded-lg flex items-center gap-2 text-[10px] font-black tracking-widest uppercase transition-colors ${movementMode === 'orbit' ? 'bg-black text-[#fcfdf2] dark:bg-white dark:text-black' : 'bg-transparent border'}`}
-                                    style={{ borderColor: colors.border, color: movementMode === 'orbit' ? colors.bg : colors.text, backgroundColor: movementMode === 'orbit' ? colors.text : 'transparent' }}>
-                                    <Icon name="orbit" size="12" /> ORBIT
+                                <button onClick={() => setMovementMode('glossy')} 
+                                    className={`px-3 py-1.5 rounded-lg flex items-center gap-2 text-[10px] font-black tracking-widest uppercase transition-colors ${movementMode === 'glossy' ? 'bg-black text-[#fcfdf2] dark:bg-white dark:text-black' : 'bg-transparent border'}`}
+                                    style={{ borderColor: colors.border, color: movementMode === 'glossy' ? colors.bg : colors.text, backgroundColor: movementMode === 'glossy' ? colors.text : 'transparent' }}>
+                                    <Icon name="gem" size="12" /> GLOSSY
                                 </button>
                             </div>
                             <button onClick={onClose} className="p-1 opacity-40 hover:opacity-100 transition-opacity" style={{ color: colors.text }}>
@@ -1032,7 +1032,7 @@
             
             const rafRef = React.useRef(null);
             const containerRef = React.useRef(null);
-            // Three ring refs for Aerotrim
+            // Three ring refs for Orbit
             const ring1Ref = React.useRef(null);
             const ring2Ref = React.useRef(null);
             const ring3Ref = React.useRef(null);
@@ -1114,7 +1114,7 @@
 
 
                     // --- FLOAT: Complex multi-sine idle with edgeBoost ---
-                    if ((movementMode === 'float' || !['boom','ripple','aerotrim','bloom','orbit'].includes(movementMode)) && shouldSpin) {
+                    if ((movementMode === 'float' || !['boom','ripple','orbit','bloom','glossy'].includes(movementMode)) && shouldSpin) {
                         const gi = genreIntensity;
                         d.rz = (d.rz + (25 + s * gi * 175) * dt) % 360;
 
@@ -1177,8 +1177,8 @@
                             containerRef.current.style.filter = 'none';
                         }
                     }
-                    // --- AEROTRIM: Chaotic gyroscope tumble ---
-                    else if (movementMode === 'aerotrim' && shouldSpin) {
+                    // --- ORBIT: Chaotic gyroscope tumble ---
+                    else if (movementMode === 'orbit' && shouldSpin) {
                          const baseSpeed = 0.5 + (s * 4);
                          const insaneMultiplier = s > 0.9 ? (1 + (s - 0.9) * 20) : 1; 
                          const chaosSpeed = baseSpeed * insaneMultiplier;
@@ -1196,8 +1196,8 @@
                              containerRef.current.style.filter = 'none';
                          }
                     }
-                    // --- ORBIT: Three.js handles its own animation ---
-                    else if (movementMode === 'orbit' && shouldSpin) {
+                    // --- GLOSSY: Three.js handles its own animation ---
+                    else if (movementMode === 'glossy' && shouldSpin) {
                         // No-op: Three.js runs its own animation loop
                         if (containerRef.current) {
                             containerRef.current.style.transform = 'rotateX(0deg) rotateY(0deg) rotateZ(0deg)';
@@ -1244,9 +1244,9 @@
             }, [shouldSpin, genreIntensity, movementMode]);
 
 
-            // --- ORBIT: Three.js 3D coin scene ---
+            // --- GLOSSY: Three.js 3D coin scene ---
             React.useEffect(() => {
-                if (movementMode !== 'orbit' || !orbitCanvasRef.current || typeof THREE === 'undefined') return;
+                if (movementMode !== 'glossy' || !orbitCanvasRef.current || typeof THREE === 'undefined') return;
                 
                 const canvas = orbitCanvasRef.current;
                 const width = 300, height = 300;
@@ -1485,8 +1485,8 @@
             return (
                 <div onTouchStart={handleSwipeStart} onTouchEnd={handleSwipeEnd} className="relative flex items-center justify-center" style={{ width: '300px', height: '300px' }}>
                     
-                    {/* Aerotrim Rings */}
-                    {movementMode === 'aerotrim' && shouldSpin && (
+                    {/* Orbit Rings */}
+                    {movementMode === 'orbit' && shouldSpin && (
                         <div className="absolute inset-0 pointer-events-none flex items-center justify-center animate-in">
                             <div ref={ring1Ref} className="absolute w-[280px] h-[280px] rounded-full border-[2px] border-opacity-60 shadow-[0_0_10px_rgba(126,194,173,0.2)]" style={{ borderColor: colors.teal, transformStyle: 'preserve-3d' }}></div>
                             <div ref={ring2Ref} className="absolute w-[240px] h-[240px] rounded-full border-[2px] border-opacity-60 shadow-[0_0_10px_rgba(229,184,74,0.2)]" style={{ borderColor: colors.yellow, transformStyle: 'preserve-3d' }}></div>
@@ -1548,8 +1548,8 @@
                     })()}
 
 
-                    {/* ORBIT: Three.js 3D Canvas */}
-                    {movementMode === 'orbit' && shouldSpin && (
+                    {/* GLOSSY: Three.js 3D Canvas */}
+                    {movementMode === 'glossy' && shouldSpin && (
                         <div className="absolute inset-0 flex items-center justify-center animate-in" style={{ zIndex: 5 }}>
                             <canvas ref={orbitCanvasRef} width={300} height={300} 
                                     style={{ width: '300px', height: '300px', borderRadius: '50%', cursor: 'grab' }} 
@@ -1557,7 +1557,7 @@
                         </div>
                     )}
 
-                    <div className="group" style={{ position: 'relative', width: '180px', height: '180px', clipPath: 'circle(50%)', opacity: movementMode === 'orbit' && shouldSpin ? 0 : 1 }}>
+                    <div className="group" style={{ position: 'relative', width: '180px', height: '180px', clipPath: 'circle(50%)', opacity: movementMode === 'glossy' && shouldSpin ? 0 : 1 }}>
                         <div className="coin-container">
                         <div ref={containerRef} style={{ transformStyle: 'preserve-3d' }}>
                         <button
@@ -1828,7 +1828,7 @@
                                     <ul className="list-disc pl-5 space-y-1 mt-2">
                                         <li>Float {'–'} layered sine-wave drift (Still {'→'} Tumble)</li>
                                         <li>Ripple {'–'} sonar pulse rings (Slow {'→'} Rapid)</li>
-                                        <li>Aerotrim {'–'} gyroscope tumble with rings (Drift {'→'} Chaos)</li>
+                                        <li>Orbit {'–'} gyroscope tumble with rings (Drift {'→'} Chaos)</li>
                                         <li>Boom {'–'} heartbeat scale pulse (60 {'→'} 170 BPM)</li>
                                         <li>Bloom {'–'} radioactive glow (Crisp {'→'} Blinding)</li>
                                     </ul>
@@ -1894,7 +1894,7 @@
         const App = () => {
             const [isNightMode, setIsNightMode] = useState(() => { try { return localStorage.getItem('relayradio-nightmode') === 'true'; } catch(e) { return false; } });
             const [spinIntensity, setSpinIntensity] = useState(0);
-            const [movementMode, setMovementMode] = useState('float'); // 'float', 'boom', 'ripple', 'aerotrim', 'bloom'
+            const [movementMode, setMovementMode] = useState('float'); // 'float', 'boom', 'ripple', 'orbit', 'bloom', 'glossy'
             const [isCoinSliderOpen, setIsCoinSliderOpen] = useState(false);
             const [isLandscapeMenuOpen, setIsLandscapeMenuOpen] = useState(false);
             const [isIndexOpen, setIsIndexOpen] = useState(false);
