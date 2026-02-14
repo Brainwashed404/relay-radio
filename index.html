@@ -46,7 +46,7 @@
 
 
         :root {
-            --bg: #fcfcf5;
+            --bg: #fcfdf2;
             --teal: #7ec2ad;
             --teal-dark: #4a8b78;
             --yellow: #e5b84a;
@@ -544,19 +544,19 @@
         const getColors = (isNightMode) => {
             return isNightMode ? {
                 bg: '#000000',
-                text: '#fcfcf5',
+                text: '#fcfdf2',
                 teal: '#4a8b78',
                 tealDark: '#7ec2ad',
                 yellow: '#bfa15f',
-                black: '#fcfcf5',
+                black: '#fcfdf2',
                 border: '#333333',
                 overlayBg: 'rgba(0,0,0,0.95)',
                 indexActive: '#e5b84a',
-                indexInactive: '#fcfcf5',
+                indexInactive: '#fcfdf2',
                 buttonShadow: '0 8px 24px rgba(0,0,0,0.6)',
                 buttonShadowHover: '0 12px 32px rgba(0,0,0,0.8)'
             } : {
-                bg: '#fcfcf5',
+                bg: '#fcfdf2',
                 text: '#000000',
                 teal: '#7ec2ad',
                 tealDark: '#4a8b78',
@@ -901,7 +901,7 @@
             <button onClick={onClick} className="absolute top-4 right-4 landscape:top-2 landscape:right-2 w-12 h-12 rounded-full transition-transform hover:rotate-90 active:scale-95 z-[110] outline-none shadow-lg overflow-hidden flex items-center justify-center" style={{ backgroundColor: colors.teal }}>
                 <div className="absolute inset-[9%] rounded-full shadow-inner" style={{ backgroundColor: colors.yellow }} />
                 <div className="absolute inset-[22.5%] rounded-full flex items-center justify-center bg-black">
-                    <Icon name="x" size="20" className="text-[#fcfcf5]" strokeWidth={3} />
+                    <Icon name="x" size="20" className="text-[#fcfdf2]" strokeWidth={3} />
                 </div>
             </button>
         );
@@ -943,28 +943,28 @@
                         <div className="flex items-center gap-2 w-full justify-between mb-1">
                             <div className="flex gap-2 landscape:gap-1 flex-wrap">
                                 <button onClick={() => setMovementMode('float')} 
-                                    className={`px-3 py-1.5 rounded-lg flex items-center gap-2 text-[10px] font-black tracking-widest uppercase transition-colors ${movementMode === 'float' ? 'bg-black text-[#fcfcf5] dark:bg-white dark:text-black' : 'bg-transparent border'}`}
+                                    className={`px-3 py-1.5 rounded-lg flex items-center gap-2 text-[10px] font-black tracking-widest uppercase transition-colors ${movementMode === 'float' ? 'bg-black text-[#fcfdf2] dark:bg-white dark:text-black' : 'bg-transparent border'}`}
                                     style={{ borderColor: colors.border, color: movementMode === 'float' ? colors.bg : colors.text, backgroundColor: movementMode === 'float' ? colors.text : 'transparent' }}>
                                     <Icon name="wind" size="12" /> FLOAT
                                 </button>
 
                                 <button onClick={() => setMovementMode('ripple')} 
-                                    className={`px-3 py-1.5 rounded-lg flex items-center gap-2 text-[10px] font-black tracking-widest uppercase transition-colors ${movementMode === 'ripple' ? 'bg-black text-[#fcfcf5] dark:bg-white dark:text-black' : 'bg-transparent border'}`}
+                                    className={`px-3 py-1.5 rounded-lg flex items-center gap-2 text-[10px] font-black tracking-widest uppercase transition-colors ${movementMode === 'ripple' ? 'bg-black text-[#fcfdf2] dark:bg-white dark:text-black' : 'bg-transparent border'}`}
                                     style={{ borderColor: colors.border, color: movementMode === 'ripple' ? colors.bg : colors.text, backgroundColor: movementMode === 'ripple' ? colors.text : 'transparent' }}>
                                     <Icon name="radar" size="12" /> RIPPLE
                                 </button>
                                 <button onClick={() => setMovementMode('aerotrim')} 
-                                    className={`px-3 py-1.5 rounded-lg flex items-center gap-2 text-[10px] font-black tracking-widest uppercase transition-colors ${movementMode === 'aerotrim' ? 'bg-black text-[#fcfcf5] dark:bg-white dark:text-black' : 'bg-transparent border'}`}
+                                    className={`px-3 py-1.5 rounded-lg flex items-center gap-2 text-[10px] font-black tracking-widest uppercase transition-colors ${movementMode === 'aerotrim' ? 'bg-black text-[#fcfdf2] dark:bg-white dark:text-black' : 'bg-transparent border'}`}
                                     style={{ borderColor: colors.border, color: movementMode === 'aerotrim' ? colors.bg : colors.text, backgroundColor: movementMode === 'aerotrim' ? colors.text : 'transparent' }}>
                                     <Icon name="rotate-3d" size="12" /> AEROTRIM
                                 </button>
                                 <button onClick={() => setMovementMode('boom')} 
-                                    className={`px-3 py-1.5 rounded-lg flex items-center gap-2 text-[10px] font-black tracking-widest uppercase transition-colors ${movementMode === 'boom' ? 'bg-black text-[#fcfcf5] dark:bg-white dark:text-black' : 'bg-transparent border'}`}
+                                    className={`px-3 py-1.5 rounded-lg flex items-center gap-2 text-[10px] font-black tracking-widest uppercase transition-colors ${movementMode === 'boom' ? 'bg-black text-[#fcfdf2] dark:bg-white dark:text-black' : 'bg-transparent border'}`}
                                     style={{ borderColor: colors.border, color: movementMode === 'boom' ? colors.bg : colors.text, backgroundColor: movementMode === 'boom' ? colors.text : 'transparent' }}>
                                     <Icon name="heart-pulse" size="12" /> BOOM
                                 </button>
                                 <button onClick={() => setMovementMode('bloom')} 
-                                    className={`px-3 py-1.5 rounded-lg flex items-center gap-2 text-[10px] font-black tracking-widest uppercase transition-colors ${movementMode === 'bloom' ? 'bg-black text-[#fcfcf5] dark:bg-white dark:text-black' : 'bg-transparent border'}`}
+                                    className={`px-3 py-1.5 rounded-lg flex items-center gap-2 text-[10px] font-black tracking-widest uppercase transition-colors ${movementMode === 'bloom' ? 'bg-black text-[#fcfdf2] dark:bg-white dark:text-black' : 'bg-transparent border'}`}
                                     style={{ borderColor: colors.border, color: movementMode === 'bloom' ? colors.bg : colors.text, backgroundColor: movementMode === 'bloom' ? colors.text : 'transparent' }}>
                                     <Icon name="sun" size="12" /> BLOOM
                                 </button>
@@ -1305,10 +1305,10 @@
                                 <img src={COIN_LOGO} alt="" className="absolute inset-0 w-full h-full object-cover pointer-events-none" draggable="false" />
                                 {/* Play/Pause Icon Overlay */}
                                 <div className="absolute inset-0 flex items-center justify-center">
-                                    <div className={`absolute transition-all duration-700 flex items-center justify-center ${(!hasStarted) ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`} style={{ color: '#fcfcf5' }}>
+                                    <div className={`absolute transition-all duration-700 flex items-center justify-center ${(!hasStarted) ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`} style={{ color: '#fcfdf2' }}>
                                         <Icon name="play" size="40" fill="currentColor" className="translate-x-0.5" />
                                     </div>
-                                    <div className={`absolute flex items-center justify-center ${hasStarted ? 'coin-icon-hover' : ''} ${(hasStarted) ? ((isPlaying && !showIcon) ? 'opacity-0 scale-100' : 'opacity-80 scale-100') : 'opacity-0 scale-150'}`} style={{ color: '#fcfcf5', transition: 'opacity 0.8s ease, transform 0.7s' }}>
+                                    <div className={`absolute flex items-center justify-center ${hasStarted ? 'coin-icon-hover' : ''} ${(hasStarted) ? ((isPlaying && !showIcon) ? 'opacity-0 scale-100' : 'opacity-80 scale-100') : 'opacity-0 scale-150'}`} style={{ color: '#fcfdf2', transition: 'opacity 0.8s ease, transform 0.7s' }}>
                                         {isPlaying ? <Icon name="pause" size="40" fill="currentColor" /> : <Icon name="play" size="40" fill="currentColor" className="translate-x-0.5" />}
                                     </div>
                                 </div>
@@ -1321,10 +1321,10 @@
                                 <img src={COIN_LOGO} alt="" className="absolute inset-0 w-full h-full object-cover pointer-events-none" draggable="false" />
                                 {/* Play/Pause Icon Overlay */}
                                 <div className="absolute inset-0 flex items-center justify-center">
-                                    <div className={`absolute transition-all duration-700 flex items-center justify-center ${(!hasStarted) ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`} style={{ color: '#fcfcf5' }}>
+                                    <div className={`absolute transition-all duration-700 flex items-center justify-center ${(!hasStarted) ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`} style={{ color: '#fcfdf2' }}>
                                         <Icon name="play" size="40" fill="currentColor" className="translate-x-0.5" />
                                     </div>
-                                    <div className={`absolute flex items-center justify-center ${hasStarted ? 'coin-icon-hover' : ''} ${(hasStarted) ? ((isPlaying && !showIcon) ? 'opacity-0 scale-100' : 'opacity-80 scale-100') : 'opacity-0 scale-150'}`} style={{ color: '#fcfcf5', transition: 'opacity 0.8s ease, transform 0.7s' }}>
+                                    <div className={`absolute flex items-center justify-center ${hasStarted ? 'coin-icon-hover' : ''} ${(hasStarted) ? ((isPlaying && !showIcon) ? 'opacity-0 scale-100' : 'opacity-80 scale-100') : 'opacity-0 scale-150'}`} style={{ color: '#fcfdf2', transition: 'opacity 0.8s ease, transform 0.7s' }}>
                                         {isPlaying ? <Icon name="pause" size="40" fill="currentColor" /> : <Icon name="play" size="40" fill="currentColor" className="translate-x-0.5" />}
                                     </div>
                                 </div>
@@ -1746,7 +1746,7 @@
                         className="absolute top-4 left-4 z-50 p-3 rounded-full transition-all duration-500 hover:scale-110 active:scale-90 outline-none group"
                         style={{ backgroundColor: isNightMode ? '#333333' : 'rgba(0,0,0,0.05)' }}>
                         <div className="relative w-6 h-6 flex items-center justify-center">
-                            <Icon name="info" size="24" strokeWidth={1.5} fill="none" style={{ color: isNightMode ? '#fcfcf5' : '#000000' }} />
+                            <Icon name="info" size="24" strokeWidth={1.5} fill="none" style={{ color: isNightMode ? '#fcfdf2' : '#000000' }} />
                         </div>
                     </button>
 
@@ -1756,7 +1756,7 @@
                             className="absolute top-4 right-4 z-50 p-3 rounded-full transition-all duration-500 hover:scale-110 active:scale-90 outline-none hidden mobile-landscape-only items-center justify-center"
                             style={{ backgroundColor: isNightMode ? '#333333' : 'rgba(0,0,0,0.05)' }}>
                             <div className="relative w-6 h-6 flex items-center justify-center">
-                                <Icon name="menu" size="24" strokeWidth={1.5} fill="none" style={{ color: isNightMode ? '#fcfcf5' : '#000000' }} />
+                                <Icon name="menu" size="24" strokeWidth={1.5} fill="none" style={{ color: isNightMode ? '#fcfdf2' : '#000000' }} />
                             </div>
                         </button>
                     )}
