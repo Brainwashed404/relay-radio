@@ -294,6 +294,7 @@
             { name: "FMSTREAM", desc: "Gunther Zeilinger\u2019s fast, independent database project provides direct access to real stream sources for thousands of global stations. By focusing on bitrates, sample rates, and signal integrity rather than app-based wrappers, it serves as one of the world\u2019s most comprehensive tools for technical broadcast enthusiasts and high-fidelity listeners.", url: "https://fmstream.org/" },
             { name: "Lofi.cafe", desc: "Fabrizio Rinaldi and Maria Di Vincenzo\u2019s Lofi.cafe minimalist tool gathers the best lofi music streams into a single, distraction-free interface. Designed for focus, the project uses simple keyboard shortcuts to flip through curated channels paired with retro GIF backdrops to create a cosy digital sanctuary for work.", url: "https://lofi.cafe/" },
             { name: "MTV Rewind", desc: "Flexasaurus Rex recreates MTV\u2019s golden era with over 88,000 music videos across 56 channels. Built with zero ads, the project focuses on cultural preservation and the shared experience of broadcast television, featuring original commercials and Easter eggs to restore the format of human-curated media.", url: "https://wantmymtv.vercel.app/" },
+            { name: "NINA\u2019s Genre Iceberg", desc: "This interactive visualiser serves as a real-time pulse of the underground, asking: how deep does your taste actually go? It reflects Nina\u2019s broader mission as a DIY, blockchain-based archive where artists keep 100% of their sales, turning the act of digital digging into a visible badge of honour for those who prefer the deep water.", url: "https://www.ninaprotocol.com/iceberg" },
             { name: "Poolsuite FM", desc: "Marty Bell\u2019s virtual holiday portal is like living in a sun-drenched, 1980s summer. Using a retro Macintosh-inspired interface, it streams upbeat disco and electronic tracks alongside grainy VHS footage to transport listeners to a permanent state of leisure.", url: "https://poolsuite.net/" },
             { name: "Project Random", desc: "Putting the web on shuffle by randomising the algorithms behind social media and streaming platforms, it unearths obscure content you might otherwise never see. It gives forgotten, unseen media from the depths of the internet a chance to be rediscovered by someone, somewhere in the world.", url: "https://0xbeef.co.uk/random/radio" },
             { name: "Radio Garden", desc: "Jonathan Puckey\u2019s project invites you to explore live radio from across the globe via a cartographic window into the world\u2019s airwaves. By bringing distant voices close, it connects people across borders, allowing listeners to discover new cultures or re-connect with home from thousands of miles away.", url: "https://radio.garden/" },
@@ -1446,8 +1447,12 @@
                 setOpenSection(willOpen ? id : null);
                 if (willOpen && sectionRef.current) {
                     setTimeout(() => {
-                        sectionRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }, 100);
+                        const scrollContainer = sectionRef.current.closest('.overflow-y-auto');
+                        if (scrollContainer) {
+                            const sectionTop = sectionRef.current.offsetTop - scrollContainer.offsetTop;
+                            scrollContainer.scrollTo({ top: sectionTop - 20, behavior: 'smooth' });
+                        }
+                    }, 150);
                 }
             };
             return (
