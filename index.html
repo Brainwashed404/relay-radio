@@ -1449,8 +1449,10 @@
                     setTimeout(() => {
                         const scrollContainer = sectionRef.current.closest('.overflow-y-auto');
                         if (scrollContainer) {
-                            const sectionTop = sectionRef.current.offsetTop - scrollContainer.offsetTop;
-                            scrollContainer.scrollTo({ top: sectionTop - 20, behavior: 'smooth' });
+                            const containerRect = scrollContainer.getBoundingClientRect();
+                            const sectionRect = sectionRef.current.getBoundingClientRect();
+                            const offset = sectionRect.top - containerRect.top + scrollContainer.scrollTop;
+                            scrollContainer.scrollTo({ top: offset - 10, behavior: 'smooth' });
                         }
                     }, 150);
                 }
