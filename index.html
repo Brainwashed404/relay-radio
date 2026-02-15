@@ -628,6 +628,26 @@
             }, []);
 
 
+            // Resolve RadioJar URLs: they 302 to http:// which gets blocked as mixed content.
+            // Uses the service worker (which can read redirect headers) via MessageChannel.
+            const resolveStreamUrl = async (url) => {
+                if (!url.includes('radiojar.com')) return url;
+                if (!navigator.serviceWorker || !navigator.serviceWorker.controller) return url;
+                try {
+                    return await new Promise((resolve) => {
+                        const ch = new MessageChannel();
+                        ch.port1.onmessage = (e) => resolve(e.data.resolved || url);
+                        setTimeout(() => resolve(url), 3000); // fallback if SW doesn't respond
+                        navigator.serviceWorker.controller.postMessage(
+                            { type: 'RESOLVE_STREAM_URL', url },
+                            [ch.port2]
+                        );
+                    });
+                } catch (e) {}
+                return url;
+            };
+
+
             const connectToStream = useCallback((url, station) => {
                 if (!audioTagRef.current) return;
                 setIsLoading(true);
@@ -644,8 +664,9 @@
                 audioTagRef.current.pause();
                 audioTagRef.current.src = "";
                 audioTagRef.current.load();
-                audioTagRef.current.src = url;
-                audioTagRef.current.play()
+                resolveStreamUrl(url).then(resolvedUrl => {
+                    audioTagRef.current.src = resolvedUrl;
+                    audioTagRef.current.play()
                     .then(async () => {
                         if (skipTimeoutRef.current) clearTimeout(skipTimeoutRef.current);
                         setIsLoading(false);
@@ -688,6 +709,7 @@
                             window.dispatchEvent(new CustomEvent('station-timeout'));
                         }
                     });
+                });
             }, [fetchMetadata]);
 
 

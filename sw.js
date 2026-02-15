@@ -1,4 +1,4 @@
-const CACHE_NAME = 'relayradio-v2';
+const CACHE_NAME = 'relayradio-v3';
 const OFFLINE_URL = '/offline.html';
 
 // Files to cache for offline fallback
@@ -32,6 +32,24 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
+// Message handler: resolve RadioJar redirect URLs
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'RESOLVE_STREAM_URL') {
+    const url = event.data.url;
+    fetch(url, { redirect: 'manual' }).then((response) => {
+      const location = response.headers.get('Location');
+      if (location) {
+        const resolved = location.replace(/^http:\/\//, 'https://');
+        event.ports[0].postMessage({ resolved });
+      } else {
+        event.ports[0].postMessage({ resolved: url });
+      }
+    }).catch(() => {
+      event.ports[0].postMessage({ resolved: url });
+    });
+  }
+});
+
 // Fetch: network-first strategy, fall back to offline page for navigation
 self.addEventListener('fetch', (event) => {
   // Only handle navigation requests (page loads) for offline fallback
@@ -44,29 +62,9 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // RadioJar streams: intercept and upgrade HTTP redirects to HTTPS
-  if (event.request.url.includes('radiojar.com')) {
-    event.respondWith(
-      fetch(event.request.url, { redirect: 'manual' }).then((response) => {
-        if (response.type === 'opaqueredirect' || (response.status >= 300 && response.status < 400)) {
-          const location = response.headers.get('Location');
-          if (location && location.startsWith('http://')) {
-            // Upgrade HTTP redirect to HTTPS
-            const httpsUrl = location.replace('http://', 'https://');
-            return fetch(httpsUrl);
-          }
-          if (location) {
-            return fetch(location);
-          }
-        }
-        return response;
-      })
-    );
-    return;
-  }
-
   // For audio streams, always go to network (never cache)
   if (event.request.url.includes('stream') ||
+      event.request.url.includes('radiojar.com') ||
       event.request.url.includes('icecast') ||
       event.request.url.includes('.mp3') ||
       event.request.url.includes('.aac') ||
