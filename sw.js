@@ -1,4 +1,4 @@
-const CACHE_NAME = 'relayradio-v1';
+const CACHE_NAME = 'relayradio-v2';
 const OFFLINE_URL = '/offline.html';
 
 // Files to cache for offline fallback
@@ -39,6 +39,27 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
       fetch(event.request).catch(() => {
         return caches.match(OFFLINE_URL);
+      })
+    );
+    return;
+  }
+
+  // RadioJar streams: intercept and upgrade HTTP redirects to HTTPS
+  if (event.request.url.includes('radiojar.com')) {
+    event.respondWith(
+      fetch(event.request.url, { redirect: 'manual' }).then((response) => {
+        if (response.type === 'opaqueredirect' || (response.status >= 300 && response.status < 400)) {
+          const location = response.headers.get('Location');
+          if (location && location.startsWith('http://')) {
+            // Upgrade HTTP redirect to HTTPS
+            const httpsUrl = location.replace('http://', 'https://');
+            return fetch(httpsUrl);
+          }
+          if (location) {
+            return fetch(location);
+          }
+        }
+        return response;
       })
     );
     return;
