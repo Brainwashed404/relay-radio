@@ -706,8 +706,18 @@
                         if ('wakeLock' in navigator) {
                             navigator.wakeLock.request('screen').catch(() => {});
                         }
-                        // Reclaim audio focus from other apps (Spotify fix)
+                        // Reclaim audio focus and re-assert metadata on play
                         if ('mediaSession' in navigator) {
+                            navigator.mediaSession.metadata = new MediaMetadata({
+                                title: 'RELAY RAD.IO',
+                                artist: 'Find Your Signal. Escape The Algorithm.',
+                                album: station.name,
+                                artwork: [
+                                    { src: 'https://www.relayrad.io/icons/icon-96x96.png', sizes: '96x96', type: 'image/png' },
+                                    { src: 'https://www.relayrad.io/icons/icon-192x192.png', sizes: '192x192', type: 'image/png' },
+                                    { src: 'https://www.relayrad.io/icons/icon-512x512.png', sizes: '512x512', type: 'image/png' }
+                                ]
+                            });
                             navigator.mediaSession.playbackState = 'playing';
                         }
                     })
