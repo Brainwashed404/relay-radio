@@ -201,12 +201,9 @@
             background: var(--yellow); cursor: pointer;
             transition: none; box-shadow: 0 1px 4px rgba(0,0,0,0.2);
         }
-        .slider-touch-zone {
-            touch-action: none;
-            -webkit-touch-callout: none;
-            user-select: none;
-            -webkit-user-select: none;
-        }
+        .ptr-slider { position: relative; height: 28px; display: flex; align-items: center; cursor: pointer; touch-action: none; -webkit-touch-callout: none; user-select: none; -webkit-user-select: none; }
+        .ptr-slider-track { width: 100%; height: 3px; border-radius: 4px; pointer-events: none; }
+        .ptr-slider-thumb { position: absolute; width: 22px; height: 22px; border-radius: 50%; background: var(--yellow); box-shadow: 0 1px 4px rgba(0,0,0,0.2); pointer-events: none; top: 50%; transform: translateY(-50%); }
         .fx-hold-btn { touch-action: manipulation; user-select: none; -webkit-user-select: none; }
 
         /* Ticker scroll for long station names */
@@ -1007,10 +1004,6 @@
                     if (progress < 1) { fadeRafRef.current = requestAnimationFrame(animate); }
                     else {
                         setIsFading(false); fadeRafRef.current = null;
-                        if (endVal >= 0.99) {
-                            const st = bDeckStationRef.current;
-                            if (st) window.dispatchEvent(new CustomEvent('fx-commit-b', { detail: st }));
-                        }
                     }
                 };
                 fadeRafRef.current = requestAnimationFrame(animate);
@@ -1653,17 +1646,51 @@
 
 
 
+        // ==================== CUSTOM POINTER SLIDER ====================
+        const PointerSlider = ({ value, min, max, step, onChange, trackColor, disabled }) => {
+            const trackRef = React.useRef(null);
+            const dragging = React.useRef(false);
+            const calc = (e) => {
+                const rect = trackRef.current.getBoundingClientRect();
+                const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+                const raw = min + pct * (max - min);
+                const s = step || 1;
+                return Math.max(min, Math.min(max, Math.round(raw / s) * s));
+            };
+            const onDown = (e) => {
+                if (disabled) return;
+                e.preventDefault(); e.stopPropagation();
+                dragging.current = true;
+                e.currentTarget.setPointerCapture(e.pointerId);
+                onChange(calc(e));
+            };
+            const onMove = (e) => {
+                if (!dragging.current) return;
+                e.preventDefault(); e.stopPropagation();
+                onChange(calc(e));
+            };
+            const onUp = (e) => {
+                dragging.current = false;
+                try { e.currentTarget.releasePointerCapture(e.pointerId); } catch(x) {}
+            };
+            const pct = ((value - min) / (max - min)) * 100;
+            return (
+                <div ref={trackRef} className="ptr-slider"
+                    onPointerDown={onDown} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp}
+                    style={{ opacity: disabled ? 0.25 : 1 }}>
+                    <div className="ptr-slider-track" style={{ backgroundColor: trackColor || 'rgba(126,194,173,0.3)' }} />
+                    <div className="ptr-slider-thumb" style={{ left: `calc(${pct}% - 11px)` }} />
+                </div>
+            );
+        };
+
+
         // ==================== FX PANEL OVERLAY ====================
         const FxSlider = ({ label, value, min, max, step, onChange, displayValue, colors, disabled }) => (
             <div className={`flex items-center gap-3 w-full py-1 transition-opacity ${disabled ? 'opacity-25 pointer-events-none' : ''}`}>
                 <span className="text-[9px] font-black tracking-widest uppercase opacity-50 w-16 text-right whitespace-nowrap" style={{ color: colors.text }}>{label}</span>
-                <div className="slider-touch-zone flex-grow"
-                    onTouchStart={e => e.stopPropagation()}
-                    onTouchMove={e => { e.stopPropagation(); e.preventDefault(); }}>
-                    <input type="range" min={min} max={max} step={step || 1} value={value}
-                        onChange={e => onChange(Number(e.target.value))}
-                        className="fx-slider w-full"
-                        style={{ '--track-color': 'rgba(126,194,173,0.3)' }} />
+                <div className="flex-grow">
+                    <PointerSlider value={value} min={min} max={max} step={step || 1} onChange={onChange} trackColor="rgba(126,194,173,0.3)" disabled={disabled} />
                 </div>
                 <span className="text-[9px] font-mono opacity-40 w-14 whitespace-nowrap" style={{ color: colors.text }}>{displayValue}</span>
             </div>
@@ -1778,13 +1805,8 @@
                     <div className={`flex items-center gap-3 w-full py-1.5 ${disabled ? 'opacity-20 pointer-events-none' : ''}`}>
                         <span className="text-[9px] font-black tracking-widest uppercase w-20 text-right whitespace-nowrap"
                               style={{ color: labelColor }}>{label}</span>
-                        <div className="slider-touch-zone flex-grow"
-                            onTouchStart={e => e.stopPropagation()}
-                            onTouchMove={e => { e.stopPropagation(); e.preventDefault(); }}>
-                            <input type="range" min={min} max={max} step={step || 0.01} value={value}
-                                onChange={e => onChange(Number(e.target.value))}
-                                className="fx-slider w-full"
-                                style={{ '--track-color': 'rgba(229,184,74,0.3)' }} />
+                        <div className="flex-grow">
+                            <PointerSlider value={value} min={min} max={max} step={step || 0.01} onChange={onChange} trackColor="rgba(229,184,74,0.3)" disabled={disabled} />
                         </div>
                         <span className="text-[9px] font-mono w-14 whitespace-nowrap text-right"
                               style={{ color: valueColor }}>{displayValue}</span>
@@ -1905,12 +1927,9 @@
                                 {/* Intensity slider */}
                                 <div className="flex items-center gap-4 w-full">
                                     <span className="text-[9px] font-black uppercase tracking-widest opacity-40 whitespace-nowrap">{sliderLabelLeft}</span>
-                                    <div className="slider-touch-zone flex-grow"
-                                        onTouchStart={e => e.stopPropagation()}
-                                        onTouchMove={e => { e.stopPropagation(); e.preventDefault(); }}>
-                                        <input type="range" min="0" max="100" value={spinIntensity}
-                                            onChange={e => setSpinIntensity(Number(e.target.value))}
-                                            className="fx-slider w-full" style={{ '--track-color': 'rgba(126,194,173,0.3)' }} />
+                                    <div className="flex-grow">
+                                        <PointerSlider value={spinIntensity} min={0} max={100} step={1}
+                                            onChange={setSpinIntensity} trackColor="rgba(126,194,173,0.3)" />
                                     </div>
                                     <span className="text-[9px] font-black uppercase tracking-widest opacity-40 whitespace-nowrap">{sliderLabelRight}</span>
                                 </div>
@@ -1920,7 +1939,7 @@
 
                     {/* ===== SCROLLABLE CONTENT - MIX and SIREN only ===== */}
                     {!isCoin && (
-                        <div className="flex-grow overflow-y-auto px-4 pb-12 custom-scrollbar scroll-smooth" style={{ overscrollBehavior: 'contain', WebkitOverflowScrolling: 'touch' }}>
+                        <div className="flex-grow overflow-y-auto px-4 pb-12 custom-scrollbar scroll-smooth">
                             <div className="max-w-lg mx-auto">
 
                                 {/* ===== MIX TAB ===== */}
@@ -1970,14 +1989,10 @@
                                             <span className="text-[9px] font-mono opacity-30" style={{ color: colors.text }}>A</span>
                                             <span className="text-[9px] font-mono opacity-30" style={{ color: colors.text }}>B</span>
                                         </div>
-                                        <div className="slider-touch-zone"
-                                            onTouchStart={e => e.stopPropagation()}
-                                            onTouchMove={e => { e.stopPropagation(); e.preventDefault(); }}>
-                                            <input type="range" min={0} max={1} step={0.01} value={fx.crossfadeValue}
-                                                onChange={e => { if (!fx.isFading && fx.isBDeckReady) fx.setCrossfadeValue(Number(e.target.value)); }}
-                                                className="fx-slider w-full" style={{ '--track-color': 'rgba(126,194,173,0.3)' }}
-                                                disabled={!fx.bDeckStation || !fx.isBDeckReady} />
-                                        </div>
+                                        <PointerSlider value={fx.crossfadeValue} min={0} max={1} step={0.01}
+                                            onChange={v => { if (!fx.isFading && fx.isBDeckReady) fx.setCrossfadeValue(v); }}
+                                            trackColor="rgba(126,194,173,0.3)"
+                                            disabled={!fx.bDeckStation || !fx.isBDeckReady} />
                                     </div>
 
                                     {/* A->B | MANUAL | B->A */}
@@ -2006,24 +2021,14 @@
                                             <div className="flex-1">
                                                 <span className="text-[9px] font-black tracking-widest uppercase block mb-2 text-center"
                                                     style={{ color: 'var(--teal)' }}>A VOL</span>
-                                                <div className="slider-touch-zone"
-                                                    onTouchStart={e => e.stopPropagation()}
-                                                    onTouchMove={e => { e.stopPropagation(); e.preventDefault(); }}>
-                                                    <input type="range" min={0} max={1} step={0.01} value={fx.aDeckVolume}
-                                                        onChange={e => fx.setADeckVolume(Number(e.target.value))}
-                                                        className="fx-slider w-full" style={{ '--track-color': 'rgba(126,194,173,0.3)' }} />
-                                                </div>
+                                                <PointerSlider value={fx.aDeckVolume} min={0} max={1} step={0.01}
+                                                    onChange={fx.setADeckVolume} trackColor="rgba(126,194,173,0.3)" />
                                             </div>
                                             <div className="flex-1">
                                                 <span className="text-[9px] font-black tracking-widest uppercase block mb-2 text-center"
                                                     style={{ color: 'var(--yellow)' }}>B VOL</span>
-                                                <div className="slider-touch-zone"
-                                                    onTouchStart={e => e.stopPropagation()}
-                                                    onTouchMove={e => { e.stopPropagation(); e.preventDefault(); }}>
-                                                    <input type="range" min={0} max={1} step={0.01} value={fx.bDeckVolume}
-                                                        onChange={e => fx.setBDeckVolume(Number(e.target.value))}
-                                                        className="fx-slider w-full" style={{ '--track-color': 'rgba(229,184,74,0.3)' }} />
-                                                </div>
+                                                <PointerSlider value={fx.bDeckVolume} min={0} max={1} step={0.01}
+                                                    onChange={fx.setBDeckVolume} trackColor="rgba(229,184,74,0.3)" />
                                             </div>
                                         </div>
                                     )}
