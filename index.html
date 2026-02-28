@@ -975,7 +975,8 @@
                 if (!bDeckSourceRef.current && bDeckAudioRef.current) bDeckAudioRef.current.volume = bVol;
                 // Auto-play B-deck when crossfade moves toward B, pause when back to A
                 if (bDeckAudioRef.current && bDeckAudioRef.current.src) {
-                    if (crossfadeValue > 0.01 && bDeckAudioRef.current.paused && bDeckAudioRef.current.readyState >= 2) {
+                    if (crossfadeValue > 0.01 && bDeckAudioRef.current.paused) {
+                        if (audioContextRef.current?.state === 'suspended') audioContextRef.current.resume();
                         bDeckAudioRef.current.play().catch(() => {});
                     } else if (crossfadeValue <= 0.01 && !bDeckAudioRef.current.paused) {
                         bDeckAudioRef.current.pause();
@@ -1041,6 +1042,7 @@
                     }
                     bDeckAudioRef.current.volume = 0;
                     // Play silently so stream buffers and canplay/onplaying fires
+                    if (audioContextRef.current?.state === 'suspended') audioContextRef.current.resume();
                     bDeckAudioRef.current.play().catch(() => {});
                     // Timeout fallback: enable crossfader after 5s even if events don't fire
                     setTimeout(() => { if (bDeckAudioRef.current && bDeckAudioRef.current.src) markReady(); }, 5000);
@@ -1659,34 +1661,74 @@
         const PointerSlider = ({ value, min, max, step, onChange, trackColor, disabled }) => {
             const trackRef = React.useRef(null);
             const dragging = React.useRef(false);
-            const calc = (e) => {
+            // Refs so native listener closures never go stale
+            const onChangeRef = React.useRef(onChange);
+            const disabledRef = React.useRef(disabled);
+            const minRef = React.useRef(min);
+            const maxRef = React.useRef(max);
+            const stepRef = React.useRef(step || 1);
+            React.useLayoutEffect(() => { onChangeRef.current = onChange; });
+            React.useLayoutEffect(() => { disabledRef.current = disabled; });
+            React.useLayoutEffect(() => { minRef.current = min; maxRef.current = max; stepRef.current = step || 1; });
+
+            const calc = (clientX) => {
                 const rect = trackRef.current.getBoundingClientRect();
-                const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-                const raw = min + pct * (max - min);
-                const s = step || 1;
-                return Math.max(min, Math.min(max, Math.round(raw / s) * s));
+                const pct = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+                const raw = minRef.current + pct * (maxRef.current - minRef.current);
+                const s = stepRef.current;
+                return Math.max(minRef.current, Math.min(maxRef.current, Math.round(raw / s) * s));
             };
-            const onDown = (e) => {
-                if (disabled) return;
-                e.preventDefault(); e.stopPropagation();
-                dragging.current = true;
-                e.currentTarget.setPointerCapture(e.pointerId);
-                onChange(calc(e));
-            };
-            const onMove = (e) => {
-                if (!dragging.current) return;
-                e.preventDefault(); e.stopPropagation();
-                onChange(calc(e));
-            };
-            const onUp = (e) => {
-                dragging.current = false;
-                try { e.currentTarget.releasePointerCapture(e.pointerId); } catch(x) {}
-            };
+
+            React.useEffect(() => {
+                const el = trackRef.current;
+                if (!el) return;
+
+                // --- MOUSE (desktop) ---
+                const onMouseDown = (e) => {
+                    if (disabledRef.current) return;
+                    e.preventDefault();
+                    dragging.current = true;
+                    onChangeRef.current(calc(e.clientX));
+                    const onMove = (e) => { if (dragging.current) onChangeRef.current(calc(e.clientX)); };
+                    const onUp = () => {
+                        dragging.current = false;
+                        document.removeEventListener('mousemove', onMove);
+                        document.removeEventListener('mouseup', onUp);
+                    };
+                    document.addEventListener('mousemove', onMove);
+                    document.addEventListener('mouseup', onUp);
+                };
+
+                // --- TOUCH (mobile, non-passive to prevent scroll stealing) ---
+                const onTouchStart = (e) => {
+                    if (disabledRef.current) return;
+                    e.preventDefault();
+                    dragging.current = true;
+                    onChangeRef.current(calc(e.touches[0].clientX));
+                };
+                const onTouchMove = (e) => {
+                    if (!dragging.current) return;
+                    e.preventDefault();
+                    onChangeRef.current(calc(e.touches[0].clientX));
+                };
+                const onTouchEnd = () => { dragging.current = false; };
+
+                el.addEventListener('mousedown', onMouseDown);
+                el.addEventListener('touchstart', onTouchStart, { passive: false });
+                el.addEventListener('touchmove', onTouchMove, { passive: false });
+                el.addEventListener('touchend', onTouchEnd);
+
+                return () => {
+                    el.removeEventListener('mousedown', onMouseDown);
+                    el.removeEventListener('touchstart', onTouchStart);
+                    el.removeEventListener('touchmove', onTouchMove);
+                    el.removeEventListener('touchend', onTouchEnd);
+                };
+            }, []); // Empty deps — refs handle all prop updates
+
             const pct = ((value - min) / (max - min)) * 100;
             return (
-                <div ref={trackRef} className="ptr-slider"
-                    onPointerDown={onDown} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp}
-                    style={{ opacity: disabled ? 0.25 : 1 }}>
+                <div ref={trackRef} className="ptr-slider" style={{ opacity: disabled ? 0.25 : 1 }}>
                     <div className="ptr-slider-track" style={{ backgroundColor: trackColor || 'rgba(126,194,173,0.3)' }} />
                     <div className="ptr-slider-thumb" style={{ left: `calc(${pct}% - 11px)` }} />
                 </div>
