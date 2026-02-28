@@ -201,7 +201,7 @@
             background: var(--yellow); cursor: pointer;
             transition: none; box-shadow: 0 1px 4px rgba(0,0,0,0.2);
         }
-        .ptr-slider { position: relative; height: 28px; display: flex; align-items: center; cursor: pointer; touch-action: none; -webkit-touch-callout: none; user-select: none; -webkit-user-select: none; }
+        .ptr-slider { position: relative; height: 28px; display: flex; align-items: center; cursor: pointer; touch-action: none; -webkit-touch-callout: none; user-select: none; -webkit-user-select: none; pointer-events: auto; }
         .ptr-slider-track { width: 100%; height: 3px; border-radius: 4px; pointer-events: none; }
         .ptr-slider-thumb { position: absolute; width: 22px; height: 22px; border-radius: 50%; background: var(--yellow); box-shadow: 0 1px 4px rgba(0,0,0,0.2); pointer-events: none; top: 50%; transform: translateY(-50%); }
         .fx-hold-btn { touch-action: manipulation; user-select: none; -webkit-user-select: none; }
@@ -1020,29 +1020,38 @@
                 setIsBDeckReady(false);
                 if (!bDeckAudioRef.current) return;
                 bDeckAudioRef.current.pause(); bDeckAudioRef.current.src = "";
-                resolveStreamUrl(station.url).then(resolved => {
-                    if (bDeckAudioRef.current) {
-                        bDeckAudioRef.current.oncanplay = () => setIsBDeckReady(true);
-                        bDeckAudioRef.current.src = resolved;
-                        // Lazy Web Audio connection (one-time, permanent)
-                        if (!bDeckSourceRef.current && audioContextRef.current && nodesRef.current) {
-                            try {
-                                const bSource = audioContextRef.current.createMediaElementSource(bDeckAudioRef.current);
-                                bSource.connect(nodesRef.current.bDeckVolGain);
-                                bDeckSourceRef.current = bSource;
-                                bDeckAudioRef.current.volume = 1; // gain node handles volume now
-                            } catch (e) { console.warn('B-deck Web Audio connection failed:', e); }
-                        }
-                        // Set initial volume to 0; crossfade useEffect manages volume
-                        if (nodesRef.current) {
-                            nodesRef.current.bDeckVolGain.gain.setValueAtTime(0, audioContextRef.current.currentTime);
-                        }
-                        bDeckAudioRef.current.volume = 0;
-                        // Don't auto-play; crossfade useEffect will call play() when needed
-                        bDeckAudioRef.current.load();
+                const markReady = () => setIsBDeckReady(true);
+                const playWithUrl = (resolved) => {
+                    if (!bDeckAudioRef.current) return;
+                    bDeckAudioRef.current.oncanplay = markReady;
+                    bDeckAudioRef.current.onplaying = markReady;
+                    bDeckAudioRef.current.src = resolved;
+                    // Lazy Web Audio connection (one-time, permanent)
+                    if (!bDeckSourceRef.current && audioContextRef.current && nodesRef.current) {
+                        try {
+                            const bSource = audioContextRef.current.createMediaElementSource(bDeckAudioRef.current);
+                            bSource.connect(nodesRef.current.bDeckVolGain);
+                            bDeckSourceRef.current = bSource;
+                            bDeckAudioRef.current.volume = 1; // gain node handles volume now
+                        } catch (e) { console.warn('B-deck Web Audio connection failed:', e); }
                     }
-                });
-            }, [crossfadeValue, bDeckVolume, audioContextRef]);
+                    // Set initial volume to 0; crossfade useEffect manages volume
+                    if (nodesRef.current) {
+                        nodesRef.current.bDeckVolGain.gain.setValueAtTime(0, audioContextRef.current.currentTime);
+                    }
+                    bDeckAudioRef.current.volume = 0;
+                    // Play silently so stream buffers and canplay/onplaying fires
+                    bDeckAudioRef.current.play().catch(() => {});
+                    // Timeout fallback: enable crossfader after 5s even if events don't fire
+                    setTimeout(() => { if (bDeckAudioRef.current && bDeckAudioRef.current.src) markReady(); }, 5000);
+                };
+                // For non-radiojar URLs, play synchronously to preserve user gesture context
+                if (!station.url.includes('radiojar.com')) {
+                    playWithUrl(station.url);
+                } else {
+                    resolveStreamUrl(station.url).then(playWithUrl);
+                }
+            }, [audioContextRef]);
 
             const stopBDeck = useCallback(() => {
                 if (fadeRafRef.current) { cancelAnimationFrame(fadeRafRef.current); fadeRafRef.current = null; }
