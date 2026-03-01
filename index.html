@@ -55,14 +55,6 @@
             --black: #000000;
         }
 
-        /* Day mode text legibility boost */
-        [data-theme="day"] .opacity-20 { opacity: 0.4 !important; }
-        [data-theme="day"] .opacity-25 { opacity: 0.45 !important; }
-        [data-theme="day"] .opacity-30 { opacity: 0.5 !important; }
-        [data-theme="day"] .opacity-40 { opacity: 0.6 !important; }
-        [data-theme="day"] .opacity-50 { opacity: 0.7 !important; }
-        [data-theme="day"] .opacity-60 { opacity: 0.75 !important; }
-
 
         body {
             font-family: 'Bitter', serif;
@@ -143,8 +135,6 @@
             background: transparent;
             outline: none;
             height: 24px;
-            touch-action: none;
-            -webkit-touch-callout: none;
         }
         .coin-slider-lg::-webkit-slider-runnable-track {
             height: 4px;
@@ -169,64 +159,6 @@
         @media (hover: hover) {
             .coin-btn:hover .coin-icon-hover { opacity: 0.8 !important; }
             .group:hover .coin-icon-hover { opacity: 0.8 !important; }
-        }
-
-
-        /* FX Panel */
-        @keyframes fxPanelIn {
-            from { transform: translateY(100%); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        .animate-fx-panel-in {
-            animation: fxPanelIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-        .fx-slider {
-            -webkit-appearance: none; appearance: none;
-            background: transparent; outline: none;
-            height: 28px; width: 100%;
-            touch-action: none;
-            -webkit-touch-callout: none;
-        }
-        .fx-slider::-webkit-slider-runnable-track {
-            height: 3px; border-radius: 4px; background: var(--track-color, rgba(126,194,173,0.3));
-        }
-        .fx-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 22px; height: 22px; border-radius: 50%;
-            background: var(--yellow); margin-top: -10px; cursor: pointer;
-            transition: none; box-shadow: 0 1px 4px rgba(0,0,0,0.2);
-        }
-        .fx-slider::-moz-range-thumb {
-            width: 22px; height: 22px; border-radius: 50%; border: none;
-            background: var(--yellow); cursor: pointer;
-            transition: none; box-shadow: 0 1px 4px rgba(0,0,0,0.2);
-        }
-        .ptr-slider { position: relative; height: 28px; display: flex; align-items: center; cursor: pointer; touch-action: none; -webkit-touch-callout: none; user-select: none; -webkit-user-select: none; pointer-events: auto; }
-        .ptr-slider-track { width: 100%; height: 3px; border-radius: 4px; pointer-events: none; }
-        .ptr-slider-thumb { position: absolute; width: 22px; height: 22px; border-radius: 50%; background: var(--yellow); box-shadow: 0 1px 4px rgba(0,0,0,0.2); pointer-events: none; top: 50%; transform: translateY(-50%); }
-        .fx-hold-btn { touch-action: manipulation; user-select: none; -webkit-user-select: none; }
-
-        /* Ticker scroll for long station names */
-        @keyframes ticker-scroll {
-            0%, 15% { transform: translateX(0); }
-            85%, 100% { transform: translateX(-50%); }
-        }
-        .deck-ticker {
-            overflow: hidden;
-            max-width: 120px;
-            display: inline-block;
-        }
-        .deck-ticker-inner {
-            display: inline-block;
-            white-space: nowrap;
-        }
-        .deck-ticker-animate .deck-ticker-inner {
-            animation: ticker-scroll 5s linear infinite;
-        }
-        .fx-hold-btn:active, .fx-hold-btn.fx-active {
-            background-color: var(--yellow) !important;
-            color: #000 !important;
-            transform: scale(0.95);
         }
 
 
@@ -393,7 +325,7 @@
             { name: "SomaFM Groove Salad", url: "https://ice.somafm.com/groovesalad", sourceUrl: "https://somafm.com/groovesalad", desc: "Downtempo beats and chilled grooves.", genre: "AMBIENT + CHILLOUT", moods: ["🧐"] },
             { name: "SomaFM Mission Control", url: "https://ice.somafm.com/missioncontrol", sourceUrl: "https://somafm.com/missioncontrol", desc: "Ambient music mixed with real-time NASA audio.", genre: "AMBIENT + CHILLOUT", moods: [] },
             { name: "Concertzender Baroque", url: "https://streams.greenhost.nl:8006/barok", sourceUrl: "https://www.concertzender.nl/programma_genre/oude-muziek/", desc: "Baroque Music from Hilversum, The Netherlands.", genre: "Classical", moods: ["🥹", "🧐"] },
-            { name: "Concertzender Classical", url: "https://streams.greenhost.nl:8006/dmm", sourceUrl: "https://www.concertzender.nl/", desc: "Classical Music from Hilversum, The Netherlands.", genre: "Classical", moods: ["🥹", "🧐", "❄️"] },
+            { name: "Concertzender Classical", url: "https://streams.greenhost.nl:8006/klassiek", sourceUrl: "https://www.concertzender.nl/", desc: "Classical Music from Hilversum, The Netherlands.", genre: "Classical", moods: ["🥹", "🧐", "❄️"] },
             { name: "NTS Sheet Music", url: "https://stream-mixtape-geo.ntslive.net/mixtape35", sourceUrl: "https://www.nts.live/infinite-mixtapes/sheet-music", desc: "The best of classical and contemporary composition.", genre: "Classical", moods: ["🥹", "🧐", "❄️"] },
             { name: "Radio Swiss Classic", url: "https://livestreaming-node-2.srg-ssr.ch/srgssr/rsc_de/mp3/128", sourceUrl: "https://www.radioswissclassic.ch/en", desc: "Classic Music. 50% Swiss Artists.", genre: "Classical", moods: ["😴", "❄️", "☔️"] },
             { name: "WFMT", url: "https://wfmt.streamguys1.com/main-mp3", sourceUrl: "https://www.wfmt.com/", desc: "Chicago's fine arts and classical station.", genre: "Classical", moods: ["🥹", "❄️"] },
@@ -471,7 +403,7 @@
             { name: "Bo Diddley Radio", url: "https://streaming.exclusive.radio/er/bodiddley/icecast.audio", sourceUrl: "https://www.bodiddley.com/", desc: "All Bo Diddley All The Time", genre: "Legends", moods: [] },
             { name: "Bob Dylan Radio", url: "https://streaming.exclusive.radio/er/bobdylan/icecast.audio", sourceUrl: "https://www.bobdylan.com/", desc: "All Bob Dylan All The Time", genre: "Legends", moods: [] },
             { name: "Bob Marley Radio", url: "https://streaming.exclusive.radio/er/bobmarley/icecast.audio", sourceUrl: "https://www.bobmarley.com/", desc: "All Bob Marley All The Time", genre: "Legends", moods: [] },
-            { name: "Booker T & The MG's Radio", url: "https://3.mystreaming.net/er/bookert/icecast.audio", sourceUrl: "https://bookert.com/", desc: "All Booker T & The MG's All The Time", genre: "Legends", moods: [] },
+            { name: "Booker T & The MG's Radio", url: "https://3.mystream.net/er/bookert/icecast.audio", sourceUrl: "https://bookert.com/", desc: "All Booker T & The MG's All The Time", genre: "Legends", moods: [] },
             { name: "Brahms Radio", url: "https://streams.calmradio.com:7128/stream", sourceUrl: "https://www.brahms-institut.de/", desc: "All Brahms All The Time", genre: "Legends", moods: [] },
             { name: "Burning Spear Radio", url: "https://streaming.exclusive.radio/er/burningspear/icecast.audio", sourceUrl: "https://www.burningspearwebsite.com/", desc: "All Burning Spear All The Time", genre: "Legends", moods: [] },
             { name: "Carly Simon Radio", url: "https://streaming.exclusive.radio/er/carlysimon/icecast.audio", sourceUrl: "https://www.carlysimon.com/", desc: "All Carly Simon All The Time", genre: "Legends", moods: [] },
@@ -480,7 +412,7 @@
             { name: "Charlie Parker Radio", url: "https://streaming.exclusive.radio/er/charlieparker/icecast.audio", sourceUrl: "https://charlieparkermusic.com/", desc: "All Charlie Parker All The Time", genre: "Legends", moods: [] },
             { name: "Chic Radio", url: "https://streaming.exclusive.radio/er/chic/icecast.audio", sourceUrl: "https://www.nilerodgers.com/", desc: "All Chic All The Time", genre: "Legends", moods: [] },
             { name: "Chuck Berry Radio", url: "https://streaming.exclusive.radio/er/chuckberry/icecast.audio", sourceUrl: "http://www.chuckberry.com/", desc: "All Chuck Berry All The Time", genre: "Legends", moods: [] },
-            { name: "The Clash Radio", sortName: "Clash", url: "https://nl4.mystreaming.net/er/theclash/icecast.audio", sourceUrl: "https://www.theclash.com/", desc: "All The Clash All The Time", genre: "Legends", moods: [] },
+            { name: "The Clash Radio", sortName: "Clash", url: "https://3.mystream.net/er/theclash/icecast.audio", sourceUrl: "https://www.theclash.com/", desc: "All The Clash All The Time", genre: "Legends", moods: [] },
             { name: "Count Basie Radio", url: "https://nl4.mystreaming.net/uber/jjrcountbasie/icecast.audio", sourceUrl: "https://thebasie.org/", desc: "All Count Basie All The Time", genre: "Legends", moods: [] },
             { name: "Cream Radio", url: "https://streaming.exclusive.radio/er/cream/icecast.audio", sourceUrl: "https://en.wikipedia.org/wiki/Cream_(band)", desc: "All Cream All The Time", genre: "Legends", moods: [] },
             { name: "Creedence Clearwater Revival Radio", url: "https://nl4.mystreaming.net/er/creedence/icecast.audio", sourceUrl: "https://ccr.concord.com/", desc: "All CCR All The Time", genre: "Legends", moods: [] },
@@ -495,7 +427,7 @@
             { name: "Dire Straits Radio", url: "https://streaming.exclusive.radio/er/direstraits/icecast.audio", sourceUrl: "https://www.direstraits.com/", desc: "All Dire Straits All The Time", genre: "Legends", moods: [] },
             { name: "Dolly Parton Radio", url: "https://streaming.exclusive.radio/er/dollyparton/icecast.audio", sourceUrl: "https://dollyparton.com/", desc: "All Dolly Parton All The Time", genre: "Legends", moods: [] },
             { name: "The Doobie Brothers Radio", sortName: "Doobie Brothers", url: "https://streaming.exclusive.radio/er/doobiebrothers/icecast.audio", sourceUrl: "https://thedoobiebrothers.com/", desc: "All Doobie Brothers All The Time", genre: "Legends", moods: [] },
-            { name: "The Doors Radio", sortName: "Doors", url: "https://nl4.mystreaming.net/er/doors/icecast.audio", sourceUrl: "https://thedoors.com/", desc: "All The Doors All The Time", genre: "Legends", moods: [] },
+            { name: "The Doors Radio", sortName: "Doors", url: "https://3.mystream.net/er/doors/icecast.audio", sourceUrl: "https://thedoors.com/", desc: "All The Doors All The Time", genre: "Legends", moods: [] },
             { name: "Dr. Dre Radio", url: "https://streaming.exclusive.radio/er/drdre/icecast.audio", sourceUrl: "https://www.drdre.com/", desc: "All Dr. Dre All The Time", genre: "Legends", moods: [] },
             { name: "Duke Ellington Radio", url: "https://streaming.exclusive.radio/er/dukeellington/icecast.audio", sourceUrl: "http://www.dukeellington.com/", desc: "All Duke Ellington All The Time", genre: "Legends", moods: [] },
             { name: "Eagles Radio", url: "https://streaming.exclusive.radio/er/eagles/icecast.audio", sourceUrl: "https://eagles.com/", desc: "All Eagles All The Time", genre: "Legends", moods: [] },
@@ -513,7 +445,7 @@
             { name: "Grateful Dead Radio", url: "https://streaming.exclusive.radio/er/gratefuldead/icecast.audio", sourceUrl: "https://www.dead.net/", desc: "All Grateful Dead All The Time", genre: "Legends", moods: [] },
             { name: "Green Day Radio", url: "https://streaming.exclusive.radio/er/greenday/icecast.audio", sourceUrl: "https://greenday.com/", desc: "All Green Day All The Time", genre: "Legends", moods: [] },
             { name: "Guns N' Roses Radio", url: "https://streaming.exclusive.radio/er/gunsnroses/icecast.audio", sourceUrl: "https://www.gunsnroses.com/", desc: "All Guns N' Roses All The Time", genre: "Legends", moods: [] },
-            { name: "Hall & Oates Radio", url: "https://nl4.mystreaming.net/er/hallandoateshits/icecast.audio", sourceUrl: "https://en.wikipedia.org/wiki/Hall_%26_Oates_discography", desc: "All Hall & Oates All The Time", genre: "Legends", moods: [] },
+            { name: "Hall & Oates Radio", url: "https://3.mystream.net/er/hallandoateshits/icecast.audio", sourceUrl: "https://en.wikipedia.org/wiki/Hall_%26_Oates_discography", desc: "All Hall & Oates All The Time", genre: "Legends", moods: [] },
             { name: "Hank Williams Radio", url: "https://streaming.exclusive.radio/er/hankwilliams/icecast.audio", sourceUrl: "https://en.wikipedia.org/wiki/Hank_Williams", desc: "All Hank Williams All The Time", genre: "Legends", moods: [] },
             { name: "Herbie Hancock Radio", url: "https://streaming.exclusive.radio/er/herbiehancock/icecast.audio", sourceUrl: "https://www.herbiehancock.com/", desc: "All Herbie Hancock All The Time", genre: "Legends", moods: [] },
             { name: "Jack Johnson Radio", url: "https://streaming.exclusive.radio/er/jackjohnson/icecast.audio", sourceUrl: "https://jackjohnsonmusic.com/", desc: "All Jack Johnson All The Time", genre: "Legends", moods: [] },
@@ -530,7 +462,7 @@
             { name: "Kanye West Radio", url: "https://streaming.exclusive.radio/er/kanyewest/icecast.audio", sourceUrl: "https://en.wikipedia.org/wiki/Kanye_West", desc: "All Kanye West All The Time", genre: "Legends", moods: [] },
             { name: "Kate Bush Radio", url: "https://streaming.exclusive.radio/er/katebush/icecast.audio", sourceUrl: "https://www.katebush.com/", desc: "All Kate Bush All The Time", genre: "Legends", moods: [] },
             { name: "Kendrick Lamar Radio", url: "https://streaming.exclusive.radio/er/kendricklamar/icecast.audio", sourceUrl: "https://www.oklama.com/", desc: "All Kendrick Lamar All The Time", genre: "Legends", moods: [] },
-            { name: "The Kinks Radio", sortName: "Kinks", url: "https://3.mystreaming.net/er/thekinks/icecast.audio", sourceUrl: "https://thekinks.info/", desc: "All The Kinks All The Time", genre: "Legends", moods: [] },
+            { name: "The Kinks Radio", sortName: "Kinks", url: "https://3.mystream.net/er/thekinks/icecast.audio", sourceUrl: "https://thekinks.info/", desc: "All The Kinks All The Time", genre: "Legends", moods: [] },
             { name: "Kraftwerk Radio", url: "https://streaming.exclusive.radio/er/kraftwerk/icecast.audio", sourceUrl: "https://kraftwerk.com/", desc: "All Kraftwerk All The Time", genre: "Legends", moods: [] },
             { name: "Lana Del Rey Radio", url: "https://streaming.exclusive.radio/er/lanadelrey/icecast.audio", sourceUrl: "https://lanadelrey.com/", desc: "All Lana Del Rey All The Time", genre: "Legends", moods: [] },
             { name: "Led Zeppelin Radio", url: "https://streaming.exclusive.radio/er/ledzeppelin/icecast.audio", sourceUrl: "https://www.ledzeppelin.com/", desc: "All Led Zeppelin All The Time", genre: "Legends", moods: [] },
@@ -675,503 +607,6 @@
         };
 
 
-        // ==================== STREAM URL RESOLVER ====================
-        const resolveStreamUrl = async (url) => {
-            if (!url.includes('radiojar.com')) return url;
-            if (!navigator.serviceWorker || !navigator.serviceWorker.controller) return url;
-            try {
-                return await new Promise((resolve) => {
-                    const ch = new MessageChannel();
-                    ch.port1.onmessage = (e) => resolve(e.data.resolved || url);
-                    setTimeout(() => resolve(url), 3000);
-                    navigator.serviceWorker.controller.postMessage(
-                        { type: 'RESOLVE_STREAM_URL', url },
-                        [ch.port2]
-                    );
-                });
-            } catch (e) {}
-            return url;
-        };
-
-
-        // ==================== DUB FX ENGINE ====================
-        const useDubFX = (audioContextRef, audioTagRef) => {
-            const [fxEnabled, setFxEnabled] = useState(false);
-            const [fxAttempted, setFxAttempted] = useState(false);
-            const [isMasterFxOn, setIsMasterFxOn] = useState(true);
-            const [isFxMuted, setIsFxMuted] = useState(false);
-            const [aDeckVolume, setADeckVolume] = useState(1);
-            const [bDeckVolume, setBDeckVolume] = useState(1);
-            const [aDeckFxOn, setADeckFxOn] = useState(true);
-            const [bDeckFxOn, setBDeckFxOn] = useState(false);
-            const [isDelayOn, setIsDelayOn] = useState(false);
-            const [isReverbOn, setIsReverbOn] = useState(false);
-            const [isFilterOn, setIsFilterOn] = useState(false);
-            const [delayTime, setDelayTime] = useState(0.35);
-            const [delayFeedback, setDelayFeedback] = useState(0.4);
-            const [delayWet, setDelayWet] = useState(0.5);
-            const [reverbWet, setReverbWet] = useState(0.5);
-            const [reverbDecay, setReverbDecay] = useState(2.0);
-            const [filterPos, setFilterPos] = useState(0.5); // 0=HP(bass cut), 0.5=neutral, 1=LP(treble cut)
-            // Siren synth
-            const [sirenPitch, setSirenPitch] = useState(800);
-            const [sirenLfoRate, setSirenLfoRate] = useState(4);
-            const [sirenLfoDepth, setSirenLfoDepth] = useState(600);
-            const [sirenVolume, setSirenVolume] = useState(0.25);
-            const [sirenDelayTime, setSirenDelayTime] = useState(300);
-            const [sirenDelayFeedback, setSirenDelayFeedback] = useState(0.3);
-            const [sirenVcoWave, setSirenVcoWave] = useState('sine');
-            const [sirenLfoWave, setSirenLfoWave] = useState('triangle');
-            const [sirenRateMultiplier, setSirenRateMultiplier] = useState('lo');
-            const [isSirenActive, setIsSirenActive] = useState(false);
-            const [isSirenDrone, setIsSirenDrone] = useState(false);
-            // Crossfader
-            const [crossfadeValue, setCrossfadeValue] = useState(0);
-            const [bDeckStation, setBDeckStation] = useState(null);
-            const [isBDeckPickerOpen, setIsBDeckPickerOpen] = useState(false);
-            const [bDeckPickerGenre, setBDeckPickerGenre] = useState(null);
-            const [isADeckPickerOpen, setIsADeckPickerOpen] = useState(false);
-            const [aDeckPickerGenre, setADeckPickerGenre] = useState(null);
-            const [isFading, setIsFading] = useState(false);
-            const bDeckAudioRef = useRef(null);
-            const bDeckStationRef = useRef(null);
-            const aDeckGainRef = useRef(null);
-            const nodesRef = useRef(null);
-            const bDeckSourceRef = useRef(null);
-            const [isBDeckReady, setIsBDeckReady] = useState(false);
-            const sirenRef = useRef(null);
-            const fadeRafRef = useRef(null);
-
-            // Keep bDeckStationRef in sync so RAF closures always have latest value
-            useEffect(() => { bDeckStationRef.current = bDeckStation; }, [bDeckStation]);
-
-            const generateIR = useCallback((ctx, decay) => {
-                const len = ctx.sampleRate * decay;
-                const buf = ctx.createBuffer(2, len, ctx.sampleRate);
-                for (let ch = 0; ch < 2; ch++) {
-                    const d = buf.getChannelData(ch);
-                    for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2.5);
-                }
-                return buf;
-            }, []);
-
-            // --- Build FX chain (FIX 1: no src reload = no dropout) ---
-            const initFxChain = useCallback(() => {
-                if (nodesRef.current || !audioContextRef.current || !audioTagRef.current) return false;
-                const ctx = audioContextRef.current;
-                const audio = audioTagRef.current;
-                try {
-                    const source = ctx.createMediaElementSource(audio);
-                    // A-deck volume (crossfade-controlled, PRE-FX)
-                    const aDeckVolGain = ctx.createGain(); aDeckVolGain.gain.value = 1;
-                    // A-deck FX send/bypass
-                    const aDeckFxSendGain = ctx.createGain(); aDeckFxSendGain.gain.value = 1;
-                    const aDeckBypassGain = ctx.createGain(); aDeckBypassGain.gain.value = 0;
-                    // B-deck volume (crossfade-controlled)
-                    const bDeckVolGain = ctx.createGain(); bDeckVolGain.gain.value = 0;
-                    // B-deck FX send/bypass
-                    const bDeckFxSendGain = ctx.createGain(); bDeckFxSendGain.gain.value = 0;
-                    const bDeckBypassGain = ctx.createGain(); bDeckBypassGain.gain.value = 1;
-                    // Shared FX chain nodes
-                    const hpFilter = ctx.createBiquadFilter();
-                    hpFilter.type = 'highpass'; hpFilter.frequency.value = 20; hpFilter.Q.value = 0.7;
-                    const lpFilter = ctx.createBiquadFilter();
-                    lpFilter.type = 'lowpass'; lpFilter.frequency.value = 22050; lpFilter.Q.value = 0.7;
-                    const delayNode = ctx.createDelay(3.0); delayNode.delayTime.value = 0.35;
-                    const feedbackGain = ctx.createGain(); feedbackGain.gain.value = 0;
-                    const delayWetGain = ctx.createGain(); delayWetGain.gain.value = 0;
-                    const delayDryGain = ctx.createGain(); delayDryGain.gain.value = 1;
-                    const convolver = ctx.createConvolver(); convolver.buffer = generateIR(ctx, 2.0);
-                    const reverbWetGain = ctx.createGain(); reverbWetGain.gain.value = 0;
-                    const reverbDryGain = ctx.createGain(); reverbDryGain.gain.value = 1;
-                    const postFxGain = ctx.createGain(); postFxGain.gain.value = 1;
-                    const masterGain = ctx.createGain(); masterGain.gain.value = 1;
-                    const sirenGain = ctx.createGain(); sirenGain.gain.value = 0;
-                    const preFxMuteGain = ctx.createGain(); preFxMuteGain.gain.value = 1;
-                    // A-deck: source → aDeckVolGain → FX send / bypass
-                    source.connect(aDeckVolGain);
-                    aDeckVolGain.connect(aDeckFxSendGain);
-                    aDeckVolGain.connect(aDeckBypassGain);
-                    aDeckFxSendGain.connect(hpFilter);
-                    aDeckBypassGain.connect(masterGain);
-                    // B-deck gain graph (bSource connected lazily in startBDeck)
-                    bDeckVolGain.connect(bDeckFxSendGain);
-                    bDeckVolGain.connect(bDeckBypassGain);
-                    bDeckFxSendGain.connect(hpFilter);
-                    bDeckBypassGain.connect(masterGain);
-                    // Shared FX chain: hpFilter → lpFilter → preFxMuteGain → delay/reverb → postFxGain → master
-                    hpFilter.connect(lpFilter);
-                    lpFilter.connect(preFxMuteGain);
-                    preFxMuteGain.connect(delayDryGain); delayDryGain.connect(reverbDryGain);
-                    preFxMuteGain.connect(delayNode); delayNode.connect(feedbackGain); feedbackGain.connect(delayNode);
-                    delayNode.connect(delayWetGain); delayWetGain.connect(reverbDryGain);
-                    reverbDryGain.connect(postFxGain);
-                    preFxMuteGain.connect(convolver); delayWetGain.connect(convolver);
-                    convolver.connect(reverbWetGain); reverbWetGain.connect(postFxGain);
-                    postFxGain.connect(masterGain); masterGain.connect(ctx.destination);
-                    sirenGain.connect(ctx.destination);
-                    nodesRef.current = { source, aDeckVolGain, aDeckFxSendGain, aDeckBypassGain, bDeckVolGain, bDeckFxSendGain, bDeckBypassGain, hpFilter, lpFilter, preFxMuteGain, delayNode, feedbackGain, delayWetGain, delayDryGain, convolver, reverbWetGain, reverbDryGain, postFxGain, masterGain, sirenGain };
-                    aDeckGainRef.current = aDeckVolGain;
-                    setFxEnabled(true); setFxAttempted(true);
-                    return true;
-                } catch (e) {
-                    console.warn('FX chain failed:', e);
-                    setFxEnabled(false); setFxAttempted(true);
-                    return false;
-                }
-            }, [audioContextRef, audioTagRef, generateIR]);
-
-            // --- Reset all FX (trails fade naturally on skip) ---
-            const resetAllFx = useCallback(() => {
-                setIsDelayOn(false); setIsReverbOn(false); setIsFilterOn(false);
-                setDelayTime(0.35); setDelayFeedback(0.4); setDelayWet(0.5);
-                setReverbWet(0.5); setReverbDecay(2.0); setFilterPos(0.5);
-                if (nodesRef.current && audioContextRef.current) {
-                    const t = audioContextRef.current.currentTime;
-                    // Kill feedback loop immediately so delay doesn't run forever
-                    nodesRef.current.feedbackGain.gain.setValueAtTime(0, t);
-                    // Fade wet gains over 3s so delay/reverb trails ring out naturally
-                    nodesRef.current.delayWetGain.gain.setValueAtTime(nodesRef.current.delayWetGain.gain.value, t);
-                    nodesRef.current.delayWetGain.gain.linearRampToValueAtTime(0, t + 3);
-                    nodesRef.current.reverbWetGain.gain.setValueAtTime(nodesRef.current.reverbWetGain.gain.value, t);
-                    nodesRef.current.reverbWetGain.gain.linearRampToValueAtTime(0, t + 2);
-                    // Reset filter + dry gains immediately
-                    nodesRef.current.lpFilter.frequency.setValueAtTime(22050, t);
-                    nodesRef.current.hpFilter.frequency.setValueAtTime(20, t);
-                    nodesRef.current.delayDryGain.gain.setValueAtTime(1, t);
-                    nodesRef.current.reverbDryGain.gain.setValueAtTime(1, t);
-                    // Reset FX routing to defaults
-                    nodesRef.current.aDeckFxSendGain.gain.setValueAtTime(1, t);
-                    nodesRef.current.aDeckBypassGain.gain.setValueAtTime(0, t);
-                    nodesRef.current.bDeckFxSendGain.gain.setValueAtTime(0, t);
-                    nodesRef.current.bDeckBypassGain.gain.setValueAtTime(1, t);
-                }
-                setADeckFxOn(true); setBDeckFxOn(false);
-                if (fadeRafRef.current) { cancelAnimationFrame(fadeRafRef.current); fadeRafRef.current = null; }
-                setIsFading(false);
-            }, [audioContextRef]);
-
-            const resetDelay = useCallback(() => {
-                setIsDelayOn(false); setDelayTime(0.35); setDelayFeedback(0.4); setDelayWet(0.5);
-                if (nodesRef.current && audioContextRef.current) {
-                    const t = audioContextRef.current.currentTime;
-                    nodesRef.current.delayWetGain.gain.setValueAtTime(0, t);
-                    nodesRef.current.feedbackGain.gain.setValueAtTime(0, t);
-                }
-            }, [audioContextRef]);
-            const resetReverb = useCallback(() => {
-                setIsReverbOn(false); setReverbDecay(2.0); setReverbWet(0.5);
-                if (nodesRef.current && audioContextRef.current)
-                    nodesRef.current.reverbWetGain.gain.setValueAtTime(0, audioContextRef.current.currentTime);
-            }, [audioContextRef]);
-            const resetFilter = useCallback(() => {
-                setIsFilterOn(false); setFilterPos(0.5);
-                if (nodesRef.current && audioContextRef.current) {
-                    const t = audioContextRef.current.currentTime;
-                    nodesRef.current.lpFilter.frequency.setValueAtTime(22050, t);
-                    nodesRef.current.hpFilter.frequency.setValueAtTime(20, t);
-                }
-            }, [audioContextRef]);
-
-            // --- Delay params ---
-            useEffect(() => {
-                if (!nodesRef.current || !isDelayOn || !isMasterFxOn) return;
-                nodesRef.current.delayNode.delayTime.linearRampToValueAtTime(delayTime, audioContextRef.current.currentTime + 0.03);
-            }, [delayTime, audioContextRef, isDelayOn, isMasterFxOn]);
-            useEffect(() => {
-                if (!nodesRef.current || !isDelayOn || !isMasterFxOn) return;
-                nodesRef.current.feedbackGain.gain.linearRampToValueAtTime(Math.min(delayFeedback, 0.85), audioContextRef.current.currentTime + 0.03);
-            }, [delayFeedback, audioContextRef, isDelayOn, isMasterFxOn]);
-            useEffect(() => {
-                if (!nodesRef.current || !isMasterFxOn) return;
-                nodesRef.current.delayWetGain.gain.linearRampToValueAtTime(isDelayOn ? delayWet : 0, audioContextRef.current.currentTime + 0.03);
-            }, [delayWet, isDelayOn, audioContextRef, isMasterFxOn]);
-
-            // --- Reverb params ---
-            useEffect(() => {
-                if (!nodesRef.current || !isMasterFxOn) return;
-                nodesRef.current.reverbWetGain.gain.linearRampToValueAtTime(isReverbOn ? reverbWet : 0, audioContextRef.current.currentTime + 0.03);
-            }, [reverbWet, isReverbOn, audioContextRef, isMasterFxOn]);
-            useEffect(() => {
-                if (!nodesRef.current || !isReverbOn || !isMasterFxOn) return;
-                nodesRef.current.convolver.buffer = generateIR(audioContextRef.current, reverbDecay);
-            }, [reverbDecay, audioContextRef, generateIR, isReverbOn, isMasterFxOn]);
-
-            // --- Dual filter (V2E: LP left / neutral centre / HP right) ---
-            useEffect(() => {
-                if (!nodesRef.current || !isMasterFxOn) return;
-                const t = audioContextRef.current.currentTime;
-                if (!isFilterOn) {
-                    nodesRef.current.lpFilter.frequency.setValueAtTime(22050, t);
-                    nodesRef.current.hpFilter.frequency.setValueAtTime(20, t);
-                    return;
-                }
-                if (filterPos <= 0.5) {
-                    // Left side = LP (treble cut)
-                    const norm = 1 - (filterPos / 0.5);
-                    const lpFreq = 22050 * Math.pow(80 / 22050, norm);
-                    nodesRef.current.lpFilter.frequency.setValueAtTime(lpFreq, t);
-                    nodesRef.current.hpFilter.frequency.setValueAtTime(20, t);
-                } else {
-                    // Right side = HP (bass cut)
-                    const norm = (filterPos - 0.5) / 0.5;
-                    const hpFreq = 20 * Math.pow(5000 / 20, norm);
-                    nodesRef.current.hpFilter.frequency.setValueAtTime(hpFreq, t);
-                    nodesRef.current.lpFilter.frequency.setValueAtTime(22050, t);
-                }
-            }, [filterPos, isFilterOn, audioContextRef, isMasterFxOn]);
-
-            // --- Master FX on/off ---
-            useEffect(() => {
-                if (!nodesRef.current) return;
-                const t = audioContextRef.current.currentTime + 0.03;
-                const ct = audioContextRef.current.currentTime;
-                if (!isMasterFxOn) {
-                    nodesRef.current.delayWetGain.gain.linearRampToValueAtTime(0, t);
-                    nodesRef.current.reverbWetGain.gain.linearRampToValueAtTime(0, t);
-                    nodesRef.current.lpFilter.frequency.setValueAtTime(22050, ct);
-                    nodesRef.current.hpFilter.frequency.setValueAtTime(20, ct);
-                } else {
-                    nodesRef.current.delayWetGain.gain.linearRampToValueAtTime(isDelayOn ? delayWet : 0, t);
-                    nodesRef.current.reverbWetGain.gain.linearRampToValueAtTime(isReverbOn ? reverbWet : 0, t);
-                    // Re-apply filter position
-                    if (isFilterOn && filterPos <= 0.5) {
-                        const norm = 1 - (filterPos / 0.5);
-                        nodesRef.current.lpFilter.frequency.setValueAtTime(22050 * Math.pow(80/22050, norm), ct);
-                        nodesRef.current.hpFilter.frequency.setValueAtTime(20, ct);
-                    } else if (isFilterOn) {
-                        const norm = (filterPos - 0.5) / 0.5;
-                        nodesRef.current.hpFilter.frequency.setValueAtTime(20 * Math.pow(250, norm), ct);
-                        nodesRef.current.lpFilter.frequency.setValueAtTime(22050, ct);
-                    }
-                }
-            }, [isMasterFxOn, audioContextRef, isDelayOn, isReverbOn, isFilterOn, delayWet, reverbWet, filterPos]);
-
-            // --- FX Mute (post-fader: cuts source before FX sends, wet trails ring out) ---
-            useEffect(() => {
-                if (!nodesRef.current || !fxEnabled) return;
-                const t = audioContextRef.current.currentTime + 0.03;
-                nodesRef.current.preFxMuteGain.gain.linearRampToValueAtTime(isFxMuted ? 0 : 1, t);
-            }, [isFxMuted, fxEnabled, audioContextRef]);
-
-            // --- Per-deck FX send/bypass routing ---
-            useEffect(() => {
-                if (!nodesRef.current || !audioContextRef.current) return;
-                const t = audioContextRef.current.currentTime + 0.02;
-                nodesRef.current.aDeckFxSendGain.gain.linearRampToValueAtTime(aDeckFxOn ? 1 : 0, t);
-                nodesRef.current.aDeckBypassGain.gain.linearRampToValueAtTime(aDeckFxOn ? 0 : 1, t);
-                nodesRef.current.bDeckFxSendGain.gain.linearRampToValueAtTime(bDeckFxOn ? 1 : 0, t);
-                nodesRef.current.bDeckBypassGain.gain.linearRampToValueAtTime(bDeckFxOn ? 0 : 1, t);
-            }, [aDeckFxOn, bDeckFxOn, audioContextRef]);
-
-            // --- Crossfader: constant power curve with per-deck volume ---
-            useEffect(() => {
-                const angle = crossfadeValue * Math.PI / 2;
-                const aVol = Math.cos(angle) * aDeckVolume;
-                const bVol = Math.sin(angle) * bDeckVolume;
-                if (aDeckGainRef.current) aDeckGainRef.current.gain.setValueAtTime(aVol, audioContextRef.current?.currentTime || 0);
-                else if (audioTagRef.current) audioTagRef.current.volume = aVol;
-                if (nodesRef.current) nodesRef.current.bDeckVolGain.gain.setValueAtTime(bVol, audioContextRef.current?.currentTime || 0);
-                if (!bDeckSourceRef.current && bDeckAudioRef.current) bDeckAudioRef.current.volume = bVol;
-                // Auto-play B-deck when crossfade moves toward B, pause when back to A
-                if (bDeckAudioRef.current && bDeckAudioRef.current.src) {
-                    if (crossfadeValue > 0.01 && bDeckAudioRef.current.paused) {
-                        if (audioContextRef.current?.state === 'suspended') audioContextRef.current.resume();
-                        bDeckAudioRef.current.play().catch(() => {});
-                    } else if (crossfadeValue <= 0.01 && !bDeckAudioRef.current.paused) {
-                        bDeckAudioRef.current.pause();
-                    }
-                }
-            }, [crossfadeValue, aDeckVolume, bDeckVolume, audioContextRef, audioTagRef]);
-
-            // --- Auto-crossfade (bidirectional: target 0=A, 1=B) ---
-            const startAutoFade = useCallback((durationMs, target = 1) => {
-                if (!bDeckStationRef.current) return;
-                if (!bDeckAudioRef.current || bDeckAudioRef.current.readyState < 2) return;
-                // Ensure B-deck is playing before starting fade
-                if (target > 0 && bDeckAudioRef.current.paused) {
-                    bDeckAudioRef.current.play().catch(() => {});
-                }
-                if (fadeRafRef.current) cancelAnimationFrame(fadeRafRef.current);
-                const startTime = performance.now();
-                const startVal = crossfadeValue;
-                const endVal = target;
-                if (Math.abs(startVal - endVal) < 0.01) return;
-                setIsFading(true);
-                const animate = (now) => {
-                    const elapsed = now - startTime;
-                    const progress = Math.min(elapsed / durationMs, 1);
-                    setCrossfadeValue(startVal + (endVal - startVal) * progress);
-                    if (progress < 1) { fadeRafRef.current = requestAnimationFrame(animate); }
-                    else {
-                        setIsFading(false); fadeRafRef.current = null;
-                    }
-                };
-                fadeRafRef.current = requestAnimationFrame(animate);
-            }, [crossfadeValue]);
-
-            const stopAutoFade = useCallback(() => {
-                if (fadeRafRef.current) { cancelAnimationFrame(fadeRafRef.current); fadeRafRef.current = null; }
-                setIsFading(false);
-            }, []);
-
-            // --- B-deck ---
-            const startBDeck = useCallback((station) => {
-                setBDeckStation(station);
-                setIsBDeckReady(false);
-                if (!bDeckAudioRef.current) return;
-                bDeckAudioRef.current.pause(); bDeckAudioRef.current.src = "";
-                const markReady = () => setIsBDeckReady(true);
-                const playWithUrl = (resolved) => {
-                    if (!bDeckAudioRef.current) return;
-                    bDeckAudioRef.current.oncanplay = markReady;
-                    bDeckAudioRef.current.onplaying = markReady;
-                    bDeckAudioRef.current.src = resolved;
-                    // Lazy Web Audio connection (one-time, permanent)
-                    if (!bDeckSourceRef.current && audioContextRef.current && nodesRef.current) {
-                        try {
-                            const bSource = audioContextRef.current.createMediaElementSource(bDeckAudioRef.current);
-                            bSource.connect(nodesRef.current.bDeckVolGain);
-                            bDeckSourceRef.current = bSource;
-                            bDeckAudioRef.current.volume = 1; // gain node handles volume now
-                        } catch (e) { console.warn('B-deck Web Audio connection failed:', e); }
-                    }
-                    // Set initial volume to 0; crossfade useEffect manages volume
-                    if (nodesRef.current) {
-                        nodesRef.current.bDeckVolGain.gain.setValueAtTime(0, audioContextRef.current.currentTime);
-                    }
-                    bDeckAudioRef.current.volume = 0;
-                    // Play silently so stream buffers and canplay/onplaying fires
-                    if (audioContextRef.current?.state === 'suspended') audioContextRef.current.resume();
-                    bDeckAudioRef.current.play().catch(() => {});
-                    // Timeout fallback: enable crossfader after 5s even if events don't fire
-                    setTimeout(() => { if (bDeckAudioRef.current && bDeckAudioRef.current.src) markReady(); }, 5000);
-                };
-                // For non-radiojar URLs, play synchronously to preserve user gesture context
-                if (!station.url.includes('radiojar.com')) {
-                    playWithUrl(station.url);
-                } else {
-                    resolveStreamUrl(station.url).then(playWithUrl);
-                }
-            }, [audioContextRef]);
-
-            const stopBDeck = useCallback(() => {
-                if (fadeRafRef.current) { cancelAnimationFrame(fadeRafRef.current); fadeRafRef.current = null; }
-                setIsFading(false);
-                setIsBDeckReady(false);
-                if (bDeckAudioRef.current) { bDeckAudioRef.current.pause(); bDeckAudioRef.current.src = ""; bDeckAudioRef.current.oncanplay = null; }
-                if (nodesRef.current) nodesRef.current.bDeckVolGain.gain.setValueAtTime(0, audioContextRef.current?.currentTime || 0);
-                setBDeckStation(null); setCrossfadeValue(0);
-            }, [audioContextRef]);
-
-            const commitBtoA = useCallback(() => bDeckStationRef.current, []);
-
-            // --- Siren synth (FIX 7: graceful release with delay trail) ---
-            useEffect(() => {
-                if (!audioContextRef.current) return;
-                const ctx = audioContextRef.current;
-                const shouldPlay = isSirenActive || isSirenDrone;
-                if (shouldPlay) {
-                    if (sirenRef.current && sirenRef.current.playing) return;
-                    const osc = ctx.createOscillator();
-                    const lfo = ctx.createOscillator();
-                    const lfoGain = ctx.createGain();
-                    const sirenOutGain = ctx.createGain();
-                    const sDelay = ctx.createDelay(2.0); sDelay.delayTime.value = sirenDelayTime / 1000;
-                    const sFeedback = ctx.createGain(); sFeedback.gain.value = sirenDelayFeedback;
-                    const sDelayWet = ctx.createGain(); sDelayWet.gain.value = 0.5;
-                    const sMix = ctx.createGain(); sMix.gain.value = 1;
-                    osc.type = sirenVcoWave; osc.frequency.value = sirenPitch;
-                    lfo.type = sirenLfoWave; lfo.frequency.value = sirenLfoRate;
-                    lfoGain.gain.value = sirenLfoDepth; sirenOutGain.gain.value = sirenVolume;
-                    lfo.connect(lfoGain); lfoGain.connect(osc.frequency);
-                    osc.connect(sirenOutGain); sirenOutGain.connect(sMix);
-                    sirenOutGain.connect(sDelay); sDelay.connect(sFeedback); sFeedback.connect(sDelay);
-                    sDelay.connect(sDelayWet); sDelayWet.connect(sMix);
-                    if (nodesRef.current) {
-                        nodesRef.current.sirenGain.gain.setValueAtTime(1, ctx.currentTime);
-                        sMix.connect(nodesRef.current.sirenGain);
-                    } else { sMix.connect(ctx.destination); }
-                    osc.start(); lfo.start();
-                    sirenRef.current = { osc, lfo, lfoGain, sirenOutGain, sDelay, sFeedback, sDelayWet, sMix, playing: true, cleanupId: null };
-                } else {
-                    // FIX 7: graceful release — fade oscillator, let delay trail ring out
-                    if (sirenRef.current && sirenRef.current.playing) {
-                        const s = sirenRef.current;
-                        const t = ctx.currentTime;
-                        const cleanupId = Date.now();
-                        // Fade direct signal over 50ms
-                        s.sirenOutGain.gain.setValueAtTime(s.sirenOutGain.gain.value, t);
-                        s.sirenOutGain.gain.exponentialRampToValueAtTime(0.001, t + 0.05);
-                        // Stop oscillator after fade
-                        setTimeout(() => {
-                            try { s.osc.stop(); } catch(e) {}
-                            try { s.lfo.stop(); } catch(e) {}
-                        }, 100);
-                        // Let delay trail ring out, then clean up sirenGain
-                        const trailMs = Math.max(sirenDelayTime * 15, 1000);
-                        setTimeout(() => {
-                            if (sirenRef.current && sirenRef.current.cleanupId === cleanupId) {
-                                if (nodesRef.current) {
-                                    nodesRef.current.sirenGain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.1);
-                                }
-                                sirenRef.current = null;
-                            }
-                        }, trailMs);
-                        s.playing = false;
-                        s.cleanupId = cleanupId;
-                    }
-                }
-            }, [isSirenActive, isSirenDrone, audioContextRef, sirenPitch, sirenLfoRate, sirenLfoDepth, sirenVolume, sirenVcoWave, sirenLfoWave, sirenRateMultiplier, sirenDelayTime, sirenDelayFeedback]);
-
-            // --- Live siren param updates ---
-            useEffect(() => {
-                if (!sirenRef.current || !sirenRef.current.playing) return;
-                const t = audioContextRef.current.currentTime + 0.03;
-                sirenRef.current.osc.frequency.linearRampToValueAtTime(sirenPitch, t);
-                sirenRef.current.lfo.frequency.linearRampToValueAtTime(sirenLfoRate, t);
-                sirenRef.current.lfoGain.gain.linearRampToValueAtTime(sirenLfoDepth, t);
-                sirenRef.current.sirenOutGain.gain.linearRampToValueAtTime(sirenVolume, t);
-                sirenRef.current.sDelay.delayTime.linearRampToValueAtTime(sirenDelayTime / 1000, t);
-                sirenRef.current.sFeedback.gain.linearRampToValueAtTime(Math.min(sirenDelayFeedback, 0.85), t);
-            }, [sirenPitch, sirenLfoRate, sirenLfoDepth, sirenVolume, sirenDelayTime, sirenDelayFeedback, audioContextRef]);
-            useEffect(() => {
-                if (!sirenRef.current || !sirenRef.current.playing) return;
-                try { sirenRef.current.osc.type = sirenVcoWave; } catch(e) {}
-                try { sirenRef.current.lfo.type = sirenLfoWave; } catch(e) {}
-            }, [sirenVcoWave, sirenLfoWave]);
-
-            const isAnyFxActive = (isDelayOn && delayWet > 0) || (isReverbOn && reverbWet > 0) || (isFilterOn && Math.abs(filterPos - 0.5) > 0.02) || isSirenActive || isSirenDrone;
-
-            return {
-                fxEnabled, fxAttempted, isAnyFxActive,
-                isMasterFxOn, setIsMasterFxOn, isFxMuted, setIsFxMuted,
-                aDeckVolume, setADeckVolume, bDeckVolume, setBDeckVolume,
-                aDeckFxOn, setADeckFxOn, bDeckFxOn, setBDeckFxOn,
-                isDelayOn, setIsDelayOn, isReverbOn, setIsReverbOn, isFilterOn, setIsFilterOn,
-                delayTime, setDelayTime, delayFeedback, setDelayFeedback, delayWet, setDelayWet,
-                reverbWet, setReverbWet, reverbDecay, setReverbDecay,
-                filterPos, setFilterPos,
-                resetDelay, resetReverb, resetFilter, resetAllFx,
-                sirenPitch, setSirenPitch, sirenLfoRate, setSirenLfoRate,
-                sirenLfoDepth, setSirenLfoDepth, sirenVolume, setSirenVolume,
-                sirenDelayTime, setSirenDelayTime, sirenDelayFeedback, setSirenDelayFeedback,
-                sirenVcoWave, setSirenVcoWave, sirenLfoWave, setSirenLfoWave,
-                sirenRateMultiplier, setSirenRateMultiplier,
-                isSirenActive, setIsSirenActive, isSirenDrone, setIsSirenDrone,
-                crossfadeValue, setCrossfadeValue,
-                bDeckStation, setBDeckStation, bDeckAudioRef,
-                nodesRef, bDeckSourceRef,
-                isBDeckPickerOpen, setIsBDeckPickerOpen, bDeckPickerGenre, setBDeckPickerGenre,
-                isADeckPickerOpen, setIsADeckPickerOpen, aDeckPickerGenre, setADeckPickerGenre,
-                isBDeckReady,
-                isFading, startAutoFade, stopAutoFade,
-                startBDeck, stopBDeck, commitBtoA,
-                initFxChain
-            };
-        };
-
-
         const useAudioPlayer = () => {
             const [isPlaying, setIsPlaying] = useState(false);
             const [isMuted, setIsMuted] = useState(false);
@@ -1203,7 +638,24 @@
             }, []);
 
 
-
+            // Resolve RadioJar URLs: they 302 to http:// which gets blocked as mixed content.
+            // Uses the service worker (which can read redirect headers) via MessageChannel.
+            const resolveStreamUrl = async (url) => {
+                if (!url.includes('radiojar.com')) return url;
+                if (!navigator.serviceWorker || !navigator.serviceWorker.controller) return url;
+                try {
+                    return await new Promise((resolve) => {
+                        const ch = new MessageChannel();
+                        ch.port1.onmessage = (e) => resolve(e.data.resolved || url);
+                        setTimeout(() => resolve(url), 3000); // fallback if SW doesn't respond
+                        navigator.serviceWorker.controller.postMessage(
+                            { type: 'RESOLVE_STREAM_URL', url },
+                            [ch.port2]
+                        );
+                    });
+                } catch (e) {}
+                return url;
+            };
 
 
             const connectToStream = useCallback((url, station) => {
@@ -1343,7 +795,7 @@
                 isPlaying, isMuted, hasStarted, isLoading, isOffAir,
                 displayedName, displayedDesc,
                 setDisplayedName,
-                audioTagRef, audioContextRef,
+                audioTagRef,
                 initAudio, togglePlay, toggleMute,
                 startStationPlayback
             };
@@ -1646,582 +1098,13 @@
                         <div className="flex items-center gap-4 w-full py-2">
                             <span className="text-[10px] font-black uppercase tracking-widest opacity-40 whitespace-nowrap" style={{ color: colors.text }}>{sliderLabelLeft}</span>
                             <input type="range" min="0" max="100" value={spinIntensity} onChange={e => setSpinIntensity(Number(e.target.value))} 
-                                   className="coin-slider-lg flex-grow" style={{ cursor: 'pointer', touchAction: 'none' }} />
+                                   className="coin-slider-lg flex-grow" style={{ cursor: 'pointer' }} />
                             <span className="text-[10px] font-black uppercase tracking-widest opacity-40 whitespace-nowrap" style={{ color: colors.text }}>{sliderLabelRight}</span>
                         </div>
                     </div>
                 </div>
             );
         }
-
-
-
-
-        // ==================== CUSTOM POINTER SLIDER ====================
-        const PointerSlider = ({ value, min, max, step, onChange, trackColor, disabled }) => {
-            const trackRef = React.useRef(null);
-            const dragging = React.useRef(false);
-            // Refs so native listener closures never go stale
-            const onChangeRef = React.useRef(onChange);
-            const disabledRef = React.useRef(disabled);
-            const minRef = React.useRef(min);
-            const maxRef = React.useRef(max);
-            const stepRef = React.useRef(step || 1);
-            React.useLayoutEffect(() => { onChangeRef.current = onChange; });
-            React.useLayoutEffect(() => { disabledRef.current = disabled; });
-            React.useLayoutEffect(() => { minRef.current = min; maxRef.current = max; stepRef.current = step || 1; });
-
-            const calc = (clientX) => {
-                const rect = trackRef.current.getBoundingClientRect();
-                const pct = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
-                const raw = minRef.current + pct * (maxRef.current - minRef.current);
-                const s = stepRef.current;
-                return Math.max(minRef.current, Math.min(maxRef.current, Math.round(raw / s) * s));
-            };
-
-            React.useEffect(() => {
-                const el = trackRef.current;
-                if (!el) return;
-
-                // --- MOUSE (desktop) ---
-                const onMouseDown = (e) => {
-                    if (disabledRef.current) return;
-                    e.preventDefault();
-                    dragging.current = true;
-                    onChangeRef.current(calc(e.clientX));
-                    const onMove = (e) => { if (dragging.current) onChangeRef.current(calc(e.clientX)); };
-                    const onUp = () => {
-                        dragging.current = false;
-                        document.removeEventListener('mousemove', onMove);
-                        document.removeEventListener('mouseup', onUp);
-                    };
-                    document.addEventListener('mousemove', onMove);
-                    document.addEventListener('mouseup', onUp);
-                };
-
-                // --- TOUCH (mobile, non-passive to prevent scroll stealing) ---
-                const onTouchStart = (e) => {
-                    if (disabledRef.current) return;
-                    e.preventDefault();
-                    dragging.current = true;
-                    onChangeRef.current(calc(e.touches[0].clientX));
-                };
-                const onTouchMove = (e) => {
-                    if (!dragging.current) return;
-                    e.preventDefault();
-                    onChangeRef.current(calc(e.touches[0].clientX));
-                };
-                const onTouchEnd = () => { dragging.current = false; };
-
-                el.addEventListener('mousedown', onMouseDown);
-                el.addEventListener('touchstart', onTouchStart, { passive: false });
-                el.addEventListener('touchmove', onTouchMove, { passive: false });
-                el.addEventListener('touchend', onTouchEnd);
-
-                return () => {
-                    el.removeEventListener('mousedown', onMouseDown);
-                    el.removeEventListener('touchstart', onTouchStart);
-                    el.removeEventListener('touchmove', onTouchMove);
-                    el.removeEventListener('touchend', onTouchEnd);
-                };
-            }, []); // Empty deps — refs handle all prop updates
-
-            const pct = ((value - min) / (max - min)) * 100;
-            return (
-                <div ref={trackRef} className="ptr-slider" style={{ opacity: disabled ? 0.25 : 1 }}>
-                    <div className="ptr-slider-track" style={{ backgroundColor: trackColor || 'rgba(126,194,173,0.3)' }} />
-                    <div className="ptr-slider-thumb" style={{ left: `calc(${pct}% - 11px)` }} />
-                </div>
-            );
-        };
-
-
-        // ==================== FX PANEL OVERLAY ====================
-        const FxSlider = ({ label, value, min, max, step, onChange, displayValue, colors, disabled }) => (
-            <div className={`flex items-center gap-3 w-full py-1 transition-opacity ${disabled ? 'opacity-25 pointer-events-none' : ''}`}>
-                <span className="text-[9px] font-black tracking-widest uppercase opacity-50 w-16 text-right whitespace-nowrap" style={{ color: colors.text }}>{label}</span>
-                <div className="flex-grow">
-                    <PointerSlider value={value} min={min} max={max} step={step || 1} onChange={onChange} trackColor="rgba(126,194,173,0.3)" disabled={disabled} />
-                </div>
-                <span className="text-[9px] font-mono opacity-40 w-14 whitespace-nowrap" style={{ color: colors.text }}>{displayValue}</span>
-            </div>
-        );
-
-        const FxHoldButton = ({ label, icon, isActive, onActivate, onDeactivate, colors }) => (
-            <button className={`fx-hold-btn flex-1 h-14 rounded-2xl border flex flex-col items-center justify-center gap-1 transition-all ${isActive ? 'fx-active' : ''}`}
-                style={{ borderColor: isActive ? 'var(--yellow)' : colors.border, backgroundColor: isActive ? 'var(--yellow)' : 'transparent', color: isActive ? '#000' : colors.text }}
-                onTouchStart={(e) => { e.preventDefault(); onActivate(); }} onTouchEnd={onDeactivate} onTouchCancel={onDeactivate}
-                onMouseDown={onActivate} onMouseUp={onDeactivate} onMouseLeave={onDeactivate}>
-                <Icon name={icon} size="18" />
-                <span className="text-[7px] font-black tracking-widest uppercase">{label}</span>
-            </button>
-        );
-
-        const FxSectionToggle = ({ label, isOn, onToggle, onReset, colors }) => (
-            <div className="flex items-center gap-2 mb-2">
-                <button onClick={onToggle}
-                    className="px-3 py-1.5 rounded-lg text-[9px] font-black tracking-widest uppercase transition-all active:scale-95 border"
-                    style={{ backgroundColor: isOn ? 'var(--yellow)' : 'transparent', borderColor: isOn ? 'var(--yellow)' : colors.border, color: isOn ? '#000' : colors.text, opacity: isOn ? 1 : 0.5 }}>
-                    {label} {isOn ? 'ON' : 'OFF'}
-                </button>
-                <button onClick={onReset}
-                    className="text-[8px] font-black tracking-widest uppercase opacity-30 hover:opacity-70 transition-opacity px-2 py-1 rounded border"
-                    style={{ color: colors.text, borderColor: colors.border }}>RESET</button>
-            </div>
-        );
-
-        const FxWaveformSelector = ({ label, options, value, onChange, colors }) => (
-            <div className="flex flex-col items-center gap-1.5">
-                <span className="text-[8px] font-black tracking-[0.15em] uppercase opacity-40" style={{ color: colors.text }}>{label}</span>
-                <div className="inline-flex rounded-full p-0.5"
-                     style={{ backgroundColor: colors.isNight ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)',
-                              border: '1px solid ' + (colors.isNight ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)') }}>
-                    {options.map(opt => (
-                        <button key={opt.value} onClick={() => onChange(opt.value)}
-                            className="px-2.5 py-1.5 rounded-full text-[8px] sm:text-[9px] font-black tracking-[0.08em] sm:tracking-[0.12em] uppercase transition-all"
-                            style={{
-                                backgroundColor: value === opt.value ? 'var(--yellow)' : 'transparent',
-                                color: value === opt.value ? '#000' : colors.text,
-                                opacity: value === opt.value ? 1 : 0.4
-                            }}>
-                            {opt.label}
-                        </button>
-                    ))}
-                </div>
-            </div>
-        );
-
-        const FxHubOverlay = ({ fx, fxHubView, setFxHubView, colors, isNightMode, setIsNightMode, onClose, hasStarted, currentStation,
-            spinIntensity, setSpinIntensity, movementMode, setMovementMode, isPlaying, flipState }) => {
-            const lfoRateMin = fx.sirenRateMultiplier === 'lo' ? 0.1 : 5;
-            const lfoRateMax = fx.sirenRateMultiplier === 'lo' ? 5 : 30;
-            const filterDisplay = (pos) => {
-                if (pos < 0.48) return 'LP';
-                if (pos > 0.52) return 'HP';
-                return '\u2014';
-            };
-            const sliderLabels = {
-                float: ['Still', 'Tumble'], boom: ['60 BPM', '170 BPM'],
-                ripple: ['Slow', 'Rapid'], orbit: ['Drift', 'Chaos'],
-                bloom: ['Crisp', 'Blinding'], balloon: ['Chill', 'Pumped']
-            };
-            const [sliderLabelLeft, sliderLabelRight] = sliderLabels[movementMode] || ['Still', 'Wild'];
-
-            const isCoin = fxHubView === 'coin';
-
-            /* Siren-only coin visual (pink center) */
-            const SirenCoinVisual = ({ active }) => (
-                <div style={{ width: 180, height: 180, borderRadius: '50%', background: 'var(--teal)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'transform 0.15s', transform: active ? 'scale(0.95)' : 'scale(1)' }}>
-                    <div style={{ width: 148, height: 148, borderRadius: '50%', background: 'var(--yellow)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <div style={{ width: 100, height: 100, borderRadius: '50%', background: active ? '#f87171' : '#000', transition: 'background 0.2s' }} />
-                    </div>
-                </div>
-            );
-
-            /* FX card: off-white+shadow in day, dark in night */
-            const FxCard = ({ children, className: cn }) => (
-                <div className={`rounded-2xl p-5 ${cn || 'mt-5'}`} style={{
-                    backgroundColor: isNightMode ? 'rgba(30,30,28,0.95)' : 'rgba(248,247,240,0.95)',
-                    border: isNightMode ? '1px solid rgba(255,255,255,0.06)' : '1px solid rgba(0,0,0,0.04)',
-                    boxShadow: isNightMode ? 'none' : '0 2px 12px rgba(0,0,0,0.06)'
-                }}>
-                    {children}
-                </div>
-            );
-
-            /* FX card toggle button */
-            const FxCardToggle = ({ label, isOn, onToggle, onReset }) => {
-                const btnBg = isOn ? (isNightMode ? '#fff' : '#000') : 'transparent';
-                const btnColor = isOn ? (isNightMode ? '#000' : '#fff') : (isNightMode ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.4)');
-                const btnBorder = isOn ? '2px solid transparent' : ('1.5px solid ' + (isNightMode ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)'));
-                const resetColor = isNightMode ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.25)';
-                return (
-                    <div className="flex items-center gap-3 mb-3">
-                        <button onClick={onToggle}
-                            className="px-5 py-2 rounded-full text-[10px] font-black tracking-[0.15em] uppercase transition-all active:scale-95"
-                            style={{ backgroundColor: btnBg, color: btnColor, border: btnBorder }}>
-                            {label} {isOn ? 'ON' : 'OFF'}
-                        </button>
-                        <button onClick={onReset} className="text-[9px] font-black tracking-widest uppercase transition-opacity hover:opacity-60"
-                            style={{ color: resetColor }}>RESET</button>
-                    </div>
-                );
-            };
-
-            /* Card slider - adapts colors for day/night */
-            const CardSlider = ({ label, value, min, max, step, onChange, displayValue, disabled }) => {
-                const labelColor = isNightMode ? 'rgba(255,255,255,0.45)' : 'rgba(0,0,0,0.4)';
-                const valueColor = isNightMode ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.35)';
-                return (
-                    <div className={`flex items-center gap-3 w-full py-1.5 ${disabled ? 'opacity-20 pointer-events-none' : ''}`}>
-                        <span className="text-[9px] font-black tracking-widest uppercase w-20 text-right whitespace-nowrap"
-                              style={{ color: labelColor }}>{label}</span>
-                        <div className="flex-grow">
-                            <PointerSlider value={value} min={min} max={max} step={step || 0.01} onChange={onChange} trackColor="rgba(229,184,74,0.3)" disabled={disabled} />
-                        </div>
-                        <span className="text-[9px] font-mono w-14 whitespace-nowrap text-right"
-                              style={{ color: valueColor }}>{displayValue}</span>
-                    </div>
-                );
-            };
-
-            /* Separator for cards */
-            const CardSep = () => (
-                <div className="border-t mb-4 mt-1" style={{ borderColor: isNightMode ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)' }} />
-            );
-
-            /* Deck name with ticker for long names */
-            const DeckName = ({ name, color }) => {
-                const isLong = name && name.length > 14;
-                return (
-                    <div className={`deck-ticker ${isLong ? 'deck-ticker-animate' : ''}`} style={{ textAlign: 'center' }}>
-                        <span className="deck-ticker-inner font-young-serif text-sm font-black tracking-tighter uppercase"
-                              style={{ color }}>
-                            {name || '\u2014'}
-                            {isLong && <span>{'\u00a0\u00a0\u00a0\u00a0\u00a0'}{name}</span>}
-                        </span>
-                    </div>
-                );
-            };
-
-            /* Active deck highlight color */
-            const aDeckActive = fx.crossfadeValue < 0.5;
-            const aDeckBg = aDeckActive
-                ? (isNightMode ? 'rgba(126,194,173,0.15)' : 'rgba(126,194,173,0.1)')
-                : 'transparent';
-            const bDeckBg = !aDeckActive && fx.bDeckStation
-                ? (isNightMode ? 'rgba(229,184,74,0.15)' : 'rgba(229,184,74,0.1)')
-                : 'transparent';
-
-            return (
-                <div className="fixed inset-0 z-[100] flex flex-col animate-overlay-in"
-                     style={{
-                         background: isCoin
-                             ? (isNightMode
-                                 ? 'linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 22%, rgba(0,0,0,0.45) 40%, rgba(0,0,0,0.45) 65%, rgba(0,0,0,0.92) 100%)'
-                                 : 'linear-gradient(to bottom, rgba(252,253,242,1) 0%, rgba(252,253,242,1) 22%, rgba(252,253,242,0.4) 40%, rgba(252,253,242,0.4) 65%, rgba(252,253,242,0.92) 100%)')
-                             : undefined,
-                         backgroundColor: isCoin ? undefined : colors.bg,
-                         color: colors.text
-                     }}>
-
-                    {/* TOP BAR */}
-                    <div className="flex items-center justify-between px-4 pt-5 pb-2 z-10">
-                        <div className="inline-flex rounded-full p-1"
-                             style={{ backgroundColor: isNightMode ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)',
-                                      border: '1px solid ' + (isNightMode ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)') }}>
-                            {['coin', 'mix', 'siren'].map(tab => (
-                                <button key={tab} onClick={() => setFxHubView(tab)}
-                                    className="px-5 py-2 rounded-full text-[10px] font-black tracking-[0.2em] uppercase transition-all"
-                                    style={{
-                                        backgroundColor: fxHubView === tab ? (isNightMode ? 'rgba(255,255,255,0.15)' : '#fff') : 'transparent',
-                                        color: colors.text,
-                                        opacity: fxHubView === tab ? 1 : 0.4,
-                                        boxShadow: fxHubView === tab ? '0 1px 4px rgba(0,0,0,0.08)' : 'none'
-                                    }}>
-                                    {tab.toUpperCase()}
-                                </button>
-                            ))}
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <button onClick={() => setIsNightMode(!isNightMode)}
-                                className="w-8 h-8 flex items-center justify-center rounded-full opacity-40 hover:opacity-80 transition-opacity">
-                                <Icon name={isNightMode ? "sun" : "moon"} size="16" />
-                            </button>
-                            <button onClick={onClose} className="relative w-10 h-10 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0" style={{ backgroundColor: colors.teal }}>
-                                <div className="absolute rounded-full" style={{ width: 30, height: 30, backgroundColor: colors.yellow }} />
-                                <div className="absolute rounded-full flex items-center justify-center" style={{ width: 22, height: 22, backgroundColor: '#000' }}>
-                                    <Icon name="x" size="14" className="text-[#fcfdf2]" strokeWidth={3} />
-                                </div>
-                            </button>
-                        </div>
-                    </div>
-
-                    {/* ===== COIN TAB - transparent overlay, controls at bottom ===== */}
-                    {isCoin && (
-                        <div className="flex-grow flex flex-col items-center justify-end px-4"
-                             onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
-                             style={{ paddingBottom: window.innerHeight > 650 ? '11rem' : '3rem', cursor: 'default' }}>
-                            {/* Controls card - semi-opaque for visibility over transparent overlay */}
-                            <div className="w-full max-w-md rounded-2xl p-5 sm:p-6" style={{
-                                backgroundColor: isNightMode ? 'rgba(30,30,28,0.9)' : 'rgba(248,247,240,0.92)',
-                                border: isNightMode ? '1px solid rgba(255,255,255,0.06)' : '1px solid rgba(0,0,0,0.04)',
-                                boxShadow: isNightMode ? 'none' : '0 2px 12px rgba(0,0,0,0.06)',
-                                backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)'
-                            }}>
-                                {/* Motion mode pill toggle - grid on mobile, flex on desktop */}
-                                <div className="mb-5 flex justify-center">
-                                    <div className="inline-grid grid-cols-3 gap-1 sm:inline-flex sm:gap-0.5"
-                                         style={{
-                                             backgroundColor: isNightMode ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)',
-                                             border: '1px solid ' + (isNightMode ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)'),
-                                             borderRadius: '16px',
-                                             padding: '6px 10px'
-                                         }}>
-                                        {['float','ripple','orbit','boom','bloom','balloon'].map(mode => (
-                                            <button key={mode} onClick={() => setMovementMode(mode)}
-                                                className="py-2 rounded-full text-[9px] font-black tracking-[0.1em] uppercase transition-all whitespace-nowrap text-center"
-                                                style={{
-                                                    paddingLeft: movementMode === mode ? '16px' : '12px',
-                                                    paddingRight: movementMode === mode ? '16px' : '12px',
-                                                    backgroundColor: movementMode === mode ? 'var(--yellow)' : 'transparent',
-                                                    color: movementMode === mode ? '#000' : colors.text,
-                                                    opacity: movementMode === mode ? 1 : 0.4,
-                                                    boxShadow: movementMode === mode ? '0 1px 3px rgba(0,0,0,0.08)' : 'none'
-                                                }}>
-                                                {mode.toUpperCase()}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                {/* Intensity slider */}
-                                <div className="flex items-center gap-4 w-full">
-                                    <span className="text-[9px] font-black uppercase tracking-widest opacity-40 whitespace-nowrap">{sliderLabelLeft}</span>
-                                    <div className="flex-grow">
-                                        <PointerSlider value={spinIntensity} min={0} max={100} step={1}
-                                            onChange={setSpinIntensity} trackColor="rgba(126,194,173,0.3)" />
-                                    </div>
-                                    <span className="text-[9px] font-black uppercase tracking-widest opacity-40 whitespace-nowrap">{sliderLabelRight}</span>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* ===== SCROLLABLE CONTENT - MIX and SIREN only ===== */}
-                    {!isCoin && (
-                        <div className="flex-grow overflow-y-auto px-4 pb-12 custom-scrollbar scroll-smooth">
-                            <div className="max-w-lg mx-auto">
-
-                                {/* ===== MIX TAB ===== */}
-                                {fxHubView === 'mix' && (<>
-                                    {/* Deck selectors with centered names, ticker, active highlight */}
-                                    <div className="flex justify-between items-center gap-3 mt-8 mb-8">
-                                        <div className="flex-1">
-                                            <button onClick={() => { fx.setADeckPickerGenre(null); fx.setIsADeckPickerOpen(true); }}
-                                                className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-full border transition-all active:scale-[0.98]"
-                                                style={{ borderColor: colors.border, backgroundColor: aDeckBg }}>
-                                                {currentStation?.apiId && <span className="text-[9px] opacity-50" style={{ color: 'var(--teal)' }}>((&bull;))</span>}
-                                                <DeckName name={currentStation?.name} color="var(--teal)" />
-                                            </button>
-                                        </div>
-                                        <div className="flex-1 flex items-center gap-1">
-                                            {fx.bDeckStation ? (<>
-                                                <button onClick={() => { fx.setBDeckPickerGenre(null); fx.setIsBDeckPickerOpen(true); }}
-                                                    className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-full border transition-all active:scale-[0.98]"
-                                                    style={{ borderColor: colors.border, backgroundColor: bDeckBg }}>
-                                                    <DeckName name={fx.bDeckStation.name} color={colors.text} />
-                                                    {fx.bDeckStation.apiId && <span className="text-[9px] opacity-50">((&bull;))</span>}
-                                                </button>
-                                                <button onClick={() => fx.stopBDeck()} className="w-7 h-7 rounded-full flex items-center justify-center opacity-30 hover:opacity-80 transition-opacity flex-shrink-0"
-                                                    style={{ color: colors.text }}>
-                                                    <Icon name="x" size="14" />
-                                                </button>
-                                            </>) : (
-                                                <button onClick={() => { fx.setBDeckPickerGenre(null); fx.setIsBDeckPickerOpen(true); }}
-                                                    className="flex-1 flex items-center justify-center px-4 py-3 rounded-full border transition-all active:scale-[0.98] opacity-40"
-                                                    style={{ borderColor: colors.border, color: colors.text }}>
-                                                    <span className="text-[10px] font-black tracking-widest uppercase">+ DECK B</span>
-                                                </button>
-                                            )}
-                                        </div>
-                                    </div>
-
-                                    {/* B-deck loading indicator */}
-                                    {fx.bDeckStation && !fx.isBDeckReady && (
-                                        <div className="text-center mb-4">
-                                            <span className="text-[9px] font-black tracking-widest uppercase animate-pulse" style={{ color: 'var(--yellow)' }}>DECK B BUFFERING...</span>
-                                        </div>
-                                    )}
-
-                                    {/* Crossfader */}
-                                    <div className="mb-2">
-                                        <div className="flex justify-between mb-1">
-                                            <span className="text-[9px] font-mono opacity-30" style={{ color: colors.text }}>A</span>
-                                            <span className="text-[9px] font-mono opacity-30" style={{ color: colors.text }}>B</span>
-                                        </div>
-                                        <PointerSlider value={fx.crossfadeValue} min={0} max={1} step={0.01}
-                                            onChange={v => { if (!fx.isFading && fx.isBDeckReady) fx.setCrossfadeValue(v); }}
-                                            trackColor="rgba(126,194,173,0.3)"
-                                            disabled={!fx.bDeckStation || !fx.isBDeckReady} />
-                                    </div>
-
-                                    {/* A->B | MANUAL | B->A */}
-                                    {fx.bDeckStation && fx.isBDeckReady && (
-                                        <div className="flex gap-2 mt-4 justify-center items-center">
-                                            {fx.isFading ? (
-                                                <button onClick={() => fx.stopAutoFade()}
-                                                    className="px-8 py-3 rounded-full text-[10px] font-black tracking-[0.15em] uppercase transition-all active:scale-95"
-                                                    style={{ backgroundColor: 'var(--yellow)', color: '#000' }}>STOP</button>
-                                            ) : (<>
-                                                <button onClick={() => fx.startAutoFade(10000, 1)}
-                                                    className="px-5 py-2.5 rounded-full text-[10px] font-black tracking-[0.15em] uppercase transition-all active:scale-95 border"
-                                                    style={{ borderColor: colors.border, color: colors.text }}>A &rarr; B</button>
-                                                <button className="px-7 py-3 rounded-full text-[10px] font-black tracking-[0.15em] uppercase"
-                                                    style={{ backgroundColor: 'var(--yellow)', color: '#000' }}>MANUAL</button>
-                                                <button onClick={() => fx.startAutoFade(10000, 0)}
-                                                    className="px-5 py-2.5 rounded-full text-[10px] font-black tracking-[0.15em] uppercase transition-all active:scale-95 border"
-                                                    style={{ borderColor: colors.border, color: colors.text }}>B &rarr; A</button>
-                                            </>)}
-                                        </div>
-                                    )}
-
-                                    {/* Per-deck volume */}
-                                    {fx.bDeckStation && (
-                                        <div className="flex gap-4 mt-6 items-start">
-                                            <div className="flex-1">
-                                                <span className="text-[9px] font-black tracking-widest uppercase block mb-2 text-center"
-                                                    style={{ color: 'var(--teal)' }}>A VOL</span>
-                                                <PointerSlider value={fx.aDeckVolume} min={0} max={1} step={0.01}
-                                                    onChange={fx.setADeckVolume} trackColor="rgba(126,194,173,0.3)" />
-                                            </div>
-                                            <div className="flex-1">
-                                                <span className="text-[9px] font-black tracking-widest uppercase block mb-2 text-center"
-                                                    style={{ color: 'var(--yellow)' }}>B VOL</span>
-                                                <PointerSlider value={fx.bDeckVolume} min={0} max={1} step={0.01}
-                                                    onChange={fx.setBDeckVolume} trackColor="rgba(229,184,74,0.3)" />
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    {/* FX A / FX B buttons */}
-                                    {fx.bDeckStation && (
-                                        <div className="flex gap-3 mt-5">
-                                            <button onClick={() => fx.setADeckFxOn(!fx.aDeckFxOn)}
-                                                className="flex-1 py-3.5 rounded-2xl text-[10px] font-black tracking-[0.15em] uppercase transition-all active:scale-[0.98]"
-                                                style={{
-                                                    backgroundColor: fx.aDeckFxOn ? 'var(--teal)' : 'transparent',
-                                                    color: fx.aDeckFxOn ? '#000' : colors.text,
-                                                    border: fx.aDeckFxOn ? '1.5px solid var(--teal)' : ('1.5px solid ' + colors.border),
-                                                    opacity: fx.aDeckFxOn ? 1 : 0.45
-                                                }}>
-                                                FX A {fx.aDeckFxOn ? 'ON' : 'OFF'}
-                                            </button>
-                                            <button onClick={() => fx.setBDeckFxOn(!fx.bDeckFxOn)}
-                                                className="flex-1 py-3.5 rounded-2xl text-[10px] font-black tracking-[0.15em] uppercase transition-all active:scale-[0.98]"
-                                                style={{
-                                                    backgroundColor: fx.bDeckFxOn ? 'var(--yellow)' : 'transparent',
-                                                    color: fx.bDeckFxOn ? '#000' : colors.text,
-                                                    border: fx.bDeckFxOn ? '1.5px solid var(--yellow)' : ('1.5px solid ' + colors.border),
-                                                    opacity: fx.bDeckFxOn ? 1 : 0.45
-                                                }}>
-                                                FX B {fx.bDeckFxOn ? 'ON' : 'OFF'}
-                                            </button>
-                                        </div>
-                                    )}
-
-                                    {/* COMMIT */}
-                                    {fx.bDeckStation && fx.crossfadeValue > 0.95 && !fx.isFading && (
-                                        <button onClick={() => { const st = fx.commitBtoA(); if (st) { window.dispatchEvent(new CustomEvent('fx-commit-b', { detail: st })); } }}
-                                            className="w-full mt-4 py-3 rounded-2xl text-[10px] font-black tracking-[0.15em] uppercase transition-all active:scale-95"
-                                            style={{ backgroundColor: 'var(--yellow)', color: '#000' }}>COMMIT B &rarr; A</button>
-                                    )}
-
-                                    {/* MUTE FX button only (FX ON removed) */}
-                                    <div className="flex items-center gap-2 mt-6 mb-1 justify-center">
-                                        <button onClick={() => fx.setIsFxMuted(!fx.isFxMuted)}
-                                            className="px-5 py-2 rounded-full text-[9px] font-black tracking-widest uppercase transition-all active:scale-95 border"
-                                            style={{ backgroundColor: fx.isFxMuted ? '#ef4444' : 'transparent',
-                                                     borderColor: fx.isFxMuted ? '#ef4444' : colors.border,
-                                                     color: fx.isFxMuted ? '#fff' : colors.text }}>
-                                            {fx.isFxMuted ? 'FX MUTED' : 'MUTE FX'}
-                                        </button>
-                                    </div>
-
-                                    {/* DELAY card */}
-                                    <FxCard>
-                                        <FxCardToggle label="DELAY" isOn={fx.isDelayOn} onToggle={() => fx.setIsDelayOn(!fx.isDelayOn)} onReset={fx.resetDelay} />
-                                        <CardSep />
-                                        <CardSlider label="TIME" value={fx.delayTime} min={0.05} max={1.5} step={0.01} onChange={fx.setDelayTime} displayValue={(fx.delayTime * 1000).toFixed(0) + 'ms'} disabled={!fx.isDelayOn} />
-                                        <CardSlider label="FEEDBACK" value={fx.delayFeedback} min={0} max={0.85} step={0.01} onChange={fx.setDelayFeedback} displayValue={Math.round(fx.delayFeedback * 100) + '%'} disabled={!fx.isDelayOn} />
-                                        <CardSlider label="WET" value={fx.delayWet} min={0} max={1} step={0.01} onChange={fx.setDelayWet} displayValue={Math.round(fx.delayWet * 100) + '%'} disabled={!fx.isDelayOn} />
-                                    </FxCard>
-
-                                    {/* REVERB card */}
-                                    <FxCard>
-                                        <FxCardToggle label="REVERB" isOn={fx.isReverbOn} onToggle={() => fx.setIsReverbOn(!fx.isReverbOn)} onReset={fx.resetReverb} />
-                                        <CardSep />
-                                        <CardSlider label="SIZE" value={fx.reverbDecay} min={0.3} max={6} step={0.1} onChange={fx.setReverbDecay} displayValue={fx.reverbDecay.toFixed(1) + 's'} disabled={!fx.isReverbOn} />
-                                        <CardSlider label="WET" value={fx.reverbWet} min={0} max={1} step={0.01} onChange={fx.setReverbWet} displayValue={Math.round(fx.reverbWet * 100) + '%'} disabled={!fx.isReverbOn} />
-                                    </FxCard>
-
-                                    {/* FILTER card */}
-                                    <FxCard>
-                                        <FxCardToggle label="FILTER" isOn={fx.isFilterOn} onToggle={() => fx.setIsFilterOn(!fx.isFilterOn)} onReset={fx.resetFilter} />
-                                        <CardSep />
-                                        <CardSlider label="SWEEP" value={fx.filterPos} min={0} max={1} step={0.01} onChange={fx.setFilterPos} displayValue={filterDisplay(fx.filterPos)} disabled={!fx.isFilterOn} />
-                                        <div className="flex justify-between mt-0 px-24">
-                                            <span className="text-[7px] font-mono" style={{ color: isNightMode ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)' }}>LP</span>
-                                            <span className="text-[7px] font-mono" style={{ color: isNightMode ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)' }}>HP</span>
-                                        </div>
-                                    </FxCard>
-                                </>)}
-
-                                {/* ===== SIREN TAB ===== */}
-                                {fxHubView === 'siren' && (<>
-                                    {/* Siren coin + auto loop */}
-                                    <div className="flex items-center justify-center gap-6 mt-10 landscape:mt-4 mb-6">
-                                        <div className="relative flex items-center justify-center select-none"
-                                            style={{ width: '180px', height: '180px', cursor: 'pointer' }}
-                                            onTouchStart={(e) => { e.preventDefault(); fx.setIsSirenActive(true); }}
-                                            onTouchEnd={() => fx.setIsSirenActive(false)}
-                                            onTouchCancel={() => fx.setIsSirenActive(false)}
-                                            onMouseDown={() => fx.setIsSirenActive(true)}
-                                            onMouseUp={() => fx.setIsSirenActive(false)}
-                                            onMouseLeave={() => fx.setIsSirenActive(false)}>
-                                            <SirenCoinVisual active={fx.isSirenActive || fx.isSirenDrone} />
-                                        </div>
-                                        <div className="flex flex-col items-center gap-1.5">
-                                            <button onClick={() => { const newDrone = !fx.isSirenDrone; fx.setIsSirenDrone(newDrone); }}
-                                                className="w-12 h-12 rounded-full transition-all active:scale-90 flex items-center justify-center"
-                                                style={{
-                                                    backgroundColor: fx.isSirenDrone ? 'rgba(239,68,68,0.12)' : 'transparent',
-                                                    border: '1.5px solid ' + (fx.isSirenDrone ? '#ef4444' : colors.border),
-                                                    color: fx.isSirenDrone ? '#ef4444' : colors.text,
-                                                    opacity: fx.isSirenDrone ? 1 : 0.35
-                                                }}>
-                                                <Icon name="repeat" size="18" />
-                                            </button>
-                                            <span className="text-[7px] font-black tracking-[0.12em] uppercase opacity-35 text-center leading-tight"
-                                                  style={{ color: colors.text }}>AUTO<br/>LOOP</span>
-                                        </div>
-                                    </div>
-
-                                    {/* Siren sliders in raised card */}
-                                    <FxCard className="mt-4">
-                                        <FxSlider label="PITCH" value={fx.sirenPitch} min={100} max={2000} step={1} onChange={fx.setSirenPitch} displayValue={fx.sirenPitch + 'Hz'} colors={colors} />
-                                        <FxSlider label="LFO RATE" value={fx.sirenLfoRate} min={lfoRateMin} max={lfoRateMax} step={0.1} onChange={fx.setSirenLfoRate} displayValue={fx.sirenLfoRate.toFixed(1) + 'Hz'} colors={colors} />
-                                        <FxSlider label="LFO DEPTH" value={fx.sirenLfoDepth} min={0} max={1200} step={1} onChange={fx.setSirenLfoDepth} displayValue={fx.sirenLfoDepth + 'Hz'} colors={colors} />
-                                        <FxSlider label="VOLUME" value={fx.sirenVolume} min={0} max={1} step={0.01} onChange={fx.setSirenVolume} displayValue={Math.round(fx.sirenVolume * 100) + '%'} colors={colors} />
-                                    </FxCard>
-
-                                    {/* Waveform selectors in raised card */}
-                                    <FxCard className="mt-4">
-                                        <div className="flex justify-center gap-3 sm:gap-6 overflow-hidden">
-                                            <FxWaveformSelector label="VCO" options={[{value:'sine',label:'SIN'},{value:'triangle',label:'TRI'},{value:'square',label:'SQR'}]} value={fx.sirenVcoWave} onChange={fx.setSirenVcoWave} colors={{...colors, isNight: isNightMode}} />
-                                            <FxWaveformSelector label="LFO" options={[{value:'triangle',label:'TRI'},{value:'square',label:'SQR'}]} value={fx.sirenLfoWave} onChange={fx.setSirenLfoWave} colors={{...colors, isNight: isNightMode}} />
-                                            <FxWaveformSelector label="RATE" options={[{value:'lo',label:'LO'},{value:'hi',label:'HI'}]} value={fx.sirenRateMultiplier} onChange={(v) => {
-                                                fx.setSirenRateMultiplier(v);
-                                                if (v === 'lo' && fx.sirenLfoRate > 5) fx.setSirenLfoRate(5);
-                                                if (v === 'hi' && fx.sirenLfoRate < 5) fx.setSirenLfoRate(5);
-                                            }} colors={{...colors, isNight: isNightMode}} />
-                                        </div>
-                                    </FxCard>
-
-                                    {/* Siren Delay in raised card */}
-                                    <FxCard className="mt-4">
-                                        <span className="text-[8px] font-black tracking-[0.15em] uppercase opacity-25 mb-2 block text-center">SIREN DELAY</span>
-                                        <FxSlider label="TIME" value={fx.sirenDelayTime} min={50} max={1500} step={1} onChange={fx.setSirenDelayTime} displayValue={fx.sirenDelayTime + 'ms'} colors={colors} />
-                                        <FxSlider label="FEEDBACK" value={fx.sirenDelayFeedback} min={0} max={0.85} step={0.01} onChange={fx.setSirenDelayFeedback} displayValue={Math.round(fx.sirenDelayFeedback * 100) + '%'} colors={colors} />
-                                    </FxCard>
-                                </>)}
-
-                            </div>
-                        </div>
-                    )}
-                </div>
-            );
-        };
 
 
         const JotterLogoButton = ({ onClick, onNext, onPrev, isPlaying, hasStarted, isLoading, isShuffleMode, flipState, colors, genre, spinIntensity, movementMode }) => {
@@ -3110,8 +1993,7 @@
             const [isNightMode, setIsNightMode] = useState(() => { try { return localStorage.getItem('relayradio-nightmode') === 'true'; } catch(e) { return false; } });
             const [spinIntensity, setSpinIntensity] = useState(0);
             const [movementMode, setMovementMode] = useState('float'); // 'float', 'boom', 'ripple', 'orbit', 'bloom', 'balloon'
-            const [isFxHubOpen, setIsFxHubOpen] = useState(false);
-            const [fxHubView, setFxHubView] = useState('coin');
+            const [isCoinSliderOpen, setIsCoinSliderOpen] = useState(false);
             const [isLandscapeMenuOpen, setIsLandscapeMenuOpen] = useState(false);
             const [isIndexOpen, setIsIndexOpen] = useState(false);
             const [isGenreOpen, setIsGenreOpen] = useState(false);
@@ -3124,16 +2006,6 @@
             const [selectedGenre, setSelectedGenre] = useState("All");
             const [selectedMood, setSelectedMood] = useState("All");
             const audio = useAudioPlayer();
-            const fx = useDubFX(audio.audioContextRef, audio.audioTagRef);
-
-            // V2E: Auto-enable FX chain when audio starts
-            useEffect(() => {
-                if (audio.hasStarted && !fx.fxEnabled && !fx.fxAttempted) {
-                    // Small delay to ensure AudioContext is ready
-                    const timer = setTimeout(() => fx.initFxChain(), 200);
-                    return () => clearTimeout(timer);
-                }
-            }, [audio.hasStarted, fx.fxEnabled, fx.fxAttempted]);
 
 
             const filteredStations = useMemo(
@@ -3151,25 +2023,12 @@
                 triggerFlip
             });
 
-            const handleNextWithFxReset = useCallback(() => {
-                // Auto-unmute on skip so new station is audible; FX trails fade naturally
-                if (fx.isFxMuted) fx.setIsFxMuted(false);
-                fx.resetAllFx();
-                nav.handleNext();
-            }, [nav.handleNext, fx]);
-
-            const handlePrevWithFxReset = useCallback(() => {
-                if (fx.isFxMuted) fx.setIsFxMuted(false);
-                fx.resetAllFx();
-                nav.handlePrevious();
-            }, [nav.handlePrevious, fx]);
-
 
             const closeAllOverlays = useCallback(() => {
                 setIsGenreOpen(false); setIsMoodOpen(false);
                 setIsIndexOpen(false); setIsAboutOpen(false); setIsLandscapeMenuOpen(false);
-                setIsFxHubOpen(false); setFxHubView('coin'); fx.setIsBDeckPickerOpen(false); fx.setBDeckPickerGenre(null); fx.setIsADeckPickerOpen(false); fx.setADeckPickerGenre(null);
-            }, [fx]);
+                setIsCoinSliderOpen(false);
+            }, []);
 
 
             const handleTogglePlay = () => {
@@ -3184,8 +2043,8 @@
                 isShuffleMode: nav.isShuffleMode,
                 filteredStations,
                 stationRefs,
-                handleNext: handleNextWithFxReset,
-                handlePrevious: handlePrevWithFxReset,
+                handleNext: nav.handleNext,
+                handlePrevious: nav.handlePrevious,
                 handleTogglePlay,
                 handleStationSelect: nav.handleStationSelect,
                 triggerFlip,
@@ -3228,8 +2087,8 @@
                 if (!('mediaSession' in navigator)) return;
                 navigator.mediaSession.setActionHandler('play', () => handleTogglePlay());
                 navigator.mediaSession.setActionHandler('pause', () => handleTogglePlay());
-                navigator.mediaSession.setActionHandler('previoustrack', () => handlePrevWithFxReset());
-                navigator.mediaSession.setActionHandler('nexttrack', () => handleNextWithFxReset());
+                navigator.mediaSession.setActionHandler('previoustrack', () => nav.handlePrevious());
+                navigator.mediaSession.setActionHandler('nexttrack', () => nav.handleNext());
                 return () => {
                     try {
                         navigator.mediaSession.setActionHandler('play', null);
@@ -3243,64 +2102,10 @@
 
             // Auto-skip on station timeout (5 second broken stream detection)
             useEffect(() => {
-                const handleTimeout = () => handleNextWithFxReset();
+                const handleTimeout = () => nav.handleNext();
                 window.addEventListener('station-timeout', handleTimeout);
                 return () => window.removeEventListener('station-timeout', handleTimeout);
             }, [nav.handleNext]);
-
-
-            // Handle FX crossfader commit B → A (gapless: B covers while A loads)
-            useEffect(() => {
-                const handleCommitB = (e) => {
-                    const station = e.detail;
-                    if (station) {
-                        fx.resetAllFx();
-                        const bAudio = fx.bDeckAudioRef.current;
-                        const nodes = fx.nodesRef.current;
-                        const ctx = audio.audioContextRef.current;
-                        // B-deck at full volume to cover A-deck reload
-                        if (bAudio && !bAudio.paused) {
-                            if (nodes && ctx) {
-                                nodes.bDeckVolGain.gain.setValueAtTime(fx.bDeckVolume, ctx.currentTime);
-                            } else {
-                                bAudio.volume = fx.bDeckVolume;
-                            }
-                        }
-                        nav.handleStationSelect(station);
-                        const aAudio = audio.audioTagRef.current;
-                        if (aAudio && bAudio) {
-                            const onPlaying = () => {
-                                aAudio.removeEventListener('playing', onPlaying);
-                                // A-deck is now playing — bring it to full immediately
-                                fx.setCrossfadeValue(0);
-                                // Fade B-deck out over 1s
-                                let fadeStart = performance.now();
-                                const fadeOut = (now) => {
-                                    const p = Math.min((now - fadeStart) / 1000, 1);
-                                    const vol = fx.bDeckVolume * (1 - p);
-                                    if (nodes && ctx) {
-                                        nodes.bDeckVolGain.gain.setValueAtTime(vol, ctx.currentTime);
-                                    } else {
-                                        bAudio.volume = vol;
-                                    }
-                                    if (p < 1) requestAnimationFrame(fadeOut);
-                                    else { bAudio.pause(); bAudio.src = ""; fx.setBDeckStation(null); }
-                                };
-                                requestAnimationFrame(fadeOut);
-                            };
-                            aAudio.addEventListener('playing', onPlaying);
-                            setTimeout(() => {
-                                aAudio.removeEventListener('playing', onPlaying);
-                                if (bAudio) { bAudio.pause(); bAudio.src = ""; }
-                                if (nodes) nodes.bDeckVolGain.gain.setValueAtTime(0, ctx?.currentTime || 0);
-                                fx.setBDeckStation(null); fx.setCrossfadeValue(0);
-                            }, 10000);
-                        }
-                    }
-                };
-                window.addEventListener('fx-commit-b', handleCommitB);
-                return () => window.removeEventListener('fx-commit-b', handleCommitB);
-            }, [nav.handleStationSelect, fx, audio.audioTagRef, audio.audioContextRef]);
 
 
             // Resume playback when returning to app
@@ -3331,7 +2136,6 @@
                     body.style.setProperty('--black', colors.black);
                     body.style.setProperty('--teal', colors.teal);
                     body.style.setProperty('--yellow', colors.yellow);
-                    body.setAttribute('data-theme', isNightMode ? 'night' : 'day');
                 }
             }, [colors, isNightMode]);
 
@@ -3394,8 +2198,7 @@
 
             return (
                 <div className="fixed inset-0 flex flex-col items-center select-none transition-colors duration-500 overflow-hidden touch-none" style={{ backgroundColor: colors.bg, color: colors.text }}>
-                    <audio ref={audio.audioTagRef} crossOrigin="anonymous" />
-                    <audio ref={fx.bDeckAudioRef} crossOrigin="anonymous" />
+                    <audio ref={audio.audioTagRef} />
                     <div className="fixed inset-0 pointer-events-none z-50 opacity-[0.03] grayscale bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
 
 
@@ -3408,10 +2211,9 @@
                     </button>
 
 
-
                     {audio.hasStarted && (
                         <button onClick={() => setIsLandscapeMenuOpen(true)}
-                            className="absolute top-3 right-4 z-50 p-3 rounded-full transition-all duration-500 hover:scale-110 active:scale-90 outline-none hidden mobile-landscape-only items-center justify-center"
+                            className="absolute top-4 right-4 z-50 p-3 rounded-full transition-all duration-500 hover:scale-110 active:scale-90 outline-none hidden mobile-landscape-only items-center justify-center"
                             style={{ backgroundColor: isNightMode ? '#333333' : 'rgba(0,0,0,0.05)' }}>
                             <div className="relative w-6 h-6 flex items-center justify-center">
                                 <Icon name="menu" size="24" strokeWidth={1.5} fill="none" style={{ color: isNightMode ? '#fcfdf2' : '#000000' }} />
@@ -3446,13 +2248,13 @@
 
                     <main className="flex-grow flex items-center justify-center w-full space-x-6 sm:space-x-12 md:space-x-20 z-10">
                         <div className={`transition-all duration-700 ${audio.hasStarted ? 'opacity-20 scale-100' : 'opacity-0 scale-75 pointer-events-none'}`}>
-                            <button onClick={handlePrevWithFxReset} className="p-2 outline-none transition-all active:scale-90" style={{ color: colors.text }}><Icon name="skip-back" size="48" strokeWidth={0} fill="currentColor" /></button>
+                            <button onClick={nav.handlePrevious} className="p-2 outline-none transition-all active:scale-90" style={{ color: colors.text }}><Icon name="skip-back" size="48" strokeWidth={0} fill="currentColor" /></button>
                         </div>
                         
                         <JotterLogoButton 
                             onClick={handleTogglePlay} 
-                            onNext={handleNextWithFxReset} 
-                            onPrev={handlePrevWithFxReset} 
+                            onNext={nav.handleNext} 
+                            onPrev={nav.handlePrevious} 
                             isPlaying={audio.isPlaying} 
                             hasStarted={audio.hasStarted} 
                             isLoading={audio.isLoading} 
@@ -3465,7 +2267,7 @@
                         />
                         
                         <div className={`transition-all duration-700 ${audio.hasStarted ? 'opacity-20 scale-100' : 'opacity-0 scale-75 pointer-events-none'}`}>
-                            <button onClick={handleNextWithFxReset} className="p-2 outline-none transition-all active:scale-90" style={{ color: colors.text }}><Icon name="skip-forward" size="48" strokeWidth={0} fill="currentColor" /></button>
+                            <button onClick={nav.handleNext} className="p-2 outline-none transition-all active:scale-90" style={{ color: colors.text }}><Icon name="skip-forward" size="48" strokeWidth={0} fill="currentColor" /></button>
                         </div>
                     </main>
 
@@ -3477,12 +2279,25 @@
                                     <FooterBtn icon={isNightMode ? "sun" : "moon"} label={isNightMode ? "Day" : "Night"} onClick={() => setIsNightMode(!isNightMode)} active={isNightMode} colors={colors} delay={100} />
                                     <FooterBtn label="Vibe" onClick={handleMoodBtnClick} active={nav.selectedMood !== "All"} text={nav.selectedMood !== "All" ? nav.selectedMood : ""} icon={nav.selectedMood !== "All" ? "" : "smile"} colors={colors} delay={200} />
                                     <FooterBtn icon="shuffle" label="Shuffle" onClick={nav.handleShuffleToggle} active={nav.isShuffleMode} colors={colors} delay={300} />
-                                    <FooterBtn icon="target" label="FX" onClick={() => { closeAllOverlays(); setFxHubView('coin'); setIsFxHubOpen(true); }} active={isFxHubOpen || fx.isAnyFxActive} colors={colors} delay={400} />
+                                    <div className="flex flex-col items-center group w-full animate-in" style={{ animationDelay: '400ms' }}
+                                        onTouchStart={() => { window._coinHoldTimer = setTimeout(() => { setIsCoinSliderOpen(true); window._coinHeld = true; }, 400); window._coinHeld = false; }}
+                                        onTouchEnd={() => { clearTimeout(window._coinHoldTimer); if (!window._coinHeld) setIsCoinSliderOpen(p => !p); }}
+                                        onTouchCancel={() => { clearTimeout(window._coinHoldTimer); }}
+                                    >
+                                        <button onClick={() => setIsCoinSliderOpen(p => !p)} className={`w-11 h-11 sm:w-14 sm:h-14 rounded-2xl border flex items-center justify-center transition-all active:scale-95 outline-none touch-manipulation`}
+                                            style={{
+                                                backgroundColor: isCoinSliderOpen ? colors.text : 'transparent',
+                                                borderColor: isCoinSliderOpen ? colors.text : colors.border,
+                                                color: isCoinSliderOpen ? colors.bg : colors.text
+                                            }}>
+                                            <Icon name="target" size="20" className="sm:w-[22px]" strokeWidth={2} fill="none" />
+                                        </button>
+                                        <span className="text-[7px] sm:text-[9px] font-black tracking-[0.15em] mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 uppercase text-center truncate w-full mobile-landscape-hidden" style={{ color: colors.text }}>Coin</span>
+                                    </div>
                                     <FooterBtn label="Genre" onClick={handleGenreBtnClick} active={nav.selectedGenre !== "All"} text={nav.selectedGenre !== "All" ? GENRE_EMOJIS[nav.selectedGenre] : ""} icon={nav.selectedGenre !== "All" ? "" : "music"} colors={colors} delay={500} />
                                     <FooterBtn icon="list" label="Index" onClick={() => setIsIndexOpen(true)} colors={colors} delay={600} />
                                 </div>
                             )}
-
                             <div className="mobile-landscape-hidden h-6 flex items-center justify-center">
                                 <Slug extraClasses={`transition-all duration-1000 ${audio.hasStarted ? 'opacity-20 hover:opacity-60' : 'opacity-100 animate-in'}`} />
                             </div>
@@ -3490,111 +2305,16 @@
                     </footer>
 
 
-                    {isFxHubOpen && (
-                        <FxHubOverlay
-                            fx={fx}
-                            fxHubView={fxHubView}
-                            setFxHubView={setFxHubView}
-                            colors={colors}
-                            isNightMode={isNightMode}
-                            setIsNightMode={setIsNightMode}
-                            isPlaying={audio.isPlaying}
-                            flipState={flipState}
-                            onClose={() => { setIsFxHubOpen(false); setFxHubView('coin'); if (fx.bDeckStation && fx.crossfadeValue < 0.95) { fx.stopBDeck(); } fx.setIsSirenActive(false); fx.setIsSirenDrone(false); }}
-                            hasStarted={audio.hasStarted}
-                            currentStation={nav.currentStation}
-                            spinIntensity={spinIntensity}
+                    {isCoinSliderOpen && (
+                        <CoinMenuOverlay 
+                            spinIntensity={spinIntensity} 
                             setSpinIntensity={setSpinIntensity}
                             movementMode={movementMode}
                             setMovementMode={setMovementMode}
+                            onClose={() => setIsCoinSliderOpen(false)} 
+                            colors={colors}
+                            isNightMode={isNightMode}
                         />
-                    )}
-                    {fx.isBDeckPickerOpen && (
-                        <div className="fixed inset-0 z-[100] flex flex-col animate-overlay-in backdrop-blur-3xl" style={{ backgroundColor: colors.overlayBg, color: colors.text }}>
-                            <CloseButton onClick={() => { fx.setIsBDeckPickerOpen(false); fx.setBDeckPickerGenre(null); }} colors={colors} />
-                            <div className="flex-grow overflow-y-auto p-4 custom-scrollbar scroll-smooth pt-20">
-                                <div className="max-w-3xl mx-auto flex flex-col">
-                                    {!fx.bDeckPickerGenre ? (
-                                        <>
-                                            <h3 className="font-young-serif text-xl sm:text-3xl font-black mb-8 px-6 uppercase text-center">Pick a Genre</h3>
-                                            <div className="grid grid-cols-2 gap-3 px-4">
-                                                {GENRES.map(genre => (
-                                                    <button key={genre} onClick={() => fx.setBDeckPickerGenre(genre)}
-                                                        className="py-4 px-4 rounded-2xl border text-left transition-all active:scale-95 hover:opacity-70"
-                                                        style={{ borderColor: colors.border }}>
-                                                        <span className="text-lg mr-2">{GENRE_EMOJIS[genre]}</span>
-                                                        <span className="font-young-serif text-sm font-black tracking-tight uppercase" style={{ color: colors.text }}>{genre}</span>
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <div className="flex items-center gap-3 mb-6 px-6">
-                                                <button onClick={() => fx.setBDeckPickerGenre(null)} className="p-1 opacity-40 hover:opacity-100 transition-opacity" style={{ color: colors.text }}>
-                                                    <Icon name="arrow-left" size="20" />
-                                                </button>
-                                                <h3 className="font-young-serif text-xl sm:text-2xl font-black uppercase" style={{ color: colors.text }}>
-                                                    {GENRE_EMOJIS[fx.bDeckPickerGenre]} {fx.bDeckPickerGenre}
-                                                </h3>
-                                            </div>
-                                            {SORTED_STATIONS.filter(s => s.genre === fx.bDeckPickerGenre).map((station) => (
-                                                <div key={station.name} className="w-full transition-all border-b last:border-0 flex items-stretch hover:opacity-70" style={{ borderColor: colors.border }}>
-                                                    <button onClick={() => { fx.startBDeck(station); fx.setIsBDeckPickerOpen(false); fx.setBDeckPickerGenre(null); }} className="flex-grow text-left py-4 px-6 outline-none">
-                                                        <span className="font-young-serif text-lg font-black tracking-tighter uppercase block" style={{ color: colors.text }}>{station.name}</span>
-                                                        <span className="text-[9px] uppercase tracking-widest font-black opacity-40 mt-0.5" style={{ color: colors.text }}>{station.desc.split('.')[0]}</span>
-                                                    </button>
-                                                </div>
-                                            ))}
-                                        </>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {fx.isADeckPickerOpen && (
-                        <div className="fixed inset-0 z-[100] flex flex-col animate-overlay-in backdrop-blur-3xl" style={{ backgroundColor: colors.overlayBg, color: colors.text }}>
-                            <CloseButton onClick={() => { fx.setIsADeckPickerOpen(false); fx.setADeckPickerGenre(null); }} colors={colors} />
-                            <div className="flex-grow overflow-y-auto p-4 custom-scrollbar scroll-smooth pt-20">
-                                <div className="max-w-3xl mx-auto flex flex-col">
-                                    {!fx.aDeckPickerGenre ? (
-                                        <>
-                                            <h3 className="font-young-serif text-xl sm:text-3xl font-black mb-8 px-6 uppercase text-center">Pick A-Deck Genre</h3>
-                                            <div className="grid grid-cols-2 gap-3 px-4">
-                                                {GENRES.map(genre => (
-                                                    <button key={genre} onClick={() => fx.setADeckPickerGenre(genre)}
-                                                        className="py-4 px-4 rounded-2xl border text-left transition-all active:scale-95 hover:opacity-70"
-                                                        style={{ borderColor: colors.border }}>
-                                                        <span className="text-lg mr-2">{GENRE_EMOJIS[genre]}</span>
-                                                        <span className="font-young-serif text-sm font-black tracking-tight uppercase" style={{ color: colors.text }}>{genre}</span>
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <div className="flex items-center gap-3 mb-6 px-6">
-                                                <button onClick={() => fx.setADeckPickerGenre(null)} className="p-1 opacity-40 hover:opacity-100 transition-opacity" style={{ color: colors.text }}>
-                                                    <Icon name="arrow-left" size="20" />
-                                                </button>
-                                                <h3 className="font-young-serif text-xl sm:text-2xl font-black uppercase" style={{ color: colors.text }}>
-                                                    {GENRE_EMOJIS[fx.aDeckPickerGenre]} {fx.aDeckPickerGenre}
-                                                </h3>
-                                            </div>
-                                            {SORTED_STATIONS.filter(s => s.genre === fx.aDeckPickerGenre).map((station) => (
-                                                <div key={station.name} className="w-full transition-all border-b last:border-0 flex items-stretch hover:opacity-70" style={{ borderColor: colors.border, backgroundColor: nav.currentStation?.name === station.name ? colors.border : 'transparent' }}>
-                                                    <button onClick={() => { nav.handleStationSelect(station); fx.setIsADeckPickerOpen(false); fx.setADeckPickerGenre(null); }} className="flex-grow text-left py-4 px-6 outline-none">
-                                                        <span className="font-young-serif text-lg font-black tracking-tighter uppercase block" style={{ color: colors.text }}>{station.name}</span>
-                                                        <span className="text-[9px] uppercase tracking-widest font-black opacity-40 mt-0.5" style={{ color: colors.text }}>{station.desc.split('.')[0]}</span>
-                                                    </button>
-                                                </div>
-                                            ))}
-                                        </>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
                     )}
                     {isMoodOpen && <MoodOverlay onSelect={handleMoodSelectAndClose} onClose={() => setIsMoodOpen(false)} selected={nav.selectedMood} colors={colors} />}
                     {isGenreOpen && <GenreOverlay onSelect={handleGenreSelectAndClose} onClose={() => setIsGenreOpen(false)} selected={nav.selectedGenre} colors={colors} />}
@@ -3615,7 +2335,7 @@
                                     <FooterBtn icon={isNightMode ? "sun" : "moon"} label={isNightMode ? "Day" : "Night"} onClick={() => { setIsNightMode(!isNightMode); }} active={isNightMode} colors={colors} />
                                     <FooterBtn label="Vibe" onClick={() => { setIsLandscapeMenuOpen(false); handleMoodBtnClick(); }} active={nav.selectedMood !== "All"} text={nav.selectedMood !== "All" ? nav.selectedMood : ""} icon={nav.selectedMood !== "All" ? "" : "smile"} colors={colors} />
                                     <FooterBtn icon="shuffle" label="Shuffle" onClick={() => { nav.handleShuffleToggle(); }} active={nav.isShuffleMode} colors={colors} />
-                                    <FooterBtn icon="target" label="FX" onClick={() => { setIsLandscapeMenuOpen(false); closeAllOverlays(); setFxHubView('coin'); setIsFxHubOpen(true); }} active={isFxHubOpen || fx.isAnyFxActive} colors={colors} />
+                                    <FooterBtn icon="target" label="Coin" onClick={() => { setIsLandscapeMenuOpen(false); setIsCoinSliderOpen(p => !p); }} active={isCoinSliderOpen} colors={colors} />
                                     <FooterBtn label="Genre" onClick={() => { setIsLandscapeMenuOpen(false); handleGenreBtnClick(); }} active={nav.selectedGenre !== "All"} text={nav.selectedGenre !== "All" ? GENRE_EMOJIS[nav.selectedGenre] : ""} icon={nav.selectedGenre !== "All" ? "" : "music"} colors={colors} />
                                     <FooterBtn icon="list" label="Index" onClick={() => { setIsLandscapeMenuOpen(false); setIsIndexOpen(true); }} colors={colors} />
                                 </div>
