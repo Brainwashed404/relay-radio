@@ -128,32 +128,10 @@
         .coin-spinning { animation: coin-spin 8s linear infinite !important; transform-style: preserve-3d; }
         button:focus, a:focus { outline: none !important; }
         
-        /* Custom Slider Styling */
-        .coin-slider-lg {
-            -webkit-appearance: none;
-            appearance: none;
-            background: transparent;
-            outline: none;
-            height: 24px;
-        }
-        .coin-slider-lg::-webkit-slider-runnable-track {
-            height: 4px;
-            background: var(--teal);
-            border-radius: 4px;
-        }
-        .coin-slider-lg::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: var(--teal);
-            margin-top: -10px;
-            cursor: pointer;
-            transition: transform 0.1s;
-        }
-        .coin-slider-lg::-webkit-slider-thumb:hover {
-            transform: scale(1.2);
-        }
+        /* Custom Pointer Slider */
+        .ptr-slider { position: relative; height: 28px; display: flex; align-items: center; cursor: pointer; touch-action: none; -webkit-touch-callout: none; user-select: none; -webkit-user-select: none; pointer-events: auto; }
+        .ptr-slider-track { width: 100%; height: 3px; border-radius: 4px; pointer-events: none; }
+        .ptr-slider-thumb { position: absolute; width: 22px; height: 22px; border-radius: 50%; background: var(--yellow); box-shadow: 0 1px 4px rgba(0,0,0,0.2); pointer-events: none; top: 50%; transform: translateY(-50%); }
 
 
         @media (hover: hover) {
@@ -1037,6 +1015,78 @@
         );
 
 
+        // ==================== CUSTOM POINTER SLIDER ====================
+        const PointerSlider = ({ value, min, max, step, onChange, trackColor, disabled }) => {
+            const trackRef = React.useRef(null);
+            const dragging = React.useRef(false);
+            const onChangeRef = React.useRef(onChange);
+            const disabledRef = React.useRef(disabled);
+            const minRef = React.useRef(min);
+            const maxRef = React.useRef(max);
+            const stepRef = React.useRef(step || 1);
+            React.useLayoutEffect(() => { onChangeRef.current = onChange; });
+            React.useLayoutEffect(() => { disabledRef.current = disabled; });
+            React.useLayoutEffect(() => { minRef.current = min; maxRef.current = max; stepRef.current = step || 1; });
+
+            const calc = (clientX) => {
+                const rect = trackRef.current.getBoundingClientRect();
+                const pct = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+                const raw = minRef.current + pct * (maxRef.current - minRef.current);
+                const s = stepRef.current;
+                return Math.max(minRef.current, Math.min(maxRef.current, Math.round(raw / s) * s));
+            };
+
+            React.useEffect(() => {
+                const el = trackRef.current;
+                if (!el) return;
+                const onMouseDown = (e) => {
+                    if (disabledRef.current) return;
+                    e.preventDefault();
+                    dragging.current = true;
+                    onChangeRef.current(calc(e.clientX));
+                    const onMove = (e) => { if (dragging.current) onChangeRef.current(calc(e.clientX)); };
+                    const onUp = () => {
+                        dragging.current = false;
+                        document.removeEventListener('mousemove', onMove);
+                        document.removeEventListener('mouseup', onUp);
+                    };
+                    document.addEventListener('mousemove', onMove);
+                    document.addEventListener('mouseup', onUp);
+                };
+                const onTouchStart = (e) => {
+                    if (disabledRef.current) return;
+                    e.preventDefault();
+                    dragging.current = true;
+                    onChangeRef.current(calc(e.touches[0].clientX));
+                };
+                const onTouchMove = (e) => {
+                    if (!dragging.current) return;
+                    e.preventDefault();
+                    onChangeRef.current(calc(e.touches[0].clientX));
+                };
+                const onTouchEnd = () => { dragging.current = false; };
+                el.addEventListener('mousedown', onMouseDown);
+                el.addEventListener('touchstart', onTouchStart, { passive: false });
+                el.addEventListener('touchmove', onTouchMove, { passive: false });
+                el.addEventListener('touchend', onTouchEnd);
+                return () => {
+                    el.removeEventListener('mousedown', onMouseDown);
+                    el.removeEventListener('touchstart', onTouchStart);
+                    el.removeEventListener('touchmove', onTouchMove);
+                    el.removeEventListener('touchend', onTouchEnd);
+                };
+            }, []);
+
+            const pct = ((value - min) / (max - min)) * 100;
+            return (
+                <div ref={trackRef} className="ptr-slider" style={{ opacity: disabled ? 0.25 : 1 }}>
+                    <div className="ptr-slider-track" style={{ backgroundColor: trackColor || 'rgba(126,194,173,0.3)' }} />
+                    <div className="ptr-slider-thumb" style={{ left: `calc(${pct}% - 11px)` }} />
+                </div>
+            );
+        };
+
+
         const CoinMenuOverlay = ({ spinIntensity, setSpinIntensity, movementMode, setMovementMode, onClose, colors, isNightMode }) => {
             const sliderLabels = {
                 float: ['Still', 'Tumble'],
@@ -1097,8 +1147,9 @@
                         {/* Middle Row: Slider */}
                         <div className="flex items-center gap-4 w-full py-2">
                             <span className="text-[10px] font-black uppercase tracking-widest opacity-40 whitespace-nowrap" style={{ color: colors.text }}>{sliderLabelLeft}</span>
-                            <input type="range" min="0" max="100" value={spinIntensity} onChange={e => setSpinIntensity(Number(e.target.value))} 
-                                   className="coin-slider-lg flex-grow" style={{ cursor: 'pointer' }} />
+                            <div className="flex-grow">
+                                <PointerSlider value={spinIntensity} min={0} max={100} step={1} onChange={v => setSpinIntensity(v)} trackColor="rgba(126,194,173,0.3)" />
+                            </div>
                             <span className="text-[10px] font-black uppercase tracking-widest opacity-40 whitespace-nowrap" style={{ color: colors.text }}>{sliderLabelRight}</span>
                         </div>
                     </div>
