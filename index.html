@@ -1094,6 +1094,7 @@
             };
             const [sliderLabelLeft, sliderLabelRight] = sliderLabels[movementMode] || ['Still', 'Wild'];
             const modes = ['float', 'ripple', 'orbit', 'boom', 'bloom', 'balloon'];
+            const isDesktop = typeof window !== 'undefined' && window.matchMedia('(min-width: 640px)').matches;
 
             // Desktop drag
             const cardRef = React.useRef(null);
@@ -1132,8 +1133,10 @@
             return (
                 <div className="fixed inset-0 z-[90] pointer-events-auto animate-overlay-in" onClick={onClose}>
                     <div ref={cardRef}
-                        className="absolute bottom-4 left-1/2 flex flex-col gap-3 px-6 py-4 rounded-3xl select-none"
+                        className="absolute left-1/2 flex flex-col gap-3 px-6 py-4 rounded-3xl select-none"
                         style={{
+                            top: isDesktop ? '20vh' : 'auto',
+                            bottom: isDesktop ? 'auto' : '1rem',
                             width: 'min(calc(100vw - 2rem), 42rem)',
                             backgroundColor: isNightMode ? 'rgba(20,20,20,0.97)' : 'rgba(252,252,245,0.99)',
                             border: '1px solid ' + colors.border,
