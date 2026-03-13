@@ -228,11 +228,9 @@
             overflow: hidden;
         }
 
-        /* Landscape overrides — !important beats inline styles; placed after base rule so
-           source order also wins; max-height:600px is broader than 500px for safety */
+        /* Landscape: shrink title box so coin fits — no padding tricks needed */
         @media (orientation: landscape) and (max-height: 600px) {
-            #player-main { padding-bottom: 0 !important; }
-            #player-main .title-container { height: 4rem !important; }
+            .title-container { height: 4rem !important; }
         }
     </style>
     <!-- Google Analytics -->
@@ -2120,28 +2118,6 @@
         const App = () => {
             const [isNightMode, setIsNightMode] = useState(() => { try { return localStorage.getItem('relayradio-nightmode') === 'true'; } catch(e) { return false; } });
 
-            // Layout refs — apply landscape overrides directly to DOM, bypassing CSS cascade entirely
-            const playerMainRef = useRef(null);
-            const titleContainerRef = useRef(null);
-            const applyLandscapeLayout = useCallback(() => {
-                const isLS = window.innerHeight <= 500 && window.innerWidth > window.innerHeight;
-                if (playerMainRef.current) {
-                    playerMainRef.current.style.paddingBottom = isLS ? '0px' : `clamp(200px, ${(window.innerHeight * 0.3).toFixed(0)}px, 300px)`;
-                }
-                if (titleContainerRef.current) {
-                    titleContainerRef.current.style.height = isLS ? '4rem' : '10rem';
-                }
-            }, []);
-            React.useLayoutEffect(() => {
-                applyLandscapeLayout();
-                window.addEventListener('resize', applyLandscapeLayout);
-                window.addEventListener('orientationchange', applyLandscapeLayout);
-                return () => {
-                    window.removeEventListener('resize', applyLandscapeLayout);
-                    window.removeEventListener('orientationchange', applyLandscapeLayout);
-                };
-            }, [applyLandscapeLayout]);
-
             const [spinIntensity, setSpinIntensity] = useState(0);
             const [movementMode, setMovementMode] = useState('float'); // 'float', 'boom', 'ripple', 'orbit', 'bloom', 'balloon'
             const [isCoinSliderOpen, setIsCoinSliderOpen] = useState(false);
@@ -2373,9 +2349,11 @@
 
                     <header className="w-full flex-shrink-0 z-10" style={{height:'env(safe-area-inset-top, 12px)'}} />
 
-                    <main id="player-main" ref={playerMainRef} className="flex-grow flex flex-col items-center justify-center w-full z-10 text-center px-4 sm:px-6">
+                    <main className="flex-grow flex flex-col items-center w-full z-10 text-center px-4 sm:px-6">
+                        {/* Top spacer — pushes title+coin down, takes 1 share of free space */}
+                        <div style={{flex:1}} />
                         {/* Title — fixed-height container; both states absolutely centred inside */}
-                        <div ref={titleContainerRef} className="title-container">
+                        <div className="title-container">
                             {/* RELAY RAD.IO (pre-start) */}
                             <div className={`absolute inset-0 flex flex-col items-center justify-center transition-all duration-1000 ease-in-out short:landscape:px-16 ${audio.hasStarted ? 'opacity-0 scale-95 blur-xl pointer-events-none' : 'opacity-100 scale-100 blur-0'}`}>
                                 <h2 className="font-young-serif text-7xl sm:text-7xl md:text-8xl short:landscape:text-5xl font-black tracking-tighter uppercase leading-[0.85] sm:leading-none" style={{ color: colors.text }}>
@@ -2428,6 +2406,8 @@
                                 <button onClick={nav.handleNext} className="p-2 outline-none transition-all active:scale-90" style={{ color: colors.text }}><Icon name="skip-forward" size="48" strokeWidth={0} fill="currentColor" /></button>
                             </div>
                         </div>
+                        {/* Bottom spacer — takes 2 shares so coin sits above the footer zone */}
+                        <div style={{flex:2}} />
                     </main>
 
                     {/* Footer — absolutely anchored to bottom, out of flow so it doesn't skew centering */}
