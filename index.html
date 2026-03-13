@@ -556,12 +556,12 @@
         const getTitleFontSize = (name) => {
             if (!name) return 'text-5xl sm:text-8xl';
             const words = name.trim().split(/\s+/);
-            // 3+ words: each word gets its own line — size by longest word length
+            // 3+ words: stacked per-line — size must account for N lines of height
             if (words.length >= 3) {
                 const longest = Math.max(...words.map(w => w.length));
-                if (longest > 10) return 'text-4xl sm:text-6xl';
-                if (longest > 7)  return 'text-5xl sm:text-7xl';
-                return 'text-5xl sm:text-8xl';
+                if (longest > 10) return 'text-2xl sm:text-3xl';
+                if (longest > 7)  return 'text-2xl sm:text-4xl';
+                return 'text-3xl sm:text-5xl';
             }
             const len = name.length;
             if (len > 13) return 'text-4xl sm:text-6xl';
