@@ -554,10 +554,11 @@
 
 
         const getTitleFontSize = (name) => {
-            if (!name) return 'text-6xl sm:text-8xl';
+            if (!name) return 'text-5xl sm:text-8xl';
             const len = name.length;
-            if (len > 15) return 'text-3xl sm:text-5xl';
-            if (len > 10) return 'text-4xl sm:text-6xl';
+            if (len > 20) return 'text-2xl sm:text-4xl';
+            if (len > 13) return 'text-3xl sm:text-5xl';
+            if (len > 8)  return 'text-4xl sm:text-6xl';
             return 'text-5xl sm:text-8xl';
         };
 
@@ -2347,7 +2348,7 @@
                             </h2>
                         </div>
                         
-                        <div className={`absolute transition-all duration-1000 ease-in-out w-full flex flex-col items-center px-2 short:landscape:px-16 ${!audio.hasStarted ? 'opacity-0 scale-105 blur-xl pointer-events-none' : 'opacity-100 scale-100 blur-0'}`}>
+                        <div className={`absolute transition-all duration-1000 ease-in-out w-full flex flex-col items-center px-12 sm:px-6 short:landscape:px-16 max-h-full overflow-hidden ${!audio.hasStarted ? 'opacity-0 scale-105 blur-xl pointer-events-none' : 'opacity-100 scale-100 blur-0'}`}>
                             <h2 className={`font-young-serif tracking-tighter leading-[0.85] uppercase transition-all duration-1000 w-full break-words ${getTitleFontSize(audio.displayedName)} short:landscape:text-3xl ${audio.isLoading ? 'opacity-20 blur-md' : 'opacity-100'}`} style={{ color: colors.text }}>
                                 {audio.displayedName}
                             </h2>
