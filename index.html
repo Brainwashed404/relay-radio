@@ -218,6 +218,20 @@
             
             .mobile-landscape-hidden { display: none !important; }
             .mobile-landscape-only { display: flex !important; }
+            .title-container { height: 3.5rem !important; }
+            .main-player-padding { padding-bottom: 3rem !important; }
+        }
+
+        /* Title area: fixed height so both crossfade states don't inflate the container */
+        .title-container {
+            position: relative;
+            width: 100%;
+            height: 10rem; /* 160px — fits any station name or RELAY RAD.IO on all screens */
+        }
+
+        /* Push flex-centering upward to clear the absolute footer */
+        .main-player-padding {
+            padding-bottom: clamp(200px, 30vh, 300px);
         }
     </style>
     <!-- Google Analytics -->
@@ -2335,18 +2349,18 @@
 
                     <header className="w-full flex-shrink-0 z-10" style={{height:'env(safe-area-inset-top, 12px)'}} />
 
-                    <main className="flex-grow flex flex-col items-center justify-center w-full z-10 text-center px-4 sm:px-6" style={{paddingBottom:'clamp(120px, 22vh, 200px)'}}>
-                        {/* Title — CSS grid stacks both states; container auto-sizes to tallest */}
-                        <div style={{display:'grid', placeItems:'center', width:'100%'}}>
+                    <main className="flex-grow flex flex-col items-center justify-center w-full z-10 text-center px-4 sm:px-6 main-player-padding">
+                        {/* Title — fixed-height container; both states absolutely centred inside */}
+                        <div className="title-container">
                             {/* RELAY RAD.IO (pre-start) */}
-                            <div className={`transition-all duration-1000 ease-in-out short:landscape:px-16 ${audio.hasStarted ? 'opacity-0 scale-95 blur-xl pointer-events-none' : 'opacity-100 scale-100 blur-0'}`} style={{gridArea:'1/1',width:'100%'}}>
+                            <div className={`absolute inset-0 flex flex-col items-center justify-center transition-all duration-1000 ease-in-out short:landscape:px-16 ${audio.hasStarted ? 'opacity-0 scale-95 blur-xl pointer-events-none' : 'opacity-100 scale-100 blur-0'}`}>
                                 <h2 className="font-young-serif text-7xl sm:text-7xl md:text-8xl short:landscape:text-5xl font-black tracking-tighter uppercase leading-[0.85] sm:leading-none" style={{ color: colors.text }}>
                                     <span className="block sm:inline">RELAY</span>{' '}
                                     <span className="block sm:inline">RAD.<span style={{ color: colors.yellow }}>I</span><span style={{ color: colors.teal }}>O</span></span>
                                 </h2>
                             </div>
                             {/* Station name (post-start) */}
-                            <div className={`transition-all duration-1000 ease-in-out short:landscape:px-16 ${!audio.hasStarted ? 'opacity-0 scale-105 blur-xl pointer-events-none' : 'opacity-100 scale-100 blur-0'}`} style={{gridArea:'1/1',width:'100%'}}>
+                            <div className={`absolute inset-0 flex flex-col items-center justify-center transition-all duration-1000 ease-in-out short:landscape:px-16 ${!audio.hasStarted ? 'opacity-0 scale-105 blur-xl pointer-events-none' : 'opacity-100 scale-100 blur-0'}`}>
                                 <h2 className={`font-young-serif tracking-tighter leading-[0.9] uppercase transition-all duration-1000 w-full break-words ${getTitleFontSize(audio.displayedName)} short:landscape:text-4xl ${audio.isLoading ? 'opacity-20 blur-md' : 'opacity-100'}`} style={{ color: colors.text }}>
                                     {audio.displayedName}
                                 </h2>
