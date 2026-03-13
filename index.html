@@ -2333,55 +2333,61 @@
                         </button>
                     )}
 
-                    <header className="w-full h-[25vh] md:h-[33vh] short:landscape:h-[25vh] flex flex-col items-center justify-center text-center px-4 pt-16 short:landscape:pt-8 flex-shrink-0 z-10 overflow-visible relative">
-                        <div className={`absolute transition-all duration-1000 ease-in-out flex flex-col items-center px-4 ${audio.hasStarted ? 'opacity-0 scale-95 blur-xl pointer-events-none' : 'opacity-100 scale-100 blur-0'}`}>
-                            <h2 className="font-young-serif text-7xl sm:text-7xl md:text-8xl short:landscape:text-5xl font-black tracking-tighter uppercase leading-[0.85] sm:leading-none" style={{ color: colors.text }}>
-                                <span className="block sm:inline">RELAY</span>{' '}
-                                <span className="block sm:inline">RAD.<span style={{ color: colors.yellow }}>I</span><span style={{ color: colors.teal }}>O</span></span>
-                            </h2>
-                        </div>
-                        
-                        <div className={`absolute transition-all duration-1000 ease-in-out w-full flex flex-col items-center px-4 sm:px-6 short:landscape:px-16 ${!audio.hasStarted ? 'opacity-0 scale-105 blur-xl pointer-events-none' : 'opacity-100 scale-100 blur-0'}`}>
-                            <h2 className={`font-young-serif tracking-tighter leading-[0.9] uppercase transition-all duration-1000 w-full break-words ${getTitleFontSize(audio.displayedName)} short:landscape:text-3xl ${audio.isLoading ? 'opacity-20 blur-md' : 'opacity-100'}`} style={{ color: colors.text }}>
-                                {audio.displayedName}
-                            </h2>
-                            <div className={`mt-2 short:landscape:mt-1 transition-all duration-1000 ${audio.isLoading ? 'opacity-0 blur-md translate-y-2' : 'opacity-40 translate-y-0'}`}>
-                                <p className="text-[10px] sm:text-xs short:landscape:text-[8px] uppercase tracking-widest font-bold max-w-full" style={{ color: colors.text }}>{audio.displayedDesc}</p>
-                            </div>
-                            <div className={`mt-3 short:landscape:mt-1 transition-all duration-500 ${audio.isLoading ? 'opacity-60 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'}`}>
-                                <p className="text-[10px] sm:text-xs short:landscape:text-[8px] uppercase tracking-[0.3em] font-bold animate-pulse" style={{ color: colors.teal }}>Tuning in…</p>
-                            </div>
-                            <div className={`mt-3 short:landscape:mt-1 transition-all duration-500 ${!audio.isLoading && audio.isOffAir ? 'opacity-60 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'}`}>
-                                <p className="text-[10px] sm:text-xs short:landscape:text-[8px] uppercase tracking-[0.3em] font-bold" style={{ color: colors.yellow }}>Off Air – Back Soon</p>
-                            </div>
-                        </div>
-                    </header>
+                    <div className="flex-grow flex flex-col items-center justify-center w-full gap-6 sm:gap-10 short:landscape:gap-4 z-10 px-4 pt-16 short:landscape:pt-8 pb-4">
 
+                        {/* Title zone — active element is in-flow so container auto-sizes; inactive is absolute */}
+                        <div className="relative w-full text-center flex flex-col items-center">
 
-                    <main className="flex-grow flex items-center justify-center w-full space-x-6 sm:space-x-12 md:space-x-20 z-10">
-                        <div className={`transition-all duration-700 ${audio.hasStarted ? 'opacity-20 scale-100' : 'opacity-0 scale-75 pointer-events-none'}`}>
-                            <button onClick={nav.handlePrevious} className="p-2 outline-none transition-all active:scale-90" style={{ color: colors.text }}><Icon name="skip-back" size="48" strokeWidth={0} fill="currentColor" /></button>
+                            {/* RELAY RAD.IO (pre-start) — in flow when active */}
+                            <div className={`w-full flex flex-col items-center transition-all duration-1000 ease-in-out ${audio.hasStarted ? 'absolute inset-x-0 opacity-0 scale-95 blur-xl pointer-events-none' : 'opacity-100 scale-100 blur-0'}`}>
+                                <h2 className="font-young-serif text-6xl sm:text-7xl md:text-8xl short:landscape:text-5xl font-black tracking-tighter uppercase leading-[0.85] sm:leading-none" style={{ color: colors.text }}>
+                                    <span className="block sm:inline">RELAY</span>{' '}
+                                    <span className="block sm:inline">RAD.<span style={{ color: colors.yellow }}>I</span><span style={{ color: colors.teal }}>O</span></span>
+                                </h2>
+                            </div>
+
+                            {/* Station name (post-start) — in flow when active */}
+                            <div className={`w-full flex flex-col items-center px-2 sm:px-6 short:landscape:px-16 transition-all duration-1000 ease-in-out ${!audio.hasStarted ? 'absolute inset-x-0 opacity-0 scale-105 blur-xl pointer-events-none' : 'opacity-100 scale-100 blur-0'}`}>
+                                <h2 className={`font-young-serif tracking-tighter leading-[0.9] uppercase transition-all duration-1000 w-full break-words ${getTitleFontSize(audio.displayedName)} short:landscape:text-3xl ${audio.isLoading ? 'opacity-20 blur-md' : 'opacity-100'}`} style={{ color: colors.text }}>
+                                    {audio.displayedName}
+                                </h2>
+                                <div className={`mt-2 short:landscape:mt-1 transition-all duration-1000 ${audio.isLoading ? 'opacity-0 blur-md translate-y-2' : 'opacity-40 translate-y-0'}`}>
+                                    <p className="text-[10px] sm:text-xs short:landscape:text-[8px] uppercase tracking-widest font-bold max-w-full" style={{ color: colors.text }}>{audio.displayedDesc}</p>
+                                </div>
+                                <div className={`mt-3 short:landscape:mt-1 transition-all duration-500 ${audio.isLoading ? 'opacity-60 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'}`}>
+                                    <p className="text-[10px] sm:text-xs short:landscape:text-[8px] uppercase tracking-[0.3em] font-bold animate-pulse" style={{ color: colors.teal }}>Tuning in…</p>
+                                </div>
+                                <div className={`mt-3 short:landscape:mt-1 transition-all duration-500 ${!audio.isLoading && audio.isOffAir ? 'opacity-60 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'}`}>
+                                    <p className="text-[10px] sm:text-xs short:landscape:text-[8px] uppercase tracking-[0.3em] font-bold" style={{ color: colors.yellow }}>Off Air – Back Soon</p>
+                                </div>
+                            </div>
                         </div>
-                        
-                        <JotterLogoButton
-                            onClick={handleTogglePlay}
-                            onNext={nav.handleNext}
-                            onPrev={nav.handlePrevious}
-                            isPlaying={audio.isPlaying}
-                            hasStarted={audio.hasStarted}
-                            isLoading={audio.isLoading}
-                            isShuffleMode={nav.isShuffleMode}
-                            flipState={flipState}
-                            colors={colors}
-                            genre={nav.currentStation?.genre}
-                            spinIntensity={spinIntensity}
-                            movementMode={movementMode}
-                        />
-                        
-                        <div className={`transition-all duration-700 ${audio.hasStarted ? 'opacity-20 scale-100' : 'opacity-0 scale-75 pointer-events-none'}`}>
-                            <button onClick={nav.handleNext} className="p-2 outline-none transition-all active:scale-90" style={{ color: colors.text }}><Icon name="skip-forward" size="48" strokeWidth={0} fill="currentColor" /></button>
+
+                        {/* Coin + prev/next */}
+                        <div className="flex items-center space-x-6 sm:space-x-12 md:space-x-20 flex-shrink-0">
+                            <div className={`transition-all duration-700 ${audio.hasStarted ? 'opacity-20 scale-100' : 'opacity-0 scale-75 pointer-events-none'}`}>
+                                <button onClick={nav.handlePrevious} className="p-2 outline-none transition-all active:scale-90" style={{ color: colors.text }}><Icon name="skip-back" size="48" strokeWidth={0} fill="currentColor" /></button>
+                            </div>
+                            <JotterLogoButton
+                                onClick={handleTogglePlay}
+                                onNext={nav.handleNext}
+                                onPrev={nav.handlePrevious}
+                                isPlaying={audio.isPlaying}
+                                hasStarted={audio.hasStarted}
+                                isLoading={audio.isLoading}
+                                isShuffleMode={nav.isShuffleMode}
+                                flipState={flipState}
+                                colors={colors}
+                                genre={nav.currentStation?.genre}
+                                spinIntensity={spinIntensity}
+                                movementMode={movementMode}
+                            />
+                            <div className={`transition-all duration-700 ${audio.hasStarted ? 'opacity-20 scale-100' : 'opacity-0 scale-75 pointer-events-none'}`}>
+                                <button onClick={nav.handleNext} className="p-2 outline-none transition-all active:scale-90" style={{ color: colors.text }}><Icon name="skip-forward" size="48" strokeWidth={0} fill="currentColor" /></button>
+                            </div>
                         </div>
-                    </main>
+
+                    </div>
 
 
                     <footer className="w-full flex flex-col items-center justify-end pb-12 md:pb-16 flex-shrink-0 z-10 min-h-[160px] sm:min-h-[120px]">
