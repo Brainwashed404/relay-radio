@@ -2334,14 +2334,14 @@
                     )}
 
                     <header className="w-full h-[25vh] md:h-[33vh] short:landscape:h-[25vh] flex flex-col items-center justify-center text-center px-4 flex-shrink-0 z-10 overflow-visible relative">
-                        <div className={`absolute transition-all duration-1000 ease-in-out flex flex-col items-center px-4 ${audio.hasStarted ? 'opacity-0 scale-95 blur-xl pointer-events-none' : 'opacity-100 scale-100 blur-0'}`}>
+                        <div className={`absolute inset-0 flex flex-col items-center justify-center transition-all duration-1000 ease-in-out px-4 ${audio.hasStarted ? 'opacity-0 scale-95 blur-xl pointer-events-none' : 'opacity-100 scale-100 blur-0'}`}>
                             <h2 className="font-young-serif text-7xl sm:text-7xl md:text-8xl short:landscape:text-5xl font-black tracking-tighter uppercase leading-[0.85] sm:leading-none" style={{ color: colors.text }}>
                                 <span className="block sm:inline">RELAY</span>{' '}
                                 <span className="block sm:inline">RAD.<span style={{ color: colors.yellow }}>I</span><span style={{ color: colors.teal }}>O</span></span>
                             </h2>
                         </div>
                         
-                        <div className={`absolute transition-all duration-1000 ease-in-out w-full flex flex-col items-center px-4 sm:px-6 short:landscape:px-16 ${!audio.hasStarted ? 'opacity-0 scale-105 blur-xl pointer-events-none' : 'opacity-100 scale-100 blur-0'}`}>
+                        <div className={`absolute inset-0 flex flex-col items-center justify-center transition-all duration-1000 ease-in-out px-4 sm:px-6 short:landscape:px-16 ${!audio.hasStarted ? 'opacity-0 scale-105 blur-xl pointer-events-none' : 'opacity-100 scale-100 blur-0'}`}>
                             <h2 className={`font-young-serif tracking-tighter leading-[0.9] uppercase transition-all duration-1000 w-full break-words ${getTitleFontSize(audio.displayedName)} short:landscape:text-4xl ${audio.isLoading ? 'opacity-20 blur-md' : 'opacity-100'}`} style={{ color: colors.text }}>
                                 {audio.displayedName}
                             </h2>
