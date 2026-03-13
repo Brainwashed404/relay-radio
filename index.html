@@ -2321,13 +2321,6 @@
                     <div className="fixed inset-0 pointer-events-none z-50 opacity-[0.03] grayscale bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
 
 
-                    <button onClick={() => setIsAboutOpen(true)}
-                        className="hidden sm:block absolute top-4 left-4 z-[95] p-3 rounded-full transition-all duration-500 hover:scale-110 active:scale-90 outline-none"
-                        style={{ backgroundColor: isNightMode ? '#333333' : 'rgba(0,0,0,0.05)' }}>
-                        <div className="relative w-6 h-6 flex items-center justify-center">
-                            <Icon name="info" size="24" strokeWidth={1.5} fill="none" style={{ color: isNightMode ? '#fcfdf2' : '#000000' }} />
-                        </div>
-                    </button>
 
 
                     {audio.hasStarted && (
@@ -2420,7 +2413,7 @@
                             <div className="mobile-landscape-hidden flex flex-col items-center gap-2">
                                 <Slug extraClasses={`transition-all duration-1000 ${audio.hasStarted ? 'opacity-60 hover:opacity-90' : 'opacity-100 animate-in'}`} />
                                 <button onClick={() => setIsAboutOpen(true)}
-                                    className="sm:hidden p-1 rounded-full transition-all duration-300 hover:scale-110 active:scale-90 outline-none opacity-70 hover:opacity-100"
+                                    className="p-1 rounded-full transition-all duration-300 hover:scale-110 active:scale-90 outline-none opacity-70 hover:opacity-100"
                                     style={{ color: colors.teal }}>
                                     <Icon name="info" size="16" strokeWidth={1.5} fill="none" />
                                 </button>
