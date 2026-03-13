@@ -555,17 +555,10 @@
 
         const getTitleFontSize = (name) => {
             if (!name) return 'text-5xl sm:text-8xl';
-            const words = name.trim().split(/\s+/);
-            // 3+ words: stacked per-line — size must account for N lines of height
-            if (words.length >= 3) {
-                const longest = Math.max(...words.map(w => w.length));
-                if (longest > 10) return 'text-2xl sm:text-3xl';
-                if (longest > 7)  return 'text-2xl sm:text-4xl';
-                return 'text-3xl sm:text-5xl';
-            }
             const len = name.length;
-            if (len > 13) return 'text-4xl sm:text-6xl';
-            if (len > 8)  return 'text-5xl sm:text-7xl';
+            if (len > 18) return 'text-4xl sm:text-5xl';
+            if (len > 12) return 'text-4xl sm:text-6xl';
+            if (len > 7)  return 'text-5xl sm:text-7xl';
             return 'text-5xl sm:text-8xl';
         };
 
@@ -2349,10 +2342,8 @@
                         </div>
                         
                         <div className={`absolute transition-all duration-1000 ease-in-out w-full flex flex-col items-center px-4 sm:px-6 short:landscape:px-16 ${!audio.hasStarted ? 'opacity-0 scale-105 blur-xl pointer-events-none' : 'opacity-100 scale-100 blur-0'}`}>
-                            <h2 className={`font-young-serif tracking-tighter leading-[0.85] uppercase transition-all duration-1000 w-full ${getTitleFontSize(audio.displayedName)} short:landscape:text-3xl ${audio.isLoading ? 'opacity-20 blur-md' : 'opacity-100'}`} style={{ color: colors.text }}>
-                                {audio.displayedName && audio.displayedName.trim().split(/\s+/).length >= 3
-                                    ? audio.displayedName.trim().split(/\s+/).map((word, i) => <span key={i} className="block">{word}</span>)
-                                    : audio.displayedName}
+                            <h2 className={`font-young-serif tracking-tighter leading-[0.9] uppercase transition-all duration-1000 w-full break-words ${getTitleFontSize(audio.displayedName)} short:landscape:text-3xl ${audio.isLoading ? 'opacity-20 blur-md' : 'opacity-100'}`} style={{ color: colors.text }}>
+                                {audio.displayedName}
                             </h2>
                             <div className={`mt-2 short:landscape:mt-1 transition-all duration-1000 ${audio.isLoading ? 'opacity-0 blur-md translate-y-2' : 'opacity-40 translate-y-0'}`}>
                                 <p className="text-[10px] sm:text-xs short:landscape:text-[8px] uppercase tracking-widest font-bold max-w-full" style={{ color: colors.text }}>{audio.displayedDesc}</p>
