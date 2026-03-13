@@ -1818,20 +1818,6 @@
                 <div className="flex-grow overflow-y-auto px-6 pt-20 pb-40 landscape:pt-6 landscape:pb-10 landscape-mood-container custom-scrollbar">
                     <div className="max-w-4xl mx-auto flex flex-col items-center">
                         <h4 className="font-young-serif text-3xl sm:text-4xl landscape-mood-title font-black tracking-tight mb-8 text-center uppercase" style={{ color: colors.text }}>Vibe check</h4>
-                        <button
-                            onClick={() => favourites.length > 0 && onSelect("❤️")}
-                            className={`w-full max-w-sm landscape:max-w-4xl mb-6 py-3 px-6 rounded-2xl font-bold uppercase tracking-wider flex items-center justify-center gap-3 transition-all raised-button outline-none ${selected === "❤️" ? 'selected' : ''} ${favourites.length === 0 ? 'opacity-30 cursor-not-allowed' : ''}`}
-                            style={{
-                                border: `1px solid ${selected === "❤️" ? colors.text : colors.border}`,
-                                color: colors.text,
-                                boxShadow: selected === "❤️" ? 'inset 0 4px 8px rgba(0,0,0,0.2)' : colors.buttonShadow,
-                                transform: selected === "❤️" ? 'translateY(2px)' : 'translateY(0)',
-                            }}
-                        >
-                            <span>❤️</span>
-                            <span>Favourites</span>
-                            {favourites.length > 0 && <span className="opacity-50 text-sm font-normal normal-case tracking-normal">({favourites.length})</span>}
-                        </button>
                         <div className="grid grid-cols-3 landscape:grid-cols-6 landscape-mood-grid gap-4 sm:gap-6 w-full max-w-sm landscape:max-w-4xl">
                             {MOODS.map((mood, idx) => (
                                 <button
@@ -1850,6 +1836,18 @@
                                     </span>
                                 </button>
                             ))}
+                            <button
+                                onClick={() => favourites.length > 0 && onSelect("❤️")}
+                                className={`aspect-square flex items-center justify-center text-3xl sm:text-4xl rounded-[1.5rem] border transition-all outline-none group raised-button ${selected === "❤️" ? 'selected' : ''} ${favourites.length === 0 ? 'opacity-30 cursor-not-allowed' : ''}`}
+                                style={{
+                                    animationDelay: `${MOODS.length * 40}ms`,
+                                    borderColor: selected === "❤️" ? colors.text : colors.border,
+                                    boxShadow: selected === "❤️" ? 'inset 0 4px 8px rgba(0,0,0,0.2)' : colors.buttonShadow,
+                                    transform: selected === "❤️" ? 'translateY(2px)' : 'translateY(0)',
+                                }}
+                            >
+                                <span className="group-hover:scale-110 group-active:scale-95 transition-transform duration-300">❤️</span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -1916,7 +1914,7 @@
                                         </div>
                                         {current?.name === station.name && <div className={`w-3.5 h-3.5 rounded-full ${isPlaying ? 'animate-pulse' : 'opacity-40'}`} style={{ backgroundColor: colors.teal }} />}
                                     </button>
-                                    <button onClick={(e) => { e.stopPropagation(); onToggleFavourite(station.name); }} className="px-4 flex items-center justify-center transition-all outline-none text-xl leading-none" style={{ opacity: favourites.includes(station.name) ? 1 : 0.2, color: favourites.includes(station.name) ? '#e0355a' : colors.text }}>{favourites.includes(station.name) ? '❤️' : '🤍'}</button>
+                                    <button onClick={(e) => { e.stopPropagation(); onToggleFavourite(station.name); }} className="px-4 flex items-center justify-center transition-all outline-none text-xl leading-none" style={{ opacity: favourites.includes(station.name) ? 1 : 0.2, color: favourites.includes(station.name) ? colors.teal : colors.text }}>{favourites.includes(station.name) ? '❤️' : '🤍'}</button>
                                     <a href={station.sourceUrl} target="_blank" rel="noopener noreferrer" className="px-8 flex items-center justify-center opacity-20 hover:opacity-100 transition-opacity outline-none" style={{ color: colors.text }}><Icon name="external-link" size="18" /></a>
                                 </div>
                             ))}
@@ -2129,7 +2127,7 @@
 
             const filteredStations = useMemo(
                 () => getFilteredStations(selectedGenre, selectedMood, favourites),
-                [selectedGenre, selectedMood, favourites]
+                [selectedGenre, selectedMood, selectedMood === "❤️" ? favourites : null]
             );
 
 
