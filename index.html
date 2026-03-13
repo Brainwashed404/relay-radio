@@ -248,7 +248,7 @@
             { emoji: "🥹", label: "Tender" }, { emoji: "🤪", label: "Pumped" },
             { emoji: "🤯", label: "Weird" }, { emoji: "😴", label: "Low-energy" },
             { emoji: "😎", label: "Confident" }, { emoji: "🧐", label: "Curious" },
-            { emoji: "☀️", label: "Clear" }, { emoji: "❄️", label: "Cold" },
+            { emoji: "☀️", label: "Clear" },
             { emoji: "☔️", label: "Rainy" },
             { emoji: "💪", label: "Exercise" }, { emoji: "🚗", label: "Driving" }, { emoji: "🧑‍🍳", label: "Cooking" }
         ];
@@ -540,12 +540,13 @@
         };
 
 
-        const getFilteredStations = (selectedGenre, selectedMood) => {
+        const getFilteredStations = (selectedGenre, selectedMood, favourites = []) => {
             return SORTED_STATIONS.filter(s => {
                 if (s.genre === "Legends") return selectedGenre === "Legends";
                 if (selectedGenre === "Legends") return false;
                 const genreMatch = selectedGenre === "All" || s.genre === selectedGenre;
-                const moodMatch = selectedMood === "All" || s.moods?.includes(selectedMood);
+                const moodMatch = selectedMood === "All" ||
+                    (selectedMood === "❤️" ? favourites.includes(s.name) : s.moods?.includes(selectedMood));
                 return genreMatch && moodMatch;
             });
         };
@@ -801,7 +802,7 @@
         };
 
 
-        const useStationNav = ({ filteredStations, selectedGenre, selectedMood, setSelectedGenre, setSelectedMood, hasStarted, initAudio, triggerFlip }) => {
+        const useStationNav = ({ filteredStations, selectedGenre, selectedMood, setSelectedGenre, setSelectedMood, hasStarted, initAudio, triggerFlip, favourites }) => {
             const [currentStation, setCurrentStation] = useState(null);
             const [isShuffleMode, setIsShuffleMode] = useState(false);
             const [shuffleSequence, setShuffleSequence] = useState([]);
@@ -900,14 +901,14 @@
                 setSelectedGenre(nextGenre);
                 
                 if (!isDeselecting || !currentStation) {
-                    const pool = STATIONS.filter(s => (nextGenre === "All" || s.genre === nextGenre) && (selectedMood === "All" || s.moods?.includes(selectedMood)));
+                    const pool = STATIONS.filter(s => (nextGenre === "All" || s.genre === nextGenre) && (selectedMood === "All" || (selectedMood === "❤️" ? favourites.includes(s.name) : s.moods?.includes(selectedMood))));
                     if (pool.length > 0) {
                         const randomStation = pool[Math.floor(Math.random() * pool.length)];
                         setCurrentStation(randomStation);
                         if (!hasStarted) initAudio();
                     }
                 }
-            }, [selectedGenre, selectedMood, currentStation, hasStarted, initAudio, triggerFlip, setSelectedGenre]);
+            }, [selectedGenre, selectedMood, favourites, currentStation, hasStarted, initAudio, triggerFlip, setSelectedGenre]);
 
 
             const handleMoodSelect = useCallback((moodEmoji) => {
@@ -917,14 +918,14 @@
                 setSelectedMood(nextMood);
                 
                 if (!isDeselecting || !currentStation) {
-                    const pool = STATIONS.filter(s => (nextMood === "All" || s.moods?.includes(nextMood)) && (selectedGenre === "All" || s.genre === selectedGenre));
+                    const pool = STATIONS.filter(s => (nextMood === "All" || (nextMood === "❤️" ? favourites.includes(s.name) : s.moods?.includes(nextMood))) && (selectedGenre === "All" || s.genre === selectedGenre));
                     if (pool.length > 0) {
                         const randomStation = pool[Math.floor(Math.random() * pool.length)];
                         setCurrentStation(randomStation);
                         if (!hasStarted) initAudio();
                     }
                 }
-            }, [selectedGenre, selectedMood, currentStation, hasStarted, initAudio, triggerFlip, setSelectedMood]);
+            }, [selectedGenre, selectedMood, favourites, currentStation, hasStarted, initAudio, triggerFlip, setSelectedMood]);
 
 
             const handleMainMoodToggle = useCallback(() => {
@@ -1811,12 +1812,26 @@
         };
 
 
-        const MoodOverlay = ({ onSelect, onClose, selected, colors }) => (
+        const MoodOverlay = ({ onSelect, onClose, selected, colors, favourites }) => (
             <div className="fixed inset-0 z-[100] flex flex-col animate-overlay-in backdrop-blur-2xl" style={{ backgroundColor: colors.overlayBg }}>
                 <CloseButton onClick={onClose} colors={colors} />
                 <div className="flex-grow overflow-y-auto px-6 pt-20 pb-40 landscape:pt-6 landscape:pb-10 landscape-mood-container custom-scrollbar">
                     <div className="max-w-4xl mx-auto flex flex-col items-center">
                         <h4 className="font-young-serif text-3xl sm:text-4xl landscape-mood-title font-black tracking-tight mb-8 text-center uppercase" style={{ color: colors.text }}>Vibe check</h4>
+                        <button
+                            onClick={() => favourites.length > 0 && onSelect("❤️")}
+                            className={`w-full max-w-sm landscape:max-w-4xl mb-6 py-3 px-6 rounded-2xl font-bold uppercase tracking-wider flex items-center justify-center gap-3 transition-all raised-button outline-none ${selected === "❤️" ? 'selected' : ''} ${favourites.length === 0 ? 'opacity-30 cursor-not-allowed' : ''}`}
+                            style={{
+                                border: `1px solid ${selected === "❤️" ? colors.text : colors.border}`,
+                                color: colors.text,
+                                boxShadow: selected === "❤️" ? 'inset 0 4px 8px rgba(0,0,0,0.2)' : colors.buttonShadow,
+                                transform: selected === "❤️" ? 'translateY(2px)' : 'translateY(0)',
+                            }}
+                        >
+                            <span>❤️</span>
+                            <span>Favourites</span>
+                            {favourites.length > 0 && <span className="opacity-50 text-sm font-normal normal-case tracking-normal">({favourites.length})</span>}
+                        </button>
                         <div className="grid grid-cols-3 landscape:grid-cols-6 landscape-mood-grid gap-4 sm:gap-6 w-full max-w-sm landscape:max-w-4xl">
                             {MOODS.map((mood, idx) => (
                                 <button
@@ -1872,7 +1887,7 @@
         );
 
 
-        const IndexOverlay = ({ current, onSelect, onClose, onTogglePlay, isPlaying, stations, refs, colors }) => {
+        const IndexOverlay = ({ current, onSelect, onClose, onTogglePlay, isPlaying, stations, refs, colors, favourites, onToggleFavourite }) => {
             useEffect(() => {
                 const timer = setTimeout(() => {
                     if (current) {
@@ -1901,6 +1916,7 @@
                                         </div>
                                         {current?.name === station.name && <div className={`w-3.5 h-3.5 rounded-full ${isPlaying ? 'animate-pulse' : 'opacity-40'}`} style={{ backgroundColor: colors.teal }} />}
                                     </button>
+                                    <button onClick={(e) => { e.stopPropagation(); onToggleFavourite(station.name); }} className="px-4 flex items-center justify-center transition-all outline-none text-xl leading-none" style={{ opacity: favourites.includes(station.name) ? 1 : 0.2, color: favourites.includes(station.name) ? '#e0355a' : colors.text }}>{favourites.includes(station.name) ? '❤️' : '🤍'}</button>
                                     <a href={station.sourceUrl} target="_blank" rel="noopener noreferrer" className="px-8 flex items-center justify-center opacity-20 hover:opacity-100 transition-opacity outline-none" style={{ color: colors.text }}><Icon name="external-link" size="18" /></a>
                                 </div>
                             ))}
@@ -2103,12 +2119,17 @@
             const { flipState, triggerFlip } = useFlip();
             const [selectedGenre, setSelectedGenre] = useState("All");
             const [selectedMood, setSelectedMood] = useState("All");
+            const [favourites, setFavourites] = useState(() => { try { return JSON.parse(localStorage.getItem('relayradio-favourites') || '[]'); } catch(e) { return []; } });
+            useEffect(() => { try { localStorage.setItem('relayradio-favourites', JSON.stringify(favourites)); } catch(e) {} }, [favourites]);
+            const toggleFavourite = useCallback((name) => {
+                setFavourites(prev => prev.includes(name) ? prev.filter(n => n !== name) : [...prev, name]);
+            }, []);
             const audio = useAudioPlayer();
 
 
             const filteredStations = useMemo(
-                () => getFilteredStations(selectedGenre, selectedMood),
-                [selectedGenre, selectedMood]
+                () => getFilteredStations(selectedGenre, selectedMood, favourites),
+                [selectedGenre, selectedMood, favourites]
             );
 
 
@@ -2118,7 +2139,8 @@
                 setSelectedGenre, setSelectedMood,
                 hasStarted: audio.hasStarted,
                 initAudio: audio.initAudio,
-                triggerFlip
+                triggerFlip,
+                favourites
             });
 
 
@@ -2414,9 +2436,9 @@
                             isNightMode={isNightMode}
                         />
                     )}
-                    {isMoodOpen && <MoodOverlay onSelect={handleMoodSelectAndClose} onClose={() => setIsMoodOpen(false)} selected={nav.selectedMood} colors={colors} />}
+                    {isMoodOpen && <MoodOverlay onSelect={handleMoodSelectAndClose} onClose={() => setIsMoodOpen(false)} selected={nav.selectedMood} colors={colors} favourites={favourites} />}
                     {isGenreOpen && <GenreOverlay onSelect={handleGenreSelectAndClose} onClose={() => setIsGenreOpen(false)} selected={nav.selectedGenre} colors={colors} />}
-                    {isIndexOpen && <IndexOverlay current={nav.currentStation} onSelect={handleStationSelectAndClose} onClose={() => setIsIndexOpen(false)} onTogglePlay={handleTogglePlay} isPlaying={audio.isPlaying} stations={filteredStations} refs={stationRefs} colors={colors} />}
+                    {isIndexOpen && <IndexOverlay current={nav.currentStation} onSelect={handleStationSelectAndClose} onClose={() => setIsIndexOpen(false)} onTogglePlay={handleTogglePlay} isPlaying={audio.isPlaying} stations={filteredStations} refs={stationRefs} colors={colors} favourites={favourites} onToggleFavourite={toggleFavourite} />}
                     {isAboutOpen && <AboutOverlay onClose={() => setIsAboutOpen(false)} colors={colors} />}
                     {isLandscapeMenuOpen && (
                         <div className="fixed inset-0 z-[100] flex items-center justify-center animate-overlay-in" onClick={() => setIsLandscapeMenuOpen(false)}>
