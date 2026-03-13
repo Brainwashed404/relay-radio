@@ -1218,7 +1218,7 @@
         }
 
 
-        const JotterLogoButton = ({ onClick, onNext, onPrev, isPlaying, hasStarted, isLoading, isShuffleMode, flipState, colors, genre, spinIntensity, movementMode }) => {
+        const JotterLogoButton = ({ onClick, onNext, onPrev, isPlaying, hasStarted, isLoading, isShuffleMode, flipState, colors, genre, spinIntensity, movementMode, coinSize = 300 }) => {
             const [showIcon, setShowIcon] = React.useState(false);
             const iconTimerRef = React.useRef(null);
             React.useEffect(() => {
@@ -1685,7 +1685,7 @@
 
 
             return (
-                <div onTouchStart={handleSwipeStart} onTouchEnd={handleSwipeEnd} className="relative flex items-center justify-center" style={{ width: '300px', height: '300px' }}>
+                <div onTouchStart={handleSwipeStart} onTouchEnd={handleSwipeEnd} className="relative flex items-center justify-center" style={{ width: `${coinSize}px`, height: `${coinSize}px` }}>
                     
                     {/* Orbit Rings */}
                     {movementMode === 'orbit' && shouldSpin && (
@@ -2115,6 +2115,12 @@
 
         const App = () => {
             const [isNightMode, setIsNightMode] = useState(() => { try { return localStorage.getItem('relayradio-nightmode') === 'true'; } catch(e) { return false; } });
+            const [isShortLandscape, setIsShortLandscape] = useState(() => window.innerWidth > window.innerHeight && window.innerHeight < 600);
+            useEffect(() => {
+                const check = () => setIsShortLandscape(window.innerWidth > window.innerHeight && window.innerHeight < 600);
+                window.addEventListener('resize', check);
+                return () => window.removeEventListener('resize', check);
+            }, []);
 
             const [spinIntensity, setSpinIntensity] = useState(0);
             const [movementMode, setMovementMode] = useState('float'); // 'float', 'boom', 'ripple', 'orbit', 'bloom', 'balloon'
@@ -2348,7 +2354,7 @@
                     <header className="w-full flex-shrink-0 z-10" style={{height:'env(safe-area-inset-top, 12px)'}} />
 
                     <main className="flex-grow flex flex-col items-center justify-center w-full z-10 text-center px-4 sm:px-6"
-                          style={{paddingBottom: 'min(clamp(200px, 30vh, 300px), max(0px, 100vh - 500px))'}}>
+                          style={{paddingBottom: isShortLandscape ? '0' : 'clamp(200px, 30vh, 300px)'}}>
                         {/* Title — fixed-height container; both states absolutely centred inside */}
                         <div className="title-container">
                             {/* RELAY RAD.IO (pre-start) */}
@@ -2397,6 +2403,7 @@
                                 genre={nav.currentStation?.genre}
                                 spinIntensity={spinIntensity}
                                 movementMode={movementMode}
+                                coinSize={isShortLandscape ? 200 : 300}
                             />
 
                             <div className={`transition-all duration-700 ${audio.hasStarted ? 'opacity-20 scale-100' : 'opacity-0 scale-75 pointer-events-none'}`}>
