@@ -228,14 +228,7 @@
             overflow: hidden;
         }
 
-        /* Shift flex-centre upward to clear the absolute footer */
-        main#player-main { padding-bottom: clamp(200px, 30vh, 300px); }
-
-        /* Landscape overrides — placed AFTER base rules so source order wins (no !important needed) */
-        @media (max-height: 500px) and (orientation: landscape) {
-            main#player-main { padding-bottom: 0; }
-            main#player-main .title-container { height: 4rem; }
-        }
+        /* Landscape overrides via JS refs — see applyLandscapeLayout in App component */
     </style>
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-9WDSHZV3NG"></script>
@@ -2121,6 +2114,29 @@
 
         const App = () => {
             const [isNightMode, setIsNightMode] = useState(() => { try { return localStorage.getItem('relayradio-nightmode') === 'true'; } catch(e) { return false; } });
+
+            // Layout refs — apply landscape overrides directly to DOM, bypassing CSS cascade entirely
+            const playerMainRef = useRef(null);
+            const titleContainerRef = useRef(null);
+            const applyLandscapeLayout = useCallback(() => {
+                const isLS = window.innerHeight <= 500 && window.innerWidth > window.innerHeight;
+                if (playerMainRef.current) {
+                    playerMainRef.current.style.paddingBottom = isLS ? '0px' : `clamp(200px, ${(window.innerHeight * 0.3).toFixed(0)}px, 300px)`;
+                }
+                if (titleContainerRef.current) {
+                    titleContainerRef.current.style.height = isLS ? '4rem' : '10rem';
+                }
+            }, []);
+            React.useLayoutEffect(() => {
+                applyLandscapeLayout();
+                window.addEventListener('resize', applyLandscapeLayout);
+                window.addEventListener('orientationchange', applyLandscapeLayout);
+                return () => {
+                    window.removeEventListener('resize', applyLandscapeLayout);
+                    window.removeEventListener('orientationchange', applyLandscapeLayout);
+                };
+            }, [applyLandscapeLayout]);
+
             const [spinIntensity, setSpinIntensity] = useState(0);
             const [movementMode, setMovementMode] = useState('float'); // 'float', 'boom', 'ripple', 'orbit', 'bloom', 'balloon'
             const [isCoinSliderOpen, setIsCoinSliderOpen] = useState(false);
@@ -2352,9 +2368,9 @@
 
                     <header className="w-full flex-shrink-0 z-10" style={{height:'env(safe-area-inset-top, 12px)'}} />
 
-                    <main id="player-main" className="flex-grow flex flex-col items-center justify-center w-full z-10 text-center px-4 sm:px-6">
+                    <main ref={playerMainRef} className="flex-grow flex flex-col items-center justify-center w-full z-10 text-center px-4 sm:px-6">
                         {/* Title — fixed-height container; both states absolutely centred inside */}
-                        <div className="title-container">
+                        <div ref={titleContainerRef} className="title-container">
                             {/* RELAY RAD.IO (pre-start) */}
                             <div className={`absolute inset-0 flex flex-col items-center justify-center transition-all duration-1000 ease-in-out short:landscape:px-16 ${audio.hasStarted ? 'opacity-0 scale-95 blur-xl pointer-events-none' : 'opacity-100 scale-100 blur-0'}`}>
                                 <h2 className="font-young-serif text-7xl sm:text-7xl md:text-8xl short:landscape:text-5xl font-black tracking-tighter uppercase leading-[0.85] sm:leading-none" style={{ color: colors.text }}>
