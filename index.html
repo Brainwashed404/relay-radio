@@ -223,11 +223,10 @@
         }
 
         /* Title area: fixed height so both crossfade states don't inflate the container */
-        /* min() naturally shrinks the box in landscape where vh is small */
         .title-container {
             position: relative;
             width: 100%;
-            height: min(10rem, 20vh);
+            height: 10rem;
             overflow: hidden;
         }
     </style>
@@ -2115,9 +2114,23 @@
 
         const App = () => {
             const [isNightMode, setIsNightMode] = useState(() => { try { return localStorage.getItem('relayradio-nightmode') === 'true'; } catch(e) { return false; } });
-            const [isShortLandscape, setIsShortLandscape] = useState(() => window.innerWidth > window.innerHeight && window.innerHeight < 600);
+            const calcLayout = () => {
+                const h = window.innerHeight, w = window.innerWidth;
+                const landscape = w > h && h < 600;
+                // Portrait padding: keep coin above footer with at least 20px margin.
+                // Content = 160px title + 32px gap + 300px coin = 492px.
+                // We want (h - pb) >= 492 + 40, so pb <= h - 532.
+                const pb = landscape ? '0' : `${Math.min(260, Math.max(60, h - 532))}px`;
+                return { landscape, pb };
+            };
+            const [isShortLandscape, setIsShortLandscape] = useState(() => calcLayout().landscape);
+            const [mainPaddingBottom, setMainPaddingBottom] = useState(() => calcLayout().pb);
             useEffect(() => {
-                const check = () => setIsShortLandscape(window.innerWidth > window.innerHeight && window.innerHeight < 600);
+                const check = () => {
+                    const { landscape, pb } = calcLayout();
+                    setIsShortLandscape(landscape);
+                    setMainPaddingBottom(pb);
+                };
                 window.addEventListener('resize', check);
                 return () => window.removeEventListener('resize', check);
             }, []);
@@ -2354,9 +2367,9 @@
                     <header className="w-full flex-shrink-0 z-10" style={{height:'env(safe-area-inset-top, 12px)'}} />
 
                     <main className="flex-grow flex flex-col items-center justify-center w-full z-10 text-center px-4 sm:px-6"
-                          style={{paddingBottom: isShortLandscape ? '0' : 'clamp(200px, 30vh, 300px)'}}>
+                          style={{paddingBottom: mainPaddingBottom}}>
                         {/* Title — fixed-height container; both states absolutely centred inside */}
-                        <div className="title-container">
+                        <div className="title-container" style={isShortLandscape ? {height:'5rem'} : {}}>
                             {/* RELAY RAD.IO (pre-start) */}
                             <div className={`absolute inset-0 flex flex-col items-center justify-center transition-all duration-1000 ease-in-out short:landscape:px-16 ${audio.hasStarted ? 'opacity-0 scale-95 blur-xl pointer-events-none' : 'opacity-100 scale-100 blur-0'}`}>
                                 <h2 className="font-young-serif text-7xl sm:text-7xl md:text-8xl short:landscape:text-5xl font-black tracking-tighter uppercase leading-[0.85] sm:leading-none" style={{ color: colors.text }}>
