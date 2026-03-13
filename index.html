@@ -1020,15 +1020,15 @@
         );
 
 
-        const FooterBtn = ({ icon, label, onClick, active, text, iconFill, noBorder, colors, delay = 0 }) => (
+        const FooterBtn = ({ icon, label, onClick, active, text, iconFill, colors, delay = 0 }) => (
             <div className={`flex flex-col items-center group w-full ${delay ? 'animate-in' : ''}`} style={delay ? { animationDelay: `${delay}ms` } : {}}>
                 <button onClick={onClick} className={`w-11 h-11 sm:w-14 sm:h-14 rounded-2xl border flex items-center justify-center transition-all active:scale-95 outline-none`}
                     style={{
                         backgroundColor: active ? colors.text : 'transparent',
-                        borderColor: noBorder ? 'transparent' : (active ? colors.text : colors.border),
+                        borderColor: active ? colors.text : colors.border,
                         color: active ? colors.bg : colors.text
                     }}>
-                    {text ? <span className="leading-none text-xl sm:text-2xl">{text}</span> : (icon ? <Icon name={icon} size="20" className="sm:w-[22px]" strokeWidth={2} fill={iconFill || "none"} /> : null)}
+                    {text ? <span className="leading-none text-xl sm:text-2xl">{text}</span> : (icon ? <Icon name={icon} size="20" className="sm:w-[22px]" strokeWidth={iconFill && iconFill !== "none" ? 0 : 2} fill={iconFill || "none"} /> : null)}
                 </button>
                 <span className="text-[7px] sm:text-[9px] font-black tracking-[0.15em] mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 uppercase text-center truncate w-full mobile-landscape-hidden" style={{ color: colors.text }}>
                     {label}
@@ -2395,7 +2395,7 @@
                             {audio.hasStarted && (
                                 <div className="grid grid-cols-3 sm:flex sm:flex-row items-center justify-center gap-y-6 gap-x-4 px-6 w-full max-w-sm mx-auto mb-8 landscape-button-spacing">
                                     <FooterBtn icon={isNightMode ? "sun" : "moon"} label={isNightMode ? "Day" : "Night"} onClick={() => setIsNightMode(!isNightMode)} active={isNightMode} colors={colors} delay={100} />
-                                    <FooterBtn label="Vibe" onClick={handleMoodBtnClick} active={nav.selectedMood !== "All" && nav.selectedMood !== "❤️"} text={nav.selectedMood !== "All" && nav.selectedMood !== "❤️" ? nav.selectedMood : ""} icon={nav.selectedMood === "❤️" ? "heart" : (nav.selectedMood !== "All" ? "" : "smile")} iconFill={nav.selectedMood === "❤️" ? colors.teal : "none"} noBorder={nav.selectedMood === "❤️"} colors={colors} delay={200} />
+                                    <FooterBtn label="Vibe" onClick={handleMoodBtnClick} active={nav.selectedMood !== "All"} text={nav.selectedMood !== "All" && nav.selectedMood !== "❤️" ? nav.selectedMood : ""} icon={nav.selectedMood === "❤️" ? "heart" : (nav.selectedMood !== "All" ? "" : "smile")} iconFill={nav.selectedMood === "❤️" ? colors.teal : "none"} colors={colors} delay={200} />
                                     <FooterBtn icon="shuffle" label="Shuffle" onClick={nav.handleShuffleToggle} active={nav.isShuffleMode} colors={colors} delay={300} />
                                     <div className="flex flex-col items-center group w-full animate-in" style={{ animationDelay: '400ms' }}
                                         onTouchStart={() => { window._coinHoldTimer = setTimeout(() => { setIsCoinSliderOpen(true); window._coinHeld = true; }, 400); window._coinHeld = false; }}
@@ -2451,7 +2451,7 @@
                                 </div>
                                 <div className="grid grid-cols-3 gap-3">
                                     <FooterBtn icon={isNightMode ? "sun" : "moon"} label={isNightMode ? "Day" : "Night"} onClick={() => { setIsNightMode(!isNightMode); }} active={isNightMode} colors={colors} />
-                                    <FooterBtn label="Vibe" onClick={() => { setIsLandscapeMenuOpen(false); handleMoodBtnClick(); }} active={nav.selectedMood !== "All" && nav.selectedMood !== "❤️"} text={nav.selectedMood !== "All" && nav.selectedMood !== "❤️" ? nav.selectedMood : ""} icon={nav.selectedMood === "❤️" ? "heart" : (nav.selectedMood !== "All" ? "" : "smile")} iconFill={nav.selectedMood === "❤️" ? colors.teal : "none"} noBorder={nav.selectedMood === "❤️"} colors={colors} />
+                                    <FooterBtn label="Vibe" onClick={() => { setIsLandscapeMenuOpen(false); handleMoodBtnClick(); }} active={nav.selectedMood !== "All"} text={nav.selectedMood !== "All" && nav.selectedMood !== "❤️" ? nav.selectedMood : ""} icon={nav.selectedMood === "❤️" ? "heart" : (nav.selectedMood !== "All" ? "" : "smile")} iconFill={nav.selectedMood === "❤️" ? colors.teal : "none"} colors={colors} />
                                     <FooterBtn icon="shuffle" label="Shuffle" onClick={() => { nav.handleShuffleToggle(); }} active={nav.isShuffleMode} colors={colors} />
                                     <FooterBtn icon="target" label="Coin" onClick={() => { setIsLandscapeMenuOpen(false); setIsCoinSliderOpen(p => !p); }} active={isCoinSliderOpen} colors={colors} />
                                     <FooterBtn label="Genre" onClick={() => { setIsLandscapeMenuOpen(false); handleGenreBtnClick(); }} active={nav.selectedGenre !== "All"} text={nav.selectedGenre !== "All" ? GENRE_EMOJIS[nav.selectedGenre] : ""} icon={nav.selectedGenre !== "All" ? "" : "music"} colors={colors} />
