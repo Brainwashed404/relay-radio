@@ -228,7 +228,12 @@
             overflow: hidden;
         }
 
-        /* Landscape overrides via JS refs — see applyLandscapeLayout in App component */
+        /* Landscape overrides — !important beats inline styles; placed after base rule so
+           source order also wins; max-height:600px is broader than 500px for safety */
+        @media (orientation: landscape) and (max-height: 600px) {
+            #player-main { padding-bottom: 0 !important; }
+            #player-main .title-container { height: 4rem !important; }
+        }
     </style>
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-9WDSHZV3NG"></script>
@@ -2368,7 +2373,7 @@
 
                     <header className="w-full flex-shrink-0 z-10" style={{height:'env(safe-area-inset-top, 12px)'}} />
 
-                    <main ref={playerMainRef} className="flex-grow flex flex-col items-center justify-center w-full z-10 text-center px-4 sm:px-6">
+                    <main id="player-main" ref={playerMainRef} className="flex-grow flex flex-col items-center justify-center w-full z-10 text-center px-4 sm:px-6">
                         {/* Title — fixed-height container; both states absolutely centred inside */}
                         <div ref={titleContainerRef} className="title-container">
                             {/* RELAY RAD.IO (pre-start) */}
