@@ -731,18 +731,29 @@
                     audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
                 }
                 if (audioContextRef.current.state === 'suspended') audioContextRef.current.resume();
-                // Wire up analyser for BOOM reactive mode (best-effort; zeros if stream blocks CORS)
-                if (!audioSourceRef.current && audioTagRef.current) {
-                    try {
-                        audioSourceRef.current = audioContextRef.current.createMediaElementSource(audioTagRef.current);
-                        analyserRef.current = audioContextRef.current.createAnalyser();
-                        analyserRef.current.fftSize = 256;
-                        audioSourceRef.current.connect(analyserRef.current);
-                        analyserRef.current.connect(audioContextRef.current.destination);
-                    } catch(e) {}
-                }
                 setHasStarted(true);
                 setIsPlaying(true);
+            }, []);
+
+            // Called only when BOOM mode is active — keeps normal playback completely untouched
+            const setupAnalyser = useCallback(() => {
+                if (analyserRef.current) return; // already set up
+                if (!audioContextRef.current || !audioTagRef.current) return;
+                try {
+                    if (audioContextRef.current.state === 'suspended') audioContextRef.current.resume();
+                    const src = audioContextRef.current.createMediaElementSource(audioTagRef.current);
+                    const analyser = audioContextRef.current.createAnalyser();
+                    analyser.fftSize = 256;
+                    src.connect(analyser);
+                    analyser.connect(audioContextRef.current.destination);
+                    audioSourceRef.current = src;
+                    analyserRef.current = analyser;
+                } catch(e) {
+                    // If source node was created but connect failed, route directly to destination
+                    if (audioSourceRef.current) {
+                        try { audioSourceRef.current.connect(audioContextRef.current.destination); } catch(_) {}
+                    }
+                }
             }, []);
 
 
@@ -809,7 +820,7 @@
                 displayedName, displayedDesc,
                 setDisplayedName,
                 audioTagRef, analyserRef,
-                initAudio, togglePlay, toggleMute,
+                initAudio, setupAnalyser, togglePlay, toggleMute,
                 startStationPlayback
             };
         };
@@ -1219,7 +1230,7 @@
         }
 
 
-        const JotterLogoButton = ({ onClick, onNext, onPrev, isPlaying, hasStarted, isLoading, isShuffleMode, flipState, colors, genre, spinIntensity, movementMode, analyserRef }) => {
+        const JotterLogoButton = ({ onClick, onNext, onPrev, isPlaying, hasStarted, isLoading, isShuffleMode, flipState, colors, genre, spinIntensity, movementMode, analyserRef, setupAnalyser }) => {
             const [showIcon, setShowIcon] = React.useState(false);
             const iconTimerRef = React.useRef(null);
             React.useEffect(() => {
@@ -1302,6 +1313,11 @@
                 }
                 wasLoadingRef.current = isLoading;
             }, [isLoading, movementMode, isShuffleMode]);
+
+            // Lazily wire up analyser only when BOOM mode is active
+            React.useEffect(() => {
+                if (movementMode === 'boom' && hasStarted && setupAnalyser) setupAnalyser();
+            }, [movementMode, hasStarted]);
 
 
             const shapeClass = 'shape-circle';
@@ -2412,6 +2428,7 @@
                             spinIntensity={spinIntensity}
                             movementMode={movementMode}
                             analyserRef={audio.analyserRef}
+                            setupAnalyser={audio.setupAnalyser}
                         />
                         
                         <div className={`transition-all duration-700 ${audio.hasStarted ? 'opacity-20 scale-100' : 'opacity-0 scale-75 pointer-events-none'}`}>
