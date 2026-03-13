@@ -617,6 +617,8 @@
             const [displayedDesc, setDisplayedDesc] = useState("");
             const audioContextRef = useRef(null);
             const audioTagRef = useRef(null);
+            const analyserRef = useRef(null);
+            const audioSourceRef = useRef(null);
             const playTimeoutRef = useRef(null);
             const metadataIntervalRef = useRef(null);
             const skipTimeoutRef = useRef(null);
@@ -728,6 +730,16 @@
                     audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
                 }
                 if (audioContextRef.current.state === 'suspended') audioContextRef.current.resume();
+                // Wire up analyser for BOOM reactive mode (best-effort; zeros if stream blocks CORS)
+                if (!audioSourceRef.current && audioTagRef.current) {
+                    try {
+                        audioSourceRef.current = audioContextRef.current.createMediaElementSource(audioTagRef.current);
+                        analyserRef.current = audioContextRef.current.createAnalyser();
+                        analyserRef.current.fftSize = 256;
+                        audioSourceRef.current.connect(analyserRef.current);
+                        analyserRef.current.connect(audioContextRef.current.destination);
+                    } catch(e) {}
+                }
                 setHasStarted(true);
                 setIsPlaying(true);
             }, []);
@@ -795,7 +807,7 @@
                 isPlaying, isMuted, hasStarted, isLoading, isOffAir,
                 displayedName, displayedDesc,
                 setDisplayedName,
-                audioTagRef,
+                audioTagRef, analyserRef,
                 initAudio, togglePlay, toggleMute,
                 startStationPlayback
             };
@@ -1111,7 +1123,7 @@
 
         const CoinMenuOverlay = ({ spinIntensity, setSpinIntensity, movementMode, setMovementMode, onClose, colors, isNightMode }) => {
             const sliderLabels = {
-                float: ['Still', 'Tumble'], boom: ['60 BPM', '170 BPM'],
+                float: ['Still', 'Tumble'], boom: ['Subtle', 'Wild'],
                 ripple: ['Slow', 'Rapid'], orbit: ['Drift', 'Chaos'],
                 bloom: ['Crisp', 'Blinding'], balloon: ['Chill', 'Pumped']
             };
@@ -1206,7 +1218,7 @@
         }
 
 
-        const JotterLogoButton = ({ onClick, onNext, onPrev, isPlaying, hasStarted, isLoading, isShuffleMode, flipState, colors, genre, spinIntensity, movementMode }) => {
+        const JotterLogoButton = ({ onClick, onNext, onPrev, isPlaying, hasStarted, isLoading, isShuffleMode, flipState, colors, genre, spinIntensity, movementMode, analyserRef }) => {
             const [showIcon, setShowIcon] = React.useState(false);
             const iconTimerRef = React.useRef(null);
             React.useEffect(() => {
@@ -1279,6 +1291,7 @@
 
             const intensityRef = React.useRef(spinIntensity / 100);
             React.useEffect(() => { intensityRef.current = spinIntensity / 100; }, [spinIntensity]);
+            const boomDataArrayRef = React.useRef(null);
 
             const flipTriggerRef = React.useRef(0);
             const wasLoadingRef = React.useRef(false);
@@ -1346,20 +1359,36 @@
                             }
                         }
                     }
-                    // --- BOOM: Punchy heartbeat scale ---
+                    // --- BOOM: Audio-reactive bass pulse (falls back to BPM if CORS blocks analyser) ---
                     else if (movementMode === 'boom' && shouldSpin) {
-                        const bpm = 60 + (s * 110); // 60-170 BPM
-                        const phase = (d.t * (bpm / 60) * Math.PI) % Math.PI;
-                        // Asymmetric: fast punch out (pow 0.4), slower retract
-                        const beat = Math.pow(Math.sin(phase), 0.4);
-                        const scale = 1 + (beat * 0.15);
-                        
-                        // Slow constant Z-spin so coin stays readable
+                        let scale = 1;
+                        const analyser = analyserRef?.current;
+                        if (analyser) {
+                            if (!boomDataArrayRef.current) boomDataArrayRef.current = new Uint8Array(analyser.frequencyBinCount);
+                            analyser.getByteFrequencyData(boomDataArrayRef.current);
+                            // Bass bins 0-7 (~0-1375Hz at fftSize=256, 44.1kHz)
+                            let bassSum = 0;
+                            for (let i = 0; i < 8; i++) bassSum += boomDataArrayRef.current[i];
+                            const bassEnergy = bassSum / (8 * 255); // 0–1
+                            if (bassEnergy > 0.01) {
+                                // Real audio: sensitivity controlled by slider (0.5× to 3×)
+                                const sensitivity = 0.5 + s * 2.5;
+                                scale = 1 + Math.min(bassEnergy * sensitivity * 0.35, 0.35);
+                            } else {
+                                // CORS fallback: manual BPM
+                                const bpm = 60 + (s * 110);
+                                const phase = (d.t * (bpm / 60) * Math.PI) % Math.PI;
+                                scale = 1 + (Math.pow(Math.sin(phase), 0.4) * 0.15);
+                            }
+                        } else {
+                            // No analyser: manual BPM
+                            const bpm = 60 + (s * 110);
+                            const phase = (d.t * (bpm / 60) * Math.PI) % Math.PI;
+                            scale = 1 + (Math.pow(Math.sin(phase), 0.4) * 0.15);
+                        }
                         d.rz = (d.rz + 15 * dt) % 360;
-                        // Flatten X/Y to keep face visible
                         d.rx = d.rx - d.rx * Math.min(dt * 5, 1);
                         d.ry = d.ry - d.ry * Math.min(dt * 5, 1);
-
                         if (containerRef.current) {
                             containerRef.current.style.transform = `scale(${scale}) rotateX(${d.rx}deg) rotateY(${d.ry}deg) rotateZ(${d.rz}deg)`;
                             containerRef.current.style.filter = 'none';
@@ -2038,7 +2067,7 @@
                                         <li>Float {'–'} layered sine-wave drift (Still {'→'} Tumble)</li>
                                         <li>Ripple {'–'} sonar pulse rings (Slow {'→'} Rapid)</li>
                                         <li>Orbit {'–'} gyroscope tumble with rings (Drift {'→'} Chaos)</li>
-                                        <li>Boom {'–'} heartbeat scale pulse (60 {'→'} 170 BPM)</li>
+                                        <li>Boom {'–'} audio-reactive bass pulse (slider controls sensitivity)</li>
                                         <li>Bloom {'–'} radioactive glow (Crisp {'→'} Blinding)</li>
                                     </ul>
                                     <p className="mt-2">Use the slider to adjust intensity.</p>
@@ -2368,19 +2397,20 @@
                             <button onClick={nav.handlePrevious} className="p-2 outline-none transition-all active:scale-90" style={{ color: colors.text }}><Icon name="skip-back" size="48" strokeWidth={0} fill="currentColor" /></button>
                         </div>
                         
-                        <JotterLogoButton 
-                            onClick={handleTogglePlay} 
-                            onNext={nav.handleNext} 
-                            onPrev={nav.handlePrevious} 
-                            isPlaying={audio.isPlaying} 
-                            hasStarted={audio.hasStarted} 
-                            isLoading={audio.isLoading} 
-                            isShuffleMode={nav.isShuffleMode} 
-                            flipState={flipState} 
-                            colors={colors} 
-                            genre={nav.currentStation?.genre} 
+                        <JotterLogoButton
+                            onClick={handleTogglePlay}
+                            onNext={nav.handleNext}
+                            onPrev={nav.handlePrevious}
+                            isPlaying={audio.isPlaying}
+                            hasStarted={audio.hasStarted}
+                            isLoading={audio.isLoading}
+                            isShuffleMode={nav.isShuffleMode}
+                            flipState={flipState}
+                            colors={colors}
+                            genre={nav.currentStation?.genre}
                             spinIntensity={spinIntensity}
                             movementMode={movementMode}
+                            analyserRef={audio.analyserRef}
                         />
                         
                         <div className={`transition-all duration-700 ${audio.hasStarted ? 'opacity-20 scale-100' : 'opacity-0 scale-75 pointer-events-none'}`}>
