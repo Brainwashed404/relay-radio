@@ -190,6 +190,8 @@
 
         @media (max-height: 500px) and (orientation: landscape) {
             .short\:landscape\:h-\[20vh\] { height: 30vh !important; }
+            .short\:landscape\:h-4 { height: 1rem !important; }
+            .short\:landscape\:text-5xl { font-size: 3rem !important; line-height: 1 !important; }
             .short\:landscape\:text-4xl { font-size: 2.5rem !important; line-height: 2.5rem !important; }
             .short\:landscape\:pt-8 { padding-top: 0.75rem !important; }
             .short\:landscape\:mt-1 { margin-top: 0.25rem !important; }
@@ -221,16 +223,12 @@
         }
 
         /* Title area: fixed height so both crossfade states don't inflate the container */
+        /* min() naturally shrinks the box in landscape where vh is small */
         .title-container {
             position: relative;
             width: 100%;
-            height: 10rem;   /* portrait/desktop: fits any title or RELAY RAD.IO */
+            height: min(10rem, 20vh);
             overflow: hidden;
-        }
-
-        /* Landscape: shrink title box so coin fits — no padding tricks needed */
-        @media (orientation: landscape) and (max-height: 600px) {
-            .title-container { height: 4rem !important; }
         }
     </style>
     <!-- Google Analytics -->
@@ -2349,9 +2347,8 @@
 
                     <header className="w-full flex-shrink-0 z-10" style={{height:'env(safe-area-inset-top, 12px)'}} />
 
-                    <main className="flex-grow flex flex-col items-center w-full z-10 text-center px-4 sm:px-6">
-                        {/* Top spacer — pushes title+coin down, takes 1 share of free space */}
-                        <div style={{flex:1}} />
+                    <main className="flex-grow flex flex-col items-center justify-center w-full z-10 text-center px-4 sm:px-6"
+                          style={{paddingBottom: 'min(clamp(200px, 30vh, 300px), max(0px, 100vh - 500px))'}}>
                         {/* Title — fixed-height container; both states absolutely centred inside */}
                         <div className="title-container">
                             {/* RELAY RAD.IO (pre-start) */}
@@ -2406,8 +2403,6 @@
                                 <button onClick={nav.handleNext} className="p-2 outline-none transition-all active:scale-90" style={{ color: colors.text }}><Icon name="skip-forward" size="48" strokeWidth={0} fill="currentColor" /></button>
                             </div>
                         </div>
-                        {/* Bottom spacer — takes 2 shares so coin sits above the footer zone */}
-                        <div style={{flex:2}} />
                     </main>
 
                     {/* Footer — absolutely anchored to bottom, out of flow so it doesn't skew centering */}
