@@ -1838,7 +1838,7 @@
                             ))}
                             <button
                                 onClick={() => favourites.length > 0 && onSelect("❤️")}
-                                className={`aspect-square flex items-center justify-center text-3xl sm:text-4xl rounded-[1.5rem] border transition-all outline-none group raised-button ${selected === "❤️" ? 'selected' : ''} ${favourites.length === 0 ? 'opacity-30 cursor-not-allowed' : ''}`}
+                                className={`aspect-square flex items-center justify-center text-3xl sm:text-4xl rounded-[1.5rem] border transition-all animate-brand-kinetic outline-none group raised-button ${selected === "❤️" ? 'selected' : ''} ${favourites.length === 0 ? 'opacity-30 cursor-not-allowed' : ''}`}
                                 style={{
                                     animationDelay: `${MOODS.length * 40}ms`,
                                     borderColor: selected === "❤️" ? colors.text : colors.border,
@@ -1846,7 +1846,7 @@
                                     transform: selected === "❤️" ? 'translateY(2px)' : 'translateY(0)',
                                 }}
                             >
-                                <span className="group-hover:scale-110 group-active:scale-95 transition-transform duration-300">❤️</span>
+                                <span className="group-hover:scale-110 group-active:scale-95 transition-transform duration-300" style={{ color: colors.teal }}><Icon name="heart" size="32" /></span>
                             </button>
                         </div>
                     </div>
@@ -1914,7 +1914,7 @@
                                         </div>
                                         {current?.name === station.name && <div className={`w-3.5 h-3.5 rounded-full ${isPlaying ? 'animate-pulse' : 'opacity-40'}`} style={{ backgroundColor: colors.teal }} />}
                                     </button>
-                                    <button onClick={(e) => { e.stopPropagation(); onToggleFavourite(station.name); }} className="px-4 flex items-center justify-center transition-all outline-none text-xl leading-none" style={{ opacity: favourites.includes(station.name) ? 1 : 0.2, color: favourites.includes(station.name) ? colors.teal : colors.text }}>{favourites.includes(station.name) ? '❤️' : '🤍'}</button>
+                                    <button onClick={(e) => { e.stopPropagation(); onToggleFavourite(station.name); }} className="px-4 flex items-center justify-center transition-all outline-none text-xl leading-none" style={{ opacity: favourites.includes(station.name) ? 1 : 0.2, color: favourites.includes(station.name) ? colors.teal : colors.text }}><Icon name="heart" size="16" fill={favourites.includes(station.name) ? colors.teal : 'none'} /></button>
                                     <a href={station.sourceUrl} target="_blank" rel="noopener noreferrer" className="px-8 flex items-center justify-center opacity-20 hover:opacity-100 transition-opacity outline-none" style={{ color: colors.text }}><Icon name="external-link" size="18" /></a>
                                 </div>
                             ))}
