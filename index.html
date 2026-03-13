@@ -1912,7 +1912,6 @@
                                             <span className={`font-young-serif text-xl sm:text-2xl font-black tracking-tighter uppercase`} style={{ color: current?.name === station.name ? colors.indexActive : colors.indexInactive }}>{station.name}</span>
                                             <span className="text-[9px] uppercase tracking-widest font-black opacity-40 mt-0.5" style={{ color: colors.text }}>{station.desc.split('.')[0]}</span>
                                         </div>
-                                        {current?.name === station.name && <div className={`w-3.5 h-3.5 rounded-full ${isPlaying ? 'animate-pulse' : 'opacity-40'}`} style={{ backgroundColor: colors.teal }} />}
                                     </button>
                                     <button onClick={(e) => { e.stopPropagation(); onToggleFavourite(station.name); }} className="px-4 flex items-center justify-center transition-all outline-none text-xl leading-none" style={{ opacity: favourites.includes(station.name) ? 1 : 0.2, color: favourites.includes(station.name) ? colors.teal : colors.text }}><Icon name="heart" size="16" fill={favourites.includes(station.name) ? colors.teal : 'none'} /></button>
                                     <a href={station.sourceUrl} target="_blank" rel="noopener noreferrer" className="px-8 flex items-center justify-center opacity-20 hover:opacity-100 transition-opacity outline-none" style={{ color: colors.text }}><Icon name="external-link" size="18" /></a>
