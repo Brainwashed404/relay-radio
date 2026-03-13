@@ -1,4 +1,4 @@
-const CACHE_NAME = 'relayradio-v5';
+const CACHE_NAME = 'relayradio-v6';
 const OFFLINE_URL = '/offline.html';
 
 // Files to cache for offline fallback
