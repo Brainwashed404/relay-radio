@@ -218,8 +218,8 @@
             
             .mobile-landscape-hidden { display: none !important; }
             .mobile-landscape-only { display: flex !important; }
-            .title-container { height: 3.5rem !important; }
-            .main-player-padding { padding-bottom: 3rem !important; }
+            .title-container { height: 4rem !important; overflow: hidden; }
+            .main-player-padding { padding-bottom: 0 !important; }
         }
 
         /* Title area: fixed height so both crossfade states don't inflate the container */
@@ -227,6 +227,7 @@
             position: relative;
             width: 100%;
             height: 10rem; /* 160px — fits any station name or RELAY RAD.IO on all screens */
+            overflow: hidden;
         }
 
         /* Push flex-centering upward to clear the absolute footer */
@@ -2410,7 +2411,7 @@
                     <footer className="absolute bottom-0 left-0 right-0 flex flex-col items-center pb-12 md:pb-16 z-10">
                         <div className="flex flex-col items-center w-full">
                             {audio.hasStarted && (
-                                <div className="grid grid-cols-3 sm:flex sm:flex-row items-center justify-center gap-y-6 gap-x-4 px-6 w-full max-w-sm mx-auto mb-8 landscape-button-spacing">
+                                <div className="grid grid-cols-3 sm:flex sm:flex-row items-center justify-center gap-y-6 gap-x-4 px-6 w-full max-w-sm mx-auto mb-8 landscape-button-spacing mobile-landscape-hidden">
                                     <FooterBtn icon={isNightMode ? "sun" : "moon"} label={isNightMode ? "Day" : "Night"} onClick={() => setIsNightMode(!isNightMode)} active={isNightMode} colors={colors} delay={100} />
                                     <FooterBtn label="Vibe" onClick={handleMoodBtnClick} active={nav.selectedMood !== "All"} text={nav.selectedMood !== "All" && nav.selectedMood !== "❤️" ? nav.selectedMood : ""} icon={nav.selectedMood === "❤️" ? "heart" : (nav.selectedMood !== "All" ? "" : "smile")} iconFill={nav.selectedMood === "❤️" ? colors.teal : "none"} colors={colors} delay={200} />
                                     <FooterBtn icon="shuffle" label="Shuffle" onClick={nav.handleShuffleToggle} active={nav.isShuffleMode} colors={colors} delay={300} />
