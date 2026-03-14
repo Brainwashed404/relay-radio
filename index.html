@@ -68,7 +68,7 @@
 
 
         html, body {
-            transition: background-color 500ms;
+            transition: background-color 600ms cubic-bezier(0.4,0,0.2,1);
         }
         body {
             font-family: 'Bitter', serif;
@@ -593,31 +593,50 @@
         };
 
 
-        const getColors = (isNightMode) => {
+        const MOOD_PALETTES = {
+            '😎': { lb:'#f5f7f2', db:'#000000', lr:'#7ec2ad', dr:'#7ec2ad', ly:'#e5b84a', dy:'#e5b84a' },
+            '🧐': { lb:'#faf8f2', db:'#0e0c04', lr:'#9a7a40', dr:'#c49a50', ly:'#d4b870', dy:'#8a6a30' },
+            '😴': { lb:'#f7f5fc', db:'#0a0814', lr:'#9080c0', dr:'#7060a8', ly:'#c8b8e8', dy:'#b0a0d8' },
+            '🤪': { lb:'#fffbf0', db:'#100800', lr:'#e05818', dr:'#e05818', ly:'#f0c820', dy:'#f0c820' },
+            '🥹': { lb:'#f5f0ff', db:'#0d0014', lr:'#7b4fa8', dr:'#7b4fa8', ly:'#c8a8f0', dy:'#c8a8f0' },
+            '❄️': { lb:'#f0f6ff', db:'#020a18', lr:'#4880c0', dr:'#4880c0', ly:'#a8c8e8', dy:'#7aa8d0' },
+            '☀️': { lb:'#fffcf0', db:'#120e00', lr:'#d89000', dr:'#d89000', ly:'#f5d060', dy:'#f5d060' },
+            '🚗': { lb:'#f2f3f5', db:'#06080e', lr:'#505870', dr:'#6070a0', ly:'#98a8c0', dy:'#98a8c0' },
+            '🧑‍🍳': { lb:'#fdf5ee', db:'#100500', lr:'#b85020', dr:'#b85020', ly:'#e89858', dy:'#e89858' },
+            '☔️': { lb:'#f0f2f5', db:'#060a0c', lr:'#587888', dr:'#507080', ly:'#98b0b8', dy:'#88a0a8' },
+            '💪': { lb:'#fff5f2', db:'#0e0100', lr:'#c01818', dr:'#c01818', ly:'#e87050', dy:'#e87050' },
+            '🤯': { lb:'#f0fff8', db:'#000e04', lr:'#00b870', dr:'#00b870', ly:'#f03888', dy:'#f03888' },
+        };
+
+        const getColors = (isNightMode, selectedMood) => {
+            const p = MOOD_PALETTES[selectedMood];
+            const bg     = p ? (isNightMode ? p.db : p.lb) : (isNightMode ? '#000000' : '#fcfdf2');
+            const teal   = p ? (isNightMode ? p.dr : p.lr) : (isNightMode ? '#4a8b78' : '#7ec2ad');
+            const yellow = p ? (isNightMode ? p.dy : p.ly) : (isNightMode ? '#bfa15f' : '#e5b84a');
             return isNightMode ? {
-                bg: '#000000',
+                bg,
                 text: '#fcfdf2',
-                teal: '#4a8b78',
-                tealDark: '#7ec2ad',
-                yellow: '#bfa15f',
+                teal,
+                tealDark: teal,
+                yellow,
                 black: '#fcfdf2',
                 border: '#333333',
                 overlayBg: 'rgba(0,0,0,0.95)',
-                indexActive: '#e5b84a',
+                indexActive: yellow,
                 indexInactive: '#fcfdf2',
                 buttonShadow: '0 8px 24px rgba(0,0,0,0.6)',
                 buttonShadowHover: '0 12px 32px rgba(0,0,0,0.8)'
             } : {
-                bg: '#fcfdf2',
+                bg,
                 text: '#000000',
-                teal: '#7ec2ad',
-                tealDark: '#4a8b78',
-                yellow: '#e5b84a',
+                teal,
+                tealDark: teal,
+                yellow,
                 black: '#000000',
                 border: 'rgba(0,0,0,0.1)',
-                overlayBg: 'rgba(252, 252, 245, 0.96)',
+                overlayBg: `rgba(${parseInt(bg.slice(1,3),16)},${parseInt(bg.slice(3,5),16)},${parseInt(bg.slice(5,7),16)},0.96)`,
                 indexActive: '#000000',
-                indexInactive: '#7ec2ad',
+                indexInactive: teal,
                 buttonShadow: '0 8px 20px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04)',
                 buttonShadowHover: '0 12px 28px rgba(0,0,0,0.12), 0 4px 8px rgba(0,0,0,0.06)'
             };
@@ -2190,13 +2209,6 @@
                 return () => window.removeEventListener('resize', check);
             }, []);
 
-            useEffect(() => {
-                const bg = isNightMode ? '#000000' : '#fcfdf2';
-                document.documentElement.style.setProperty('--bg', bg);
-                document.documentElement.style.backgroundColor = bg;
-                const meta = document.querySelector('meta[name="theme-color"]');
-                if (meta) meta.setAttribute('content', bg);
-            }, [isNightMode]);
 
             const [spinIntensity, setSpinIntensity] = useState(0);
             const [movementMode, setMovementMode] = useState('float'); // 'float', 'boom', 'ripple', 'orbit', 'bloom', 'balloon'
@@ -2207,11 +2219,11 @@
             const [isMoodOpen, setIsMoodOpen] = useState(false);
             const [isAboutOpen, setIsAboutOpen] = useState(false);
             const stationRefs = useRef(new Map());
-            const colors = useMemo(() => getColors(isNightMode), [isNightMode]);
             useEffect(() => { try { localStorage.setItem('relayradio-nightmode', isNightMode); } catch(e) {} }, [isNightMode]);
             const { flipState, triggerFlip } = useFlip();
             const [selectedGenre, setSelectedGenre] = useState("All");
             const [selectedMood, setSelectedMood] = useState("All");
+            const colors = useMemo(() => getColors(isNightMode, selectedMood), [isNightMode, selectedMood]);
             const [favourites, setFavourites] = useState(() => { try { return JSON.parse(localStorage.getItem('relayradio-favourites') || '[]'); } catch(e) { return []; } });
             useEffect(() => { try { localStorage.setItem('relayradio-favourites', JSON.stringify(favourites)); } catch(e) {} }, [favourites]);
             const toggleFavourite = useCallback((name) => {
@@ -2344,7 +2356,11 @@
 
 
             useEffect(() => {
-                // Update CSS variables for the body and root buttons to follow theme
+                // Update CSS variables and meta theme-color to follow palette + night mode
+                document.documentElement.style.setProperty('--bg', colors.bg);
+                document.documentElement.style.backgroundColor = colors.bg;
+                const meta = document.querySelector('meta[name="theme-color"]');
+                if (meta) meta.setAttribute('content', colors.bg);
                 const body = document.getElementById('app-body');
                 if (body) {
                     body.style.setProperty('--bg', colors.bg);
@@ -2352,7 +2368,7 @@
                     body.style.setProperty('--teal', colors.teal);
                     body.style.setProperty('--yellow', colors.yellow);
                 }
-            }, [colors, isNightMode]);
+            }, [colors]);
 
 
 
