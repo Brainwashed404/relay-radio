@@ -88,6 +88,10 @@
 
         .animate-overlay-in { animation: overlayIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards !important; }
         @keyframes overlayIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-coin-card-in { animation: coinCardIn 0.38s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .animate-coin-card-out { animation: coinCardOut 0.22s cubic-bezier(0.4, 0, 1, 1) forwards; }
+        @keyframes coinCardIn { from { opacity: 0; transform: translateY(28px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        @keyframes coinCardOut { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(28px) scale(0.95); } }
 
 
         .animate-brand-kinetic {
@@ -1191,21 +1195,30 @@
                 return () => card.removeEventListener('mousedown', onMouseDown);
             }, []);
 
+            const [isClosing, setIsClosing] = React.useState(false);
+            const handleClose = React.useCallback(() => {
+                setIsClosing(true);
+                setTimeout(onClose, 210);
+            }, [onClose]);
+
             return (
-                <div className="fixed inset-0 z-[90] pointer-events-auto animate-overlay-in" onClick={onClose}>
+                <div className="fixed inset-0 z-[90] pointer-events-auto" onClick={handleClose}>
                     <div ref={cardRef}
-                        className="absolute left-1/2 flex flex-col gap-3 px-6 py-4 rounded-3xl select-none"
+                        className="absolute left-1/2"
                         style={{
                             top: isDesktop ? '20vh' : 'auto',
                             bottom: isDesktop ? 'auto' : '1rem',
                             width: 'min(calc(100vw - 2rem), 42rem)',
-                            backgroundColor: isNightMode ? 'rgba(20,20,20,0.97)' : 'rgba(252,252,245,0.99)',
-                            border: '1px solid ' + colors.border,
-                            boxShadow: '0 -4px 40px rgba(0,0,0,0.1)',
                             transform: `translateX(-50%) translate(${offset.x}px, ${offset.y}px)`,
                             cursor: 'grab'
                         }}
                         onClick={e => e.stopPropagation()}>
+                    <div className={`flex flex-col gap-3 px-6 py-4 rounded-3xl select-none ${isClosing ? 'animate-coin-card-out' : 'animate-coin-card-in'}`}
+                        style={{
+                            backgroundColor: isNightMode ? 'rgba(20,20,20,0.97)' : 'rgba(252,252,245,0.99)',
+                            border: '1px solid ' + colors.border,
+                            boxShadow: '0 -4px 40px rgba(0,0,0,0.1)',
+                        }}>
 
                         {/* Drag handle — desktop only */}
                         <div className="hidden sm:flex justify-center -mt-1">
@@ -1238,6 +1251,7 @@
                             </div>
                             <span className="text-[9px] font-black uppercase tracking-widest opacity-40 whitespace-nowrap" style={{ color: colors.text }}>{sliderLabelRight}</span>
                         </div>
+                    </div>
                     </div>
                 </div>
             );
