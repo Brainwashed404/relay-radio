@@ -822,32 +822,6 @@
                 return () => audio.removeEventListener('pause', handleInterruption);
             }, [isPlaying]);
 
-            // Stall/error recovery — auto-reconnect if stream drops mid-playback
-            React.useEffect(() => {
-                const audioEl = audioTagRef.current;
-                if (!audioEl) return;
-                let stallTimer = null;
-                const handleStall = () => {
-                    if (intentionalPauseRef.current) return;
-                    stallTimer = setTimeout(() => {
-                        if (currentStationRef.current && !intentionalPauseRef.current) {
-                            connectToStream(currentStationRef.current.url, currentStationRef.current);
-                        }
-                    }, 4000);
-                };
-                const clearStall = () => { if (stallTimer) { clearTimeout(stallTimer); stallTimer = null; } };
-                audioEl.addEventListener('stalled', handleStall);
-                audioEl.addEventListener('error', handleStall);
-                audioEl.addEventListener('playing', clearStall);
-                audioEl.addEventListener('canplay', clearStall);
-                return () => {
-                    clearStall();
-                    audioEl.removeEventListener('stalled', handleStall);
-                    audioEl.removeEventListener('error', handleStall);
-                    audioEl.removeEventListener('playing', clearStall);
-                    audioEl.removeEventListener('canplay', clearStall);
-                };
-            }, [connectToStream]);
 
             const reconnect = useCallback(() => {
                 if (currentStationRef.current) {
@@ -2341,8 +2315,7 @@
                 const handleVisibilityChange = () => {
                     if (document.visibilityState === 'visible' && audio.hasStarted && audio.isPlaying && audio.audioTagRef.current) {
                         const audioEl = audio.audioTagRef.current;
-                        // readyState < 3 means buffer is empty / stream stale — reconnect fresh
-                        if (audioEl.paused || audioEl.readyState < 3) {
+                        if (audioEl.paused) {
                             audio.reconnect();
                         }
                         if ('wakeLock' in navigator) {
