@@ -2118,19 +2118,26 @@
             const calcLayout = () => {
                 const h = window.innerHeight, w = window.innerWidth;
                 const landscape = w > h && h < 600;
-                // Portrait padding: keep coin above footer with at least 20px margin.
-                // Content = 160px title + 32px gap + 300px coin = 492px.
-                // We want (h - pb) >= 492 + 40, so pb <= h - 532.
-                const pb = landscape ? '0' : `${Math.min(190, Math.max(60, h - 532))}px`;
-                return { landscape, pb };
+                if (landscape) return { landscape, pt: '0', pb: '0', coinSz: 200 };
+                // Portrait: pb reserves space for the footer so the coin (flex:1) sits
+                // perfectly centred between the station info and the footer buttons.
+                // Footer when playing ≈ h * 0.31. CoinSz smaller on short screens.
+                const pb = `${Math.min(264, Math.max(100, Math.round(h * 0.31)))}px`;
+                const pt = '1.25rem';
+                const coinSz = h < 720 ? 220 : 250;
+                return { landscape, pt, pb, coinSz };
             };
             const [isShortLandscape, setIsShortLandscape] = useState(() => calcLayout().landscape);
             const [mainPaddingBottom, setMainPaddingBottom] = useState(() => calcLayout().pb);
+            const [mainPaddingTop, setMainPaddingTop] = useState(() => calcLayout().pt);
+            const [portraitCoinSize, setPortraitCoinSize] = useState(() => calcLayout().coinSz);
             useEffect(() => {
                 const check = () => {
-                    const { landscape, pb } = calcLayout();
+                    const { landscape, pt, pb, coinSz } = calcLayout();
                     setIsShortLandscape(landscape);
                     setMainPaddingBottom(pb);
+                    setMainPaddingTop(pt);
+                    setPortraitCoinSize(coinSz);
                 };
                 window.addEventListener('resize', check);
                 return () => window.removeEventListener('resize', check);
@@ -2367,8 +2374,8 @@
 
                     <header className="w-full flex-shrink-0 z-10" style={{height:'env(safe-area-inset-top, 12px)'}} />
 
-                    <main className="flex-grow flex flex-col items-center justify-center w-full z-10 text-center px-4 sm:px-6"
-                          style={{paddingBottom: mainPaddingBottom}}>
+                    <main className={`flex-grow flex flex-col items-center w-full z-10 text-center px-4 sm:px-6 ${isShortLandscape ? 'justify-center' : ''}`}
+                          style={{paddingTop: mainPaddingTop, paddingBottom: mainPaddingBottom}}>
                         {/* Title — fixed-height container; both states absolutely centred inside */}
                         <div className="title-container" style={isShortLandscape ? {height:'5rem'} : {}}>
                             {/* RELAY RAD.IO (pre-start) */}
@@ -2398,8 +2405,9 @@
                         {/* Gap between title and coin */}
                         <div className="h-8 short:landscape:h-4 flex-shrink-0" />
 
-                        {/* Coin + arrows */}
-                        <div className="flex items-center justify-center w-full space-x-6 sm:space-x-12 md:space-x-20 flex-shrink-0">
+                        {/* Coin + arrows — flex:1 in portrait so coin centres between title and footer */}
+                        <div className="flex items-center justify-center w-full space-x-6 sm:space-x-12 md:space-x-20 flex-shrink-0"
+                             style={isShortLandscape ? {} : {flexGrow: 1}}>
                             <div className={`transition-all duration-700 ${audio.hasStarted ? 'opacity-20 scale-100' : 'opacity-0 scale-75 pointer-events-none'}`}>
                                 <button onClick={nav.handlePrevious} className="p-2 outline-none transition-all active:scale-90" style={{ color: colors.text }}><Icon name="skip-back" size="48" strokeWidth={0} fill="currentColor" /></button>
                             </div>
@@ -2417,7 +2425,7 @@
                                 genre={nav.currentStation?.genre}
                                 spinIntensity={spinIntensity}
                                 movementMode={movementMode}
-                                coinSize={isShortLandscape ? 200 : 250}
+                                coinSize={isShortLandscape ? 200 : portraitCoinSize}
                             />
 
                             <div className={`transition-all duration-700 ${audio.hasStarted ? 'opacity-20 scale-100' : 'opacity-0 scale-75 pointer-events-none'}`}>
