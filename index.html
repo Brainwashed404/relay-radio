@@ -594,17 +594,28 @@
 
 
         const MOOD_PALETTES = {
-            '🥺': { lb:'#f5f0ff', db:'#0d0014', lr:'#7b4fa8', dr:'#7b4fa8', ly:'#c8a8f0', dy:'#c8a8f0', lc:'#111111', dc:'#111111' },
-            '🤪': { lb:'#fffbf0', db:'#100800', lr:'#e05818', dr:'#e05818', ly:'#f0c820', dy:'#f0c820', lc:'#111111', dc:'#111111' },
-            '🤯': { lb:'#f0fff8', db:'#000e04', lr:'#00b870', dr:'#00b870', ly:'#f03888', dy:'#f03888', lc:'#111111', dc:'#111111' },
-            '😴': { lb:'#f7f5fc', db:'#0a0814', lr:'#9080c0', dr:'#7060a8', ly:'#c8b8e8', dy:'#b0a0d8', lc:'#111111', dc:'#111111' },
-            '😎': { lb:'#f5f7f2', db:'#000000', lr:'#7ec2ad', dr:'#7ec2ad', ly:'#e5b84a', dy:'#e5b84a', lc:'#111111', dc:'#111111' },
-            '🧐': { lb:'#faf8f2', db:'#0e0c04', lr:'#9a7a40', dr:'#c49a50', ly:'#d4b870', dy:'#8a6a30', lc:'#111111', dc:'#111111' },
+            // Tender — blush rose, tearful softness
+            '🥺': { lb:'#FFF5F7', db:'#200810', lr:'#E888A0', dr:'#CC6080', ly:'#F5D0D8', dy:'#D09098', lc:'#111111', dc:'#111111' },
+            // Pumped — Teutonic: imperial red + gold on near-black night
+            '🤪': { lb:'#FFF8F0', db:'#1A0000', lr:'#CC0000', dr:'#FF2020', ly:'#FFD700', dy:'#FFD700', lc:'#111111', dc:'#FFD700' },
+            // Weird — psychedelic: acid green outer + hot magenta middle
+            '🤯': { lb:'#F8FFF8', db:'#050014', lr:'#00CC33', dr:'#00FF41', ly:'#CC00CC', dy:'#FF00FF', lc:'#111111', dc:'#111111' },
+            // Sleepy — moonlit: silver-grey outer + deep slate middle
+            '😴': { lb:'#F4F4FA', db:'#080810', lr:'#8080A0', dr:'#6060A0', ly:'#C0C0D8', dy:'#A0A0C0', lc:'#111111', dc:'#111111' },
+            // Confident — sunglasses: jet black outer (frames) + gold middle; night flips outer to gold
+            '😎': { lb:'#F8F8F8', db:'#0A0A0A', lr:'#111111', dr:'#D4AF37', ly:'#D4AF37', dy:'#C09020', lc:'#111111', dc:'#D4AF37' },
+            // Curious — scholarly: warm parchment + antique brass + forest green
+            '🧐': { lb:'#F5F0E8', db:'#12100A', lr:'#B8952A', dr:'#D4AF37', ly:'#4A7C40', dy:'#3A6030', lc:'#111111', dc:'#111111' },
+            // Clear — sunshine: UNCHANGED
             '☀️': { lb:'#FFEFD5', db:'#0A192F', lr:'#FFDA03', dr:'#FFDA03', ly:'#87CEEB', dy:'#87CEEB', lc:'#FFFFFF', dc:'#FFFFFF' },
-            '☔️': { lb:'#f0f2f5', db:'#060a0c', lr:'#587888', dr:'#507080', ly:'#98b0b8', dy:'#88a0a8', lc:'#111111', dc:'#111111' },
-            '💪': { lb:'#fff5f2', db:'#0e0100', lr:'#c01818', dr:'#c01818', ly:'#e87050', dy:'#e87050', lc:'#111111', dc:'#111111' },
-            '🚗': { lb:'#f2f3f5', db:'#06080e', lr:'#505870', dr:'#6070a0', ly:'#98a8c0', dy:'#98a8c0', lc:'#111111', dc:'#111111' },
-            '🧑‍🍳': { lb:'#fdf5ee', db:'#100500', lr:'#b85020', dr:'#b85020', ly:'#e89858', dy:'#e89858', lc:'#111111', dc:'#111111' },
+            // Rainy — violet day, deep aubergine night
+            '☔️': { lb:'#EDE8F8', db:'#0E0820', lr:'#7B4FA8', dr:'#9060C0', ly:'#C0A0E0', dy:'#8060B0', lc:'#111111', dc:'#111111' },
+            // Exercise — athletic: vivid orange outer + power red middle
+            '💪': { lb:'#FFF5EE', db:'#0A0502', lr:'#FF6B00', dr:'#FF8C00', ly:'#CC2020', dy:'#FF3030', lc:'#111111', dc:'#111111' },
+            // Driving — British Racing Green + racing gold
+            '🚗': { lb:'#F2F5F2', db:'#050A05', lr:'#1A5C32', dr:'#2A7042', ly:'#D4AF37', dy:'#C09020', lc:'#111111', dc:'#111111' },
+            // Cooking — Italian tricolor: tomato red + herb green
+            '🧑‍🍳': { lb:'#FDFDF8', db:'#0A1208', lr:'#CC2020', dr:'#E03030', ly:'#4A8840', dy:'#3A7030', lc:'#111111', dc:'#111111' },
         };
 
         const getColors = (isNightMode, selectedMood) => {
