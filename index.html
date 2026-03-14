@@ -635,6 +635,7 @@
             const skipTimeoutRef = useRef(null);
             const silenceCheckRef = useRef(null);
             const intentionalPauseRef = useRef(false);
+            const currentStationRef = useRef(null);
 
 
             const fetchMetadata = useCallback(async (station) => {
@@ -673,6 +674,7 @@
 
             const connectToStream = useCallback((url, station) => {
                 if (!audioTagRef.current) return;
+                currentStationRef.current = station;
                 setIsLoading(true);
                 setIsOffAir(false);
                 if (skipTimeoutRef.current) clearTimeout(skipTimeoutRef.current);
@@ -803,13 +805,46 @@
                 return () => audio.removeEventListener('pause', handleInterruption);
             }, [isPlaying]);
 
+            // Stall/error recovery — auto-reconnect if stream drops mid-playback
+            React.useEffect(() => {
+                const audioEl = audioTagRef.current;
+                if (!audioEl) return;
+                let stallTimer = null;
+                const handleStall = () => {
+                    if (intentionalPauseRef.current) return;
+                    stallTimer = setTimeout(() => {
+                        if (currentStationRef.current && !intentionalPauseRef.current) {
+                            connectToStream(currentStationRef.current.url, currentStationRef.current);
+                        }
+                    }, 4000);
+                };
+                const clearStall = () => { if (stallTimer) { clearTimeout(stallTimer); stallTimer = null; } };
+                audioEl.addEventListener('stalled', handleStall);
+                audioEl.addEventListener('error', handleStall);
+                audioEl.addEventListener('playing', clearStall);
+                audioEl.addEventListener('canplay', clearStall);
+                return () => {
+                    clearStall();
+                    audioEl.removeEventListener('stalled', handleStall);
+                    audioEl.removeEventListener('error', handleStall);
+                    audioEl.removeEventListener('playing', clearStall);
+                    audioEl.removeEventListener('canplay', clearStall);
+                };
+            }, [connectToStream]);
+
+            const reconnect = useCallback(() => {
+                if (currentStationRef.current) {
+                    connectToStream(currentStationRef.current.url, currentStationRef.current);
+                }
+            }, [connectToStream]);
+
             return {
                 isPlaying, isMuted, hasStarted, isLoading, isOffAir,
                 displayedName, displayedDesc,
                 setDisplayedName,
                 audioTagRef,
                 initAudio, togglePlay, toggleMute,
-                startStationPlayback
+                startStationPlayback, reconnect
             };
         };
 
@@ -2256,7 +2291,10 @@
 
             useEffect(() => {
                 if (!('mediaSession' in navigator)) return;
-                navigator.mediaSession.setActionHandler('play', () => handleTogglePlay());
+                // play: always do a fresh reconnect — stale live streams can't be "resumed"
+                navigator.mediaSession.setActionHandler('play', () => {
+                    if (!audio.isPlaying) audio.reconnect();
+                });
                 navigator.mediaSession.setActionHandler('pause', () => handleTogglePlay());
                 navigator.mediaSession.setActionHandler('previoustrack', () => nav.handlePrevious());
                 navigator.mediaSession.setActionHandler('nexttrack', () => nav.handleNext());
@@ -2268,7 +2306,7 @@
                         navigator.mediaSession.setActionHandler('nexttrack', null);
                     } catch(e) {}
                 };
-            }, [handleTogglePlay, nav.handleNext, nav.handlePrevious]);
+            }, [handleTogglePlay, audio.reconnect, audio.isPlaying, nav.handleNext, nav.handlePrevious]);
 
 
             // Auto-skip on station timeout (5 second broken stream detection)
@@ -2284,10 +2322,10 @@
                 const handleVisibilityChange = () => {
                     if (document.visibilityState === 'visible' && audio.hasStarted && audio.isPlaying && audio.audioTagRef.current) {
                         const audioEl = audio.audioTagRef.current;
-                        if (audioEl.paused && !audio.isLoading) {
-                            audioEl.play().catch(() => {});
+                        // readyState < 3 means buffer is empty / stream stale — reconnect fresh
+                        if (audioEl.paused || audioEl.readyState < 3) {
+                            audio.reconnect();
                         }
-                        // Re-request wake lock
                         if ('wakeLock' in navigator) {
                             navigator.wakeLock.request('screen').catch(() => {});
                         }
@@ -2295,7 +2333,7 @@
                 };
                 document.addEventListener('visibilitychange', handleVisibilityChange);
                 return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
-            }, [audio.hasStarted, audio.isPlaying, audio.isLoading]);
+            }, [audio.hasStarted, audio.isPlaying, audio.reconnect]);
 
 
 
