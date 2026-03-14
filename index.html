@@ -594,28 +594,28 @@
 
 
         const MOOD_PALETTES = {
-            // Tender — blush rose, tearful softness
-            '🥺': { lb:'#FFF5F7', db:'#200810', lr:'#E888A0', dr:'#CC6080', ly:'#F5D0D8', dy:'#D09098', lc:'#111111', dc:'#111111' },
-            // Pumped — Teutonic: imperial red + gold on near-black night
-            '🤪': { lb:'#FFF8F0', db:'#1A0000', lr:'#CC0000', dr:'#FF2020', ly:'#FFD700', dy:'#FFD700', lc:'#111111', dc:'#FFD700' },
-            // Weird — psychedelic: acid green outer + hot magenta middle
-            '🤯': { lb:'#F8FFF8', db:'#050014', lr:'#00CC33', dr:'#00FF41', ly:'#CC00CC', dy:'#FF00FF', lc:'#111111', dc:'#111111' },
-            // Sleepy — moonlit: silver-grey outer + deep slate middle
+            // Tender — purple gradient: eggplant to lavender
+            '🥺': { lb:'#F0E4F8', db:'#2A0840', lr:'#7030A0', dr:'#9050C0', ly:'#C090E0', dy:'#A878D0', lc:'#3A1060', dc:'#C090E0' },
+            // Pumped — stark grey + electric mint teal
+            '🤪': { lb:'#F2F2F2', db:'#121212', lr:'#00D4A8', dr:'#00E8BC', ly:'#888888', dy:'#AAAAAA', lc:'#111111', dc:'#EEEEEE' },
+            // Weird — bubblegum pink + hot pink + mint green + baby blue
+            '🤯': { lb:'#FFD0E0', db:'#1A0010', lr:'#FF4090', dr:'#FF30A0', ly:'#70E8A0', dy:'#50D888', lc:'#90C8F0', dc:'#60A0D8' },
+            // Sleepy — UNCHANGED
             '😴': { lb:'#F4F4FA', db:'#080810', lr:'#8080A0', dr:'#6060A0', ly:'#C0C0D8', dy:'#A0A0C0', lc:'#111111', dc:'#111111' },
-            // Confident — sunglasses: jet black outer (frames) + gold middle; night flips outer to gold
-            '😎': { lb:'#F8F8F8', db:'#0A0A0A', lr:'#111111', dr:'#D4AF37', ly:'#D4AF37', dy:'#C09020', lc:'#111111', dc:'#D4AF37' },
-            // Curious — scholarly: warm parchment + antique brass + forest green
-            '🧐': { lb:'#F5F0E8', db:'#12100A', lr:'#B8952A', dr:'#D4AF37', ly:'#4A7C40', dy:'#3A6030', lc:'#111111', dc:'#111111' },
+            // Confident — dark teal bg + teal outer + gold middle + coral centre
+            '😎': { lb:'#F0F7F5', db:'#1B3A48', lr:'#4A8B78', dr:'#5AA090', ly:'#D4A840', dy:'#C09030', lc:'#E8907A', dc:'#D07860' },
+            // Curious — near-black + earthy browns + caramel
+            '🧐': { lb:'#F5EED8', db:'#0A0800', lr:'#7A5828', dr:'#9A7840', ly:'#C49050', dy:'#A87840', lc:'#3A2808', dc:'#7A5828' },
             // Clear — sunshine: UNCHANGED
             '☀️': { lb:'#FFEFD5', db:'#0A192F', lr:'#FFDA03', dr:'#FFDA03', ly:'#87CEEB', dy:'#87CEEB', lc:'#FFFFFF', dc:'#FFFFFF' },
-            // Rainy — violet day, deep aubergine night
-            '☔️': { lb:'#EDE8F8', db:'#0E0820', lr:'#7B4FA8', dr:'#9060C0', ly:'#C0A0E0', dy:'#8060B0', lc:'#111111', dc:'#111111' },
-            // Exercise — athletic: vivid orange outer + power red middle
-            '💪': { lb:'#FFF5EE', db:'#0A0502', lr:'#FF6B00', dr:'#FF8C00', ly:'#CC2020', dy:'#FF3030', lc:'#111111', dc:'#111111' },
-            // Driving — British Racing Green + racing gold
-            '🚗': { lb:'#F2F5F2', db:'#050A05', lr:'#1A5C32', dr:'#2A7042', ly:'#D4AF37', dy:'#C09020', lc:'#111111', dc:'#111111' },
-            // Cooking — Italian tricolor: tomato red + herb green
-            '🧑‍🍳': { lb:'#FDFDF8', db:'#0A1208', lr:'#CC2020', dr:'#E03030', ly:'#4A8840', dy:'#3A7030', lc:'#111111', dc:'#111111' },
+            // Rainy — desaturated grey-blue monotone
+            '☔️': { lb:'#EEF0F4', db:'#151820', lr:'#9098A8', dr:'#A0A8B8', ly:'#505868', dy:'#606878', lc:'#282E38', dc:'#C0C4CC' },
+            // Exercise — pale lime bg + orange outer + vivid red middle + yellow centre
+            '💪': { lb:'#EEFAC0', db:'#180800', lr:'#F09830', dr:'#E88820', ly:'#E83018', dy:'#FF3820', lc:'#F5E850', dc:'#E0C830' },
+            // Driving — cream bg + chartreuse outer + pale yellow middle + dark wine centre
+            '🚗': { lb:'#F5F2DC', db:'#280810', lr:'#B0C828', dr:'#98B020', ly:'#F0E888', dy:'#D8D060', lc:'#901828', dc:'#700818' },
+            // Cooking — all greens: forest to lime
+            '🧑‍🍳': { lb:'#F4FDF0', db:'#1A2810', lr:'#2E5E1E', dr:'#3A7025', ly:'#5A9A38', dy:'#488030', lc:'#9AD050', dc:'#78A838' },
         };
 
         const getColors = (isNightMode, selectedMood) => {
