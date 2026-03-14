@@ -565,12 +565,12 @@
 
 
         const getTitleFontSize = (name) => {
-            if (!name) return 'text-5xl sm:text-8xl lg:text-[10rem] xl:text-[12rem]';
+            if (!name) return 'text-5xl sm:text-8xl lg:text-9xl xl:text-[8rem]';
             const len = name.length;
-            if (len > 18) return 'text-4xl sm:text-5xl lg:text-6xl xl:text-7xl';
-            if (len >= 12) return 'text-4xl sm:text-6xl lg:text-7xl xl:text-8xl';
-            if (len > 7)  return 'text-5xl sm:text-7xl lg:text-9xl xl:text-[10rem]';
-            return 'text-5xl sm:text-8xl lg:text-[10rem] xl:text-[12rem]';
+            if (len > 18) return 'text-4xl sm:text-5xl lg:text-5xl xl:text-6xl';
+            if (len >= 12) return 'text-4xl sm:text-6xl lg:text-6xl xl:text-7xl';
+            if (len > 7)  return 'text-5xl sm:text-7xl lg:text-8xl xl:text-9xl';
+            return 'text-5xl sm:text-8xl lg:text-9xl xl:text-[8rem]';
         };
 
 
@@ -2121,7 +2121,7 @@
                 if (landscape) return { landscape, desktop: false, pt: '0', pb: '0', coinSz: 200, titleH: '5rem' };
                 // Desktop: justify-center on main, no padding offset needed — coin sits at true centre
                 const desktop = !landscape && w >= 1024;
-                if (desktop) return { landscape: false, desktop: true, pt: '0', pb: '0', coinSz: 300, titleH: '8rem' };
+                if (desktop) return { landscape: false, desktop: true, pt: '0', pb: '5rem', coinSz: 300, titleH: '8rem' };
                 // Portrait mobile: pb reserves space for the footer so the coin (flex:1) sits
                 // perfectly centred between the station info and the footer buttons.
                 // Footer when playing ≈ h * 0.31. CoinSz smaller on short screens.
@@ -2387,7 +2387,7 @@
                         <div className="title-container" style={{height: titleHeight}}>
                             {/* RELAY RAD.IO (pre-start) */}
                             <div className={`absolute inset-0 flex flex-col items-center justify-center transition-all duration-1000 ease-in-out short:landscape:px-16 ${audio.hasStarted ? 'opacity-0 scale-95 blur-xl pointer-events-none' : 'opacity-100 scale-100 blur-0'}`}>
-                                <h2 className="font-young-serif text-7xl sm:text-7xl md:text-8xl lg:text-[10rem] xl:text-[12rem] short:landscape:text-5xl font-black tracking-tighter uppercase leading-[0.85] sm:leading-none" style={{ color: colors.text }}>
+                                <h2 className="font-young-serif text-7xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[8rem] short:landscape:text-5xl font-black tracking-tighter uppercase leading-[0.85] sm:leading-none" style={{ color: colors.text }}>
                                     <span className="block sm:inline">RELAY</span>{' '}
                                     <span className="block sm:inline">RAD.<span style={{ color: colors.yellow }}>I</span><span style={{ color: colors.teal }}>O</span></span>
                                 </h2>
