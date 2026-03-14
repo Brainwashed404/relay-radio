@@ -2121,7 +2121,7 @@
                 if (landscape) return { landscape, desktop: false, pt: '0', pb: '0', coinSz: 200, titleH: '5rem' };
                 // Desktop: justify-center on main, no padding offset needed — coin sits at true centre
                 const desktop = !landscape && w >= 1024;
-                if (desktop) return { landscape: false, desktop: true, pt: '0', pb: '5rem', coinSz: 300, titleH: '8rem' };
+                if (desktop) return { landscape: false, desktop: true, pt: '0', pb: '9rem', coinSz: 300, titleH: '8rem' };
                 // Portrait mobile: pb reserves space for the footer so the coin (flex:1) sits
                 // perfectly centred between the station info and the footer buttons.
                 // Footer when playing ≈ h * 0.31. CoinSz smaller on short screens.
