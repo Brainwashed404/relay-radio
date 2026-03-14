@@ -568,7 +568,7 @@
             if (!name) return 'text-5xl sm:text-8xl';
             const len = name.length;
             if (len > 18) return 'text-4xl sm:text-5xl';
-            if (len > 12) return 'text-4xl sm:text-6xl';
+            if (len >= 12) return 'text-4xl sm:text-6xl';
             if (len > 7)  return 'text-5xl sm:text-7xl';
             return 'text-5xl sm:text-8xl';
         };
@@ -2121,7 +2121,7 @@
                 // Portrait padding: keep coin above footer with at least 20px margin.
                 // Content = 160px title + 32px gap + 300px coin = 492px.
                 // We want (h - pb) >= 492 + 40, so pb <= h - 532.
-                const pb = landscape ? '0' : `${Math.min(260, Math.max(60, h - 532))}px`;
+                const pb = landscape ? '0' : `${Math.min(190, Math.max(60, h - 532))}px`;
                 return { landscape, pb };
             };
             const [isShortLandscape, setIsShortLandscape] = useState(() => calcLayout().landscape);
