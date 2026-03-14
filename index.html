@@ -1072,7 +1072,7 @@
 
 
         const CloseButton = ({ onClick, colors }) => (
-            <button onClick={onClick} className="absolute w-12 h-12 rounded-full transition-transform hover:rotate-90 active:scale-95 z-[110] outline-none shadow-lg overflow-hidden flex items-center justify-center" style={{ backgroundColor: colors.teal, top: 'clamp(1rem, 4vw, 3.5rem)', right: 'clamp(1rem, 4vw, 3.5rem)' }}>
+            <button onClick={onClick} className="absolute w-12 h-12 rounded-full transition-transform hover:rotate-90 active:scale-95 z-[110] outline-none shadow-lg overflow-hidden flex items-center justify-center" style={{ backgroundColor: colors.teal, top: 'calc(env(safe-area-inset-top, 0px) + clamp(1rem, 4vw, 3.5rem))', right: 'clamp(1rem, 4vw, 3.5rem)' }}>
                 <div className="absolute inset-[9%] rounded-full shadow-inner" style={{ backgroundColor: colors.yellow }} />
                 <div className="absolute inset-[22.5%] rounded-full flex items-center justify-center bg-black">
                     <Icon name="x" size="20" className="text-[#fcfdf2]" strokeWidth={3} />
