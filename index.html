@@ -724,6 +724,8 @@
                         // Reclaim audio focus from other apps (Spotify fix)
                         if ('mediaSession' in navigator) {
                             navigator.mediaSession.playbackState = 'playing';
+                            // Mark as live stream — suppresses the 0–9s scrubber on iOS lock screen
+                            try { navigator.mediaSession.setPositionState({ duration: Infinity, playbackRate: 1, position: 0 }); } catch(e) {}
                         }
                     })
                     .catch(err => {
