@@ -565,12 +565,12 @@
 
 
         const getTitleFontSize = (name) => {
-            if (!name) return 'text-5xl sm:text-8xl';
+            if (!name) return 'text-5xl sm:text-8xl lg:text-[10rem] xl:text-[12rem]';
             const len = name.length;
-            if (len > 18) return 'text-4xl sm:text-5xl';
-            if (len >= 12) return 'text-4xl sm:text-6xl';
-            if (len > 7)  return 'text-5xl sm:text-7xl';
-            return 'text-5xl sm:text-8xl';
+            if (len > 18) return 'text-4xl sm:text-5xl lg:text-6xl xl:text-7xl';
+            if (len >= 12) return 'text-4xl sm:text-6xl lg:text-7xl xl:text-8xl';
+            if (len > 7)  return 'text-5xl sm:text-7xl lg:text-9xl xl:text-[10rem]';
+            return 'text-5xl sm:text-8xl lg:text-[10rem] xl:text-[12rem]';
         };
 
 
@@ -2118,26 +2118,33 @@
             const calcLayout = () => {
                 const h = window.innerHeight, w = window.innerWidth;
                 const landscape = w > h && h < 600;
-                if (landscape) return { landscape, pt: '0', pb: '0', coinSz: 200 };
-                // Portrait: pb reserves space for the footer so the coin (flex:1) sits
+                if (landscape) return { landscape, desktop: false, pt: '0', pb: '0', coinSz: 200, titleH: '5rem' };
+                // Desktop: justify-center on main, no padding offset needed — coin sits at true centre
+                const desktop = !landscape && w >= 1024;
+                if (desktop) return { landscape: false, desktop: true, pt: '0', pb: '0', coinSz: 300, titleH: '8rem' };
+                // Portrait mobile: pb reserves space for the footer so the coin (flex:1) sits
                 // perfectly centred between the station info and the footer buttons.
                 // Footer when playing ≈ h * 0.31. CoinSz smaller on short screens.
                 const pb = `${Math.min(264, Math.max(100, Math.round(h * 0.31)))}px`;
                 const pt = '3.5rem';
                 const coinSz = h < 720 ? 220 : 250;
-                return { landscape, pt, pb, coinSz };
+                return { landscape, desktop: false, pt, pb, coinSz, titleH: '5rem' };
             };
             const [isShortLandscape, setIsShortLandscape] = useState(() => calcLayout().landscape);
+            const [isDesktop, setIsDesktop] = useState(() => calcLayout().desktop);
             const [mainPaddingBottom, setMainPaddingBottom] = useState(() => calcLayout().pb);
             const [mainPaddingTop, setMainPaddingTop] = useState(() => calcLayout().pt);
             const [portraitCoinSize, setPortraitCoinSize] = useState(() => calcLayout().coinSz);
+            const [titleHeight, setTitleHeight] = useState(() => calcLayout().titleH);
             useEffect(() => {
                 const check = () => {
-                    const { landscape, pt, pb, coinSz } = calcLayout();
+                    const { landscape, desktop, pt, pb, coinSz, titleH } = calcLayout();
                     setIsShortLandscape(landscape);
+                    setIsDesktop(desktop);
                     setMainPaddingBottom(pb);
                     setMainPaddingTop(pt);
                     setPortraitCoinSize(coinSz);
+                    setTitleHeight(titleH);
                 };
                 window.addEventListener('resize', check);
                 return () => window.removeEventListener('resize', check);
@@ -2374,13 +2381,13 @@
 
                     <header className="w-full flex-shrink-0 z-10" style={{height:'env(safe-area-inset-top, 12px)'}} />
 
-                    <main className={`flex-grow flex flex-col items-center w-full z-10 text-center px-4 sm:px-6 ${isShortLandscape ? 'justify-center' : ''}`}
+                    <main className={`flex-grow flex flex-col items-center w-full z-10 text-center px-4 sm:px-6 ${isShortLandscape || isDesktop ? 'justify-center' : ''}`}
                           style={{paddingTop: mainPaddingTop, paddingBottom: mainPaddingBottom}}>
                         {/* Title — fixed-height container; both states absolutely centred inside */}
-                        <div className="title-container">
+                        <div className="title-container" style={{height: titleHeight}}>
                             {/* RELAY RAD.IO (pre-start) */}
                             <div className={`absolute inset-0 flex flex-col items-center justify-center transition-all duration-1000 ease-in-out short:landscape:px-16 ${audio.hasStarted ? 'opacity-0 scale-95 blur-xl pointer-events-none' : 'opacity-100 scale-100 blur-0'}`}>
-                                <h2 className="font-young-serif text-7xl sm:text-7xl md:text-8xl short:landscape:text-5xl font-black tracking-tighter uppercase leading-[0.85] sm:leading-none" style={{ color: colors.text }}>
+                                <h2 className="font-young-serif text-7xl sm:text-7xl md:text-8xl lg:text-[10rem] xl:text-[12rem] short:landscape:text-5xl font-black tracking-tighter uppercase leading-[0.85] sm:leading-none" style={{ color: colors.text }}>
                                     <span className="block sm:inline">RELAY</span>{' '}
                                     <span className="block sm:inline">RAD.<span style={{ color: colors.yellow }}>I</span><span style={{ color: colors.teal }}>O</span></span>
                                 </h2>
@@ -2402,12 +2409,12 @@
                             </div>
                         </div>
 
-                        {/* Gap between title and coin — 3rem portrait, 1rem landscape */}
-                        <div className="flex-shrink-0" style={{height: isShortLandscape ? '1rem' : '3rem'}} />
+                        {/* Gap between title and coin — 4rem desktop, 3rem portrait, 1rem landscape */}
+                        <div className="flex-shrink-0" style={{height: isShortLandscape ? '1rem' : isDesktop ? '4rem' : '3rem'}} />
 
                         {/* Coin + arrows — flex:1 in portrait so coin centres between title and footer */}
                         <div className="flex items-center justify-center w-full space-x-6 sm:space-x-12 md:space-x-20 flex-shrink-0"
-                             style={isShortLandscape ? {} : {flexGrow: 1}}>
+                             style={isShortLandscape || isDesktop ? {} : {flexGrow: 1}}>
                             <div className={`transition-all duration-700 ${audio.hasStarted ? 'opacity-20 scale-100' : 'opacity-0 scale-75 pointer-events-none'}`}>
                                 <button onClick={nav.handlePrevious} className="p-2 outline-none transition-all active:scale-90" style={{ color: colors.text }}><Icon name="skip-back" size="48" strokeWidth={0} fill="currentColor" /></button>
                             </div>
@@ -2425,7 +2432,7 @@
                                 genre={nav.currentStation?.genre}
                                 spinIntensity={spinIntensity}
                                 movementMode={movementMode}
-                                coinSize={isShortLandscape ? 200 : portraitCoinSize}
+                                coinSize={isShortLandscape ? 200 : isDesktop ? 300 : portraitCoinSize}
                             />
 
                             <div className={`transition-all duration-700 ${audio.hasStarted ? 'opacity-20 scale-100' : 'opacity-0 scale-75 pointer-events-none'}`}>
