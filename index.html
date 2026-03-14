@@ -594,17 +594,17 @@
 
 
         const MOOD_PALETTES = {
-            '🥺': { lb:'#FDFAEF', db:'#2D1B2E', lr:'#FFB6C1', dr:'#FFB6C1', ly:'#89CFF0', dy:'#89CFF0', lc:'#F5F5DC', dc:'#F5F5DC' },
-            '🤪': { lb:'#FFFACD', db:'#1A0B2E', lr:'#FFA500', dr:'#FFA500', ly:'#32CD32', dy:'#32CD32', lc:'#FF00FF', dc:'#FF00FF' },
-            '🤯': { lb:'#F4F1EE', db:'#050505', lr:'#FF4500', dr:'#FF4500', ly:'#FFFF00', dy:'#FFFF00', lc:'#36454F', dc:'#596A7A' },
-            '😴': { lb:'#F0F8FF', db:'#121826', lr:'#E6E6FA', dr:'#E6E6FA', ly:'#191970', dy:'#191970', lc:'#D3D3D3', dc:'#D3D3D3' },
-            '😎': { lb:'#F5F5DC', db:'#1E2328', lr:'#0B0B0B', dr:'#E0E0E0', ly:'#FFD700', dy:'#FFD700', lc:'#A5F2F3', dc:'#A5F2F3' },
-            '🧐': { lb:'#E8EBE4', db:'#1C140F', lr:'#F1E9D2', dr:'#F1E9D2', ly:'#228B22', dy:'#228B22', lc:'#C04000', dc:'#C04000' },
+            '🥺': { lb:'#f5f0ff', db:'#0d0014', lr:'#7b4fa8', dr:'#7b4fa8', ly:'#c8a8f0', dy:'#c8a8f0', lc:'#111111', dc:'#111111' },
+            '🤪': { lb:'#fffbf0', db:'#100800', lr:'#e05818', dr:'#e05818', ly:'#f0c820', dy:'#f0c820', lc:'#111111', dc:'#111111' },
+            '🤯': { lb:'#f0fff8', db:'#000e04', lr:'#00b870', dr:'#00b870', ly:'#f03888', dy:'#f03888', lc:'#111111', dc:'#111111' },
+            '😴': { lb:'#f7f5fc', db:'#0a0814', lr:'#9080c0', dr:'#7060a8', ly:'#c8b8e8', dy:'#b0a0d8', lc:'#111111', dc:'#111111' },
+            '😎': { lb:'#f5f7f2', db:'#000000', lr:'#7ec2ad', dr:'#7ec2ad', ly:'#e5b84a', dy:'#e5b84a', lc:'#111111', dc:'#111111' },
+            '🧐': { lb:'#faf8f2', db:'#0e0c04', lr:'#9a7a40', dr:'#c49a50', ly:'#d4b870', dy:'#8a6a30', lc:'#111111', dc:'#111111' },
             '☀️': { lb:'#FFEFD5', db:'#0A192F', lr:'#FFDA03', dr:'#FFDA03', ly:'#87CEEB', dy:'#87CEEB', lc:'#FFFFFF', dc:'#FFFFFF' },
-            '☔️': { lb:'#FFE4E1', db:'#10141D', lr:'#708090', dr:'#708090', ly:'#5DADE2', dy:'#5DADE2', lc:'#8A2BE2', dc:'#8A2BE2' },
-            '💪': { lb:'#FFF5EE', db:'#2A2D34', lr:'#DC143C', dr:'#DC143C', ly:'#B0C4DE', dy:'#B0C4DE', lc:'#CC5500', dc:'#CC5500' },
-            '🚗': { lb:'#F8F9FA', db:'#111111', lr:'#FF2400', dr:'#FF2400', ly:'#505050', dy:'#505050', lc:'#C0C0C0', dc:'#C0C0C0' },
-            '🧑‍🍳': { lb:'#FFFDD0', db:'#1A2421', lr:'#FBCEB1', dr:'#FBCEB1', ly:'#8A9A5B', dy:'#8A9A5B', lc:'#F5F5F5', dc:'#F5F5F5' },
+            '☔️': { lb:'#f0f2f5', db:'#060a0c', lr:'#587888', dr:'#507080', ly:'#98b0b8', dy:'#88a0a8', lc:'#111111', dc:'#111111' },
+            '💪': { lb:'#fff5f2', db:'#0e0100', lr:'#c01818', dr:'#c01818', ly:'#e87050', dy:'#e87050', lc:'#111111', dc:'#111111' },
+            '🚗': { lb:'#f2f3f5', db:'#06080e', lr:'#505870', dr:'#6070a0', ly:'#98a8c0', dy:'#98a8c0', lc:'#111111', dc:'#111111' },
+            '🧑‍🍳': { lb:'#fdf5ee', db:'#100500', lr:'#b85020', dr:'#b85020', ly:'#e89858', dy:'#e89858', lc:'#111111', dc:'#111111' },
         };
 
         const getColors = (isNightMode, selectedMood) => {
@@ -612,7 +612,7 @@
             const bg         = p ? (isNightMode ? p.db : p.lb) : (isNightMode ? '#000000' : '#fcfdf2');
             const teal       = p ? (isNightMode ? p.dr : p.lr) : (isNightMode ? '#4a8b78' : '#7ec2ad');
             const yellow     = p ? (isNightMode ? p.dy : p.ly) : (isNightMode ? '#bfa15f' : '#e5b84a');
-            const coinCenter = p ? (isNightMode ? p.dc : p.lc) : '#111111';
+            const coinCenter = p ? (isNightMode ? (p.dc || '#111111') : (p.lc || '#111111')) : '#111111';
             return isNightMode ? {
                 bg,
                 text: '#fcfdf2',
