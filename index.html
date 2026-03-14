@@ -29,6 +29,17 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="RELAY RAD.IO">
     <meta name="theme-color" content="#fcfdf2">
+    <script>
+        // Set background before first render to avoid flash when night mode is persisted
+        (function(){
+            var night = localStorage.getItem('relayradio-nightmode') === 'true';
+            var bg = night ? '#000000' : '#fcfdf2';
+            document.documentElement.style.setProperty('--bg', bg);
+            document.documentElement.style.backgroundColor = bg;
+            var meta = document.querySelector('meta[name="theme-color"]');
+            if (meta) meta.setAttribute('content', bg);
+        })();
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
     tailwind.config = {
@@ -56,6 +67,9 @@
         }
 
 
+        html, body {
+            transition: background-color 500ms;
+        }
         body {
             font-family: 'Bitter', serif;
             background-color: var(--bg);
@@ -2189,8 +2203,10 @@
 
             useEffect(() => {
                 const bg = isNightMode ? '#000000' : '#fcfdf2';
-                document.body.style.backgroundColor = bg;
+                document.documentElement.style.setProperty('--bg', bg);
                 document.documentElement.style.backgroundColor = bg;
+                const meta = document.querySelector('meta[name="theme-color"]');
+                if (meta) meta.setAttribute('content', bg);
             }, [isNightMode]);
 
             const [spinIntensity, setSpinIntensity] = useState(0);
