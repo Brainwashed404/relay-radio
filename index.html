@@ -28,7 +28,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="RELAY RAD.IO">
-    <meta name="theme-color" content="#000000">
+    <meta name="theme-color" content="#fcfdf2">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
     tailwind.config = {
@@ -2150,6 +2150,12 @@
                 return () => window.removeEventListener('resize', check);
             }, []);
 
+            useEffect(() => {
+                const bg = isNightMode ? '#000000' : '#fcfdf2';
+                document.body.style.backgroundColor = bg;
+                document.documentElement.style.backgroundColor = bg;
+            }, [isNightMode]);
+
             const [spinIntensity, setSpinIntensity] = useState(0);
             const [movementMode, setMovementMode] = useState('float'); // 'float', 'boom', 'ripple', 'orbit', 'bloom', 'balloon'
             const [isCoinSliderOpen, setIsCoinSliderOpen] = useState(false);
@@ -2400,12 +2406,13 @@
                                 <div className={`mt-2 short:landscape:mt-1 transition-all duration-1000 ${audio.isLoading ? 'opacity-0 blur-md translate-y-2' : 'opacity-40 translate-y-0'}`}>
                                     <p className="text-[10px] sm:text-xs short:landscape:text-[8px] uppercase tracking-widest font-bold max-w-full" style={{ color: colors.text }}>{audio.displayedDesc}</p>
                                 </div>
-                                <div className={`mt-3 short:landscape:mt-1 transition-all duration-500 ${audio.isLoading ? 'opacity-60 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'}`}>
-                                    <p className="text-[10px] sm:text-xs short:landscape:text-[8px] uppercase tracking-[0.3em] font-bold animate-pulse" style={{ color: colors.teal }}>Tuning in…</p>
-                                </div>
-                                <div className={`mt-3 short:landscape:mt-1 transition-all duration-500 ${!audio.isLoading && audio.isOffAir ? 'opacity-60 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'}`}>
-                                    <p className="text-[10px] sm:text-xs short:landscape:text-[8px] uppercase tracking-[0.3em] font-bold" style={{ color: colors.yellow }}>Off Air – Back Soon</p>
-                                </div>
+                            </div>
+                            {/* Tuning + OffAir — absolutely positioned so they don't push title/desc out of centre */}
+                            <div className={`absolute bottom-0 left-0 right-0 flex justify-center transition-all duration-500 ${audio.isLoading ? 'opacity-60' : 'opacity-0 pointer-events-none'}`}>
+                                <p className="text-[10px] sm:text-xs short:landscape:text-[8px] uppercase tracking-[0.3em] font-bold animate-pulse" style={{ color: colors.teal }}>Tuning in…</p>
+                            </div>
+                            <div className={`absolute bottom-0 left-0 right-0 flex justify-center transition-all duration-500 ${!audio.isLoading && audio.isOffAir ? 'opacity-60' : 'opacity-0 pointer-events-none'}`}>
+                                <p className="text-[10px] sm:text-xs short:landscape:text-[8px] uppercase tracking-[0.3em] font-bold" style={{ color: colors.yellow }}>Off Air – Back Soon</p>
                             </div>
                         </div>
 
