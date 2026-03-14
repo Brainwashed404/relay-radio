@@ -569,7 +569,7 @@
 
         const getFilteredStations = (selectedGenre, selectedMood, favourites = []) => {
             return SORTED_STATIONS.filter(s => {
-                if (s.genre === "Legends") return selectedGenre === "Legends";
+                if (s.genre === "Legends") return selectedGenre === "Legends" || (selectedMood === "❤️" && favourites.includes(s.name));
                 if (selectedGenre === "Legends") return false;
                 const genreMatch = selectedGenre === "All" || s.genre === selectedGenre;
                 const moodMatch = selectedMood === "All" ||
