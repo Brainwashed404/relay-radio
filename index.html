@@ -593,63 +593,54 @@
         };
 
 
+        // Each entry: lb/db = solid start (top), lb2/db2 = gradient end (bottom) — omit for solid bg
         const MOOD_PALETTES = {
-            // Tender — purple gradient: eggplant to lavender
-            '🥺': { lb:'#F0E4F8', db:'#2A0840', lr:'#7030A0', dr:'#9050C0', ly:'#C090E0', dy:'#A878D0', lc:'#3A1060', dc:'#C090E0' },
-            // Pumped — stark grey + electric mint teal
-            '🤪': { lb:'#F2F2F2', db:'#121212', lr:'#00D4A8', dr:'#00E8BC', ly:'#888888', dy:'#AAAAAA', lc:'#111111', dc:'#EEEEEE' },
-            // Weird — bubblegum pink + hot pink + mint green + baby blue
-            '🤯': { lb:'#FFD0E0', db:'#1A0010', lr:'#FF4090', dr:'#FF30A0', ly:'#70E8A0', dy:'#50D888', lc:'#90C8F0', dc:'#60A0D8' },
-            // Sleepy — UNCHANGED
-            '😴': { lb:'#F4F4FA', db:'#080810', lr:'#8080A0', dr:'#6060A0', ly:'#C0C0D8', dy:'#A0A0C0', lc:'#111111', dc:'#111111' },
-            // Confident — dark teal bg + teal outer + gold middle + coral centre
-            '😎': { lb:'#F0F7F5', db:'#1B3A48', lr:'#4A8B78', dr:'#5AA090', ly:'#D4A840', dy:'#C09030', lc:'#E8907A', dc:'#D07860' },
-            // Curious — near-black + earthy browns + caramel
-            '🧐': { lb:'#F5EED8', db:'#0A0800', lr:'#7A5828', dr:'#9A7840', ly:'#C49050', dy:'#A87840', lc:'#3A2808', dc:'#7A5828' },
-            // Clear — sunshine: UNCHANGED
-            '☀️': { lb:'#FFEFD5', db:'#0A192F', lr:'#FFDA03', dr:'#FFDA03', ly:'#87CEEB', dy:'#87CEEB', lc:'#FFFFFF', dc:'#FFFFFF' },
-            // Rainy — desaturated grey-blue monotone
-            '☔️': { lb:'#EEF0F4', db:'#151820', lr:'#9098A8', dr:'#A0A8B8', ly:'#505868', dy:'#606878', lc:'#282E38', dc:'#C0C4CC' },
-            // Exercise — pale lime bg + orange outer + vivid red middle + yellow centre
-            '💪': { lb:'#EEFAC0', db:'#180800', lr:'#F09830', dr:'#E88820', ly:'#E83018', dy:'#FF3820', lc:'#F5E850', dc:'#E0C830' },
-            // Driving — cream bg + chartreuse outer + pale yellow middle + dark wine centre
-            '🚗': { lb:'#F5F2DC', db:'#280810', lr:'#B0C828', dr:'#98B020', ly:'#F0E888', dy:'#D8D060', lc:'#901828', dc:'#700818' },
-            // Cooking — all greens: forest to lime
-            '🧑‍🍳': { lb:'#F4FDF0', db:'#1A2810', lr:'#2E5E1E', dr:'#3A7025', ly:'#5A9A38', dy:'#488030', lc:'#9AD050', dc:'#78A838' },
+            '🥺': { lb:'#97B9FE', lb2:'#F6B9EE', db:'#21083E', db2:'#8B51F7' }, // baby blue→soft pink / eggplant→violet
+            '🤪': { lb:'#802E9C', lb2:'#FBD230', db:'#1F0D3A', db2:'#5BF675' }, // purple→gold / dark purple→neon green
+            '🤯': { lb:'#F567DD', lb2:'#7BF9C2', db:'#1B1416', db2:'#C40511' }, // magenta→mint / near-black→vivid red
+            '😴': { lb:'#073AF3', lb2:'#F1B4EE', db:'#020307', db2:'#A616B2' }, // vivid blue→soft pink / near-black→magenta
+            '😎': { lb:'#4992F9', lb2:'#DDFC3E', db:'#020704', db2:'#B6CE18' }, // blue→lime / near-black→lime green
+            '🧐': { lb:'#CCA200',               db:'#3C1700'               }, // solid amber / solid espresso
+            '☀️': { lb:'#024EAE', lb2:'#59DAE3', db:'#000005', db2:'#0C0AAD' }, // deep blue→cyan / near-black→royal blue
+            '☔️': { lb:'#818496', lb2:'#F6F7EC', db:'#302F31', db2:'#4F6285' }, // grey→cream / charcoal→deep blue-grey
+            '💪': { lb:'#FF3800', lb2:'#FFCC00', db:'#1A0000', db2:'#4A2000' }, // vivid red→amber / near-black→dark copper
+            '🚗': { lb:'#0CBFDE',               db:'#0D1016', db2:'#697081' }, // solid cyan / near-black→steel grey
+            '🧑‍🍳': { lb:'#CC7540',              db:'#233C00'               }, // solid terracotta / solid dark forest
         };
 
         const getColors = (isNightMode, selectedMood) => {
-            const p = MOOD_PALETTES[selectedMood];
-            const bg         = p ? (isNightMode ? p.db : p.lb) : (isNightMode ? '#000000' : '#fcfdf2');
-            const teal       = p ? (isNightMode ? p.dr : p.lr) : (isNightMode ? '#4a8b78' : '#7ec2ad');
-            const yellow     = p ? (isNightMode ? p.dy : p.ly) : (isNightMode ? '#bfa15f' : '#e5b84a');
-            const coinCenter = p ? (isNightMode ? (p.dc || '#111111') : (p.lc || '#111111')) : '#111111';
+            const p        = MOOD_PALETTES[selectedMood];
+            const bgSolid  = p ? (isNightMode ? p.db  : p.lb)  : (isNightMode ? '#000000' : '#fcfdf2');
+            const bgEnd    = p ? (isNightMode ? p.db2 : p.lb2) : undefined;
+            const bg       = bgEnd ? `linear-gradient(to bottom, ${bgSolid}, ${bgEnd})` : bgSolid;
+            const teal     = isNightMode ? '#4a8b78' : '#7ec2ad';
+            const yellow   = isNightMode ? '#bfa15f' : '#e5b84a';
+            const coinCenter = '#111111';
+            if (p) {
+                // Mood active — white text on gradient/solid background
+                const r = parseInt(bgSolid.slice(1,3), 16);
+                const g = parseInt(bgSolid.slice(3,5), 16);
+                const b = parseInt(bgSolid.slice(5,7), 16);
+                return {
+                    bg, bgSolid, text: '#ffffff', teal, tealDark: teal, yellow, coinCenter,
+                    black: '#ffffff', border: 'rgba(255,255,255,0.22)',
+                    overlayBg: `rgba(${r},${g},${b},0.94)`,
+                    indexActive: '#ffffff', indexInactive: 'rgba(255,255,255,0.65)',
+                    buttonShadow: '0 8px 24px rgba(0,0,0,0.25)',
+                    buttonShadowHover: '0 12px 32px rgba(0,0,0,0.38)'
+                };
+            }
             return isNightMode ? {
-                bg,
-                text: '#fcfdf2',
-                teal,
-                tealDark: teal,
-                yellow,
-                coinCenter,
-                black: '#fcfdf2',
-                border: '#333333',
-                overlayBg: 'rgba(0,0,0,0.95)',
-                indexActive: yellow,
-                indexInactive: '#fcfdf2',
+                bg, bgSolid, text: '#fcfdf2', teal, tealDark: teal, yellow, coinCenter,
+                black: '#fcfdf2', border: '#333333', overlayBg: 'rgba(0,0,0,0.95)',
+                indexActive: yellow, indexInactive: '#fcfdf2',
                 buttonShadow: '0 8px 24px rgba(0,0,0,0.6)',
                 buttonShadowHover: '0 12px 32px rgba(0,0,0,0.8)'
             } : {
-                bg,
-                text: '#000000',
-                teal,
-                tealDark: teal,
-                yellow,
-                coinCenter,
-                black: '#000000',
-                border: 'rgba(0,0,0,0.1)',
-                overlayBg: `rgba(${parseInt(bg.slice(1,3),16)},${parseInt(bg.slice(3,5),16)},${parseInt(bg.slice(5,7),16)},0.96)`,
-                indexActive: '#000000',
-                indexInactive: teal,
+                bg, bgSolid, text: '#000000', teal, tealDark: teal, yellow, coinCenter,
+                black: '#000000', border: 'rgba(0,0,0,0.1)',
+                overlayBg: `rgba(${parseInt(bgSolid.slice(1,3),16)},${parseInt(bgSolid.slice(3,5),16)},${parseInt(bgSolid.slice(5,7),16)},0.96)`,
+                indexActive: '#000000', indexInactive: teal,
                 buttonShadow: '0 8px 20px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04)',
                 buttonShadowHover: '0 12px 28px rgba(0,0,0,0.12), 0 4px 8px rgba(0,0,0,0.06)'
             };
@@ -2169,7 +2160,7 @@
                             <div className="grid gap-6 mt-4">
                                 {INSPIRATION_LINKS.map((link) => (
                                     <a key={link.name} href={link.url} target="_blank" rel="noopener noreferrer" className="group block space-y-2 pb-4 -mx-4 px-4 rounded-xl transition-all outline-none"
-                                        onMouseEnter={e => e.currentTarget.style.backgroundColor = colors.bg === '#000000' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)'}
+                                        onMouseEnter={e => e.currentTarget.style.backgroundColor = isNightMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)'}
                                         onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}>
                                         <div className="flex items-center justify-between">
                                             <span className="font-young-serif text-lg font-black tracking-tight uppercase group-hover:underline" style={{ color: colors.text }}>{link.name}</span>
@@ -2382,13 +2373,14 @@
 
             useEffect(() => {
                 // Update CSS variables and meta theme-color to follow palette + night mode
-                document.documentElement.style.setProperty('--bg', colors.bg);
-                document.documentElement.style.backgroundColor = colors.bg;
+                // bgSolid = solid primary colour; bg may be a gradient string
+                document.documentElement.style.setProperty('--bg', colors.bgSolid);
+                document.documentElement.style.background = colors.bg;
                 const meta = document.querySelector('meta[name="theme-color"]');
-                if (meta) meta.setAttribute('content', colors.bg);
+                if (meta) meta.setAttribute('content', colors.bgSolid);
                 const body = document.getElementById('app-body');
                 if (body) {
-                    body.style.setProperty('--bg', colors.bg);
+                    body.style.setProperty('--bg', colors.bgSolid);
                     body.style.setProperty('--black', colors.black);
                     body.style.setProperty('--teal', colors.teal);
                     body.style.setProperty('--yellow', colors.yellow);
@@ -2453,7 +2445,7 @@
 
 
             return (
-                <div className="fixed inset-0 flex flex-col items-center select-none transition-colors duration-500 overflow-hidden touch-none" style={{ backgroundColor: colors.bg, color: colors.text }}>
+                <div className="fixed inset-0 flex flex-col items-center select-none overflow-hidden touch-none" style={{ background: colors.bg, color: colors.text, transition: 'background 0.5s ease, color 0.3s ease' }}>
                     <audio ref={audio.audioTagRef} />
                     <div className="fixed inset-0 pointer-events-none z-50 opacity-[0.03] grayscale bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
 
