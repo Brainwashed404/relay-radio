@@ -594,19 +594,19 @@
 
 
         // Each entry: lb/db = solid start (top), lb2/db2 = gradient end (bottom) — omit for solid bg
-        // la/da = accent color (most prominent/vibrant per mood) used for buttons, slider thumb, footer text
+        // la/da = accent color (most vibrant per mood) used for coin slider thumb & segmented buttons
         const MOOD_PALETTES = {
-            '🥺': { lb:'#95B9FE', lb2:'#F8B9EE', db:'#1F063A', db2:'#8E52FB', la:'#95B9FE', da:'#8E52FB' }, // baby blue→soft pink / deep violet→vivid violet
-            '🤪': { lb:'#7C2C9D', lb2:'#FCD72C', db:'#001F39', db2:'#19952E', la:'#FCD72C', da:'#19952E' }, // purple→gold / deep navy→vivid green
-            '🤯': { lb:'#F864DD', lb2:'#79FCC2', db:'#181418', db2:'#FB01BC', la:'#F864DD', da:'#FB01BC' }, // magenta→mint / near-black→vivid magenta
-            '😴': { lb:'#0237F3', lb2:'#F6B6EE', db:'#010102', db2:'#AB15B5', la:'#0237F3', da:'#AB15B5' }, // royal blue→soft pink / near-black→vivid purple
-            '😎': { lb:'#488EFD', lb2:'#E2FC39', db:'#010302', db2:'#02D6FA', la:'#E2FC39', da:'#02D6FA' }, // blue→lime / near-black→cyan
-            '🧐': { lb:'#5C2714', lb2:'#F9FBE5', db:'#3D1600', db2:'#511520', la:'#D07030', da:'#9A3010' }, // dark brown→cream / dark espresso→deep burgundy
-            '☀️': { lb:'#014BAD', lb2:'#5BDDE5', db:'#000002', db2:'#0C0AB1', la:'#5BDDE5', da:'#5BDDE5' }, // deep blue→cyan / near-black→royal blue
-            '☔️': { lb:'#777778', lb2:'#F8F9ED', db:'#171717', db2:'#808CA2', la:'#9898B0', da:'#808CA2' }, // grey→cream / charcoal→steel blue-grey
-            '💪': { lb:'#FF3800', lb2:'#FFCC00', db:'#1A0000', db2:'#4A2000', la:'#FF3800', da:'#FFCC00' }, // vivid red→amber / near-black→dark copper
-            '🚗': { lb:'#F7F302', lb2:'#3EC2FA', db:'#181414', db2:'#F7A901', la:'#F7F302', da:'#F7A901' }, // vivid yellow→sky blue / near-black→amber
-            '🧑‍🍳': { lb:'#FE3C3C', lb2:'#F9F6F6', db:'#233C00',             la:'#FE3C3C', da:'#4A8040' }, // vivid red→off-white / solid dark forest
+            '🥺': { lb:'#94B9FF', lb2:'#F9B9EE', db:'#1D0537', db2:'#8F53FE', la:'#94B9FF', da:'#8F53FE' }, // baby blue→soft pink / deep violet→vivid violet
+            '🤪': { lb:'#792B9D', lb2:'#FDDA2A', db:'#001D3A', db2:'#19962E', la:'#FDDA2A', da:'#19962E' }, // purple→gold / deep navy→vivid green
+            '🤯': { lb:'#FA62DE', lb2:'#77FEC2', db:'#161517', db2:'#FE01BE', la:'#FA62DE', da:'#FE01BE' }, // magenta→mint / near-black→vivid magenta
+            '😴': { lb:'#0036F4', lb2:'#F9B8EE', db:'#000000', db2:'#AE14B7', la:'#0036F4', da:'#AE14B7' }, // royal blue→soft pink / near-black→vivid purple
+            '😎': { lb:'#488BFF', lb2:'#E5FC36', db:'#000000', db2:'#00D8FD', la:'#E5FC36', da:'#00D8FD' }, // blue→lime / near-black→cyan
+            '🧐': { lb:'#582515', lb2:'#FAFFEB', db:'#3C1700', db2:'#511520', la:'#D07030', da:'#9A3010' }, // dark brown→cream / dark espresso→deep burgundy
+            '☀️': { lb:'#004AAC', lb2:'#5CDFE5', db:'#000000', db2:'#0C0AB3', la:'#5CDFE5', da:'#5CDFE5' }, // deep blue→cyan / near-black→royal blue
+            '☔️': { lb:'#767677', lb2:'#FAFBEF', db:'#161616', db2:'#828EA4', la:'#9898B0', da:'#828EA4' }, // grey→cream / charcoal→steel blue-grey
+            '💪': { lb:'#E13333', lb2:'#F8E718', db:'#000000', db2:'#DA3333', la:'#E13333', da:'#DA3333' }, // vivid red→yellow / near-black→vivid red
+            '🚗': { lb:'#F7F500', lb2:'#3AC3FD', db:'#131313', db2:'#F7AC00', la:'#F7F500', da:'#F7AC00' }, // vivid yellow→sky blue / near-black→amber
+            '🧑‍🍳': { lb:'#FFE748', lb2:'#FFF6DD', db:'#233C00',             la:'#FFE748', da:'#4A8040' }, // warm yellow→cream / solid dark forest
         };
 
         const getColors = (isNightMode, selectedMood) => {
@@ -622,6 +622,16 @@
             // accentFg: readable text color on top of accent background
             const lum = (hex) => { if (!hex || hex.length < 7) return 0.5; const r=parseInt(hex.slice(1,3),16)/255, g=parseInt(hex.slice(3,5),16)/255, b=parseInt(hex.slice(5,7),16)/255; return 0.299*r+0.587*g+0.114*b; };
             const accentFg = lum(accent) > 0.5 ? '#000000' : '#ffffff';
+            // footerAccent: must be visually readable against the footer area background.
+            // Footer sits at the bottom of the screen, which is bgEnd (gradient end) or bgSolid.
+            // Strategy: try bgSolid (top gradient color contrasts naturally with bottom), then accent,
+            // then fall back to a semi-transparent dark/light based on footer brightness.
+            const cRatio = (hexFg, bgLum) => { const fl = lum(hexFg); return (Math.max(fl,bgLum)+0.05)/(Math.min(fl,bgLum)+0.05); };
+            const footerBgLum = lum(bgEnd || bgSolid);
+            const footerAccent = !p ? accent
+                : cRatio(bgSolid, footerBgLum) >= 3.5 ? bgSolid
+                : cRatio(accent,  footerBgLum) >= 3.5 ? accent
+                : footerBgLum > 0.4 ? 'rgba(0,0,0,0.62)' : 'rgba(255,255,255,0.72)';
             if (p) {
                 // Mood active — white text on gradient/solid background
                 const r = parseInt(bgSolid.slice(1,3), 16);
@@ -629,7 +639,7 @@
                 const b = parseInt(bgSolid.slice(5,7), 16);
                 return {
                     bg, bgSolid, bgEnd, text: '#ffffff', teal, tealDark: teal, yellow, coinCenter,
-                    accent, accentFg,
+                    accent, accentFg, footerAccent,
                     black: '#ffffff', border: 'rgba(255,255,255,0.22)',
                     overlayBg: `rgba(${r},${g},${b},0.94)`,
                     indexActive: '#ffffff', indexInactive: 'rgba(255,255,255,0.65)',
@@ -639,14 +649,14 @@
             }
             return isNightMode ? {
                 bg, bgSolid, bgEnd: undefined, text: '#fcfdf2', teal, tealDark: teal, yellow, coinCenter,
-                accent, accentFg,
+                accent, accentFg, footerAccent: accent,
                 black: '#fcfdf2', border: '#333333', overlayBg: 'rgba(0,0,0,0.95)',
                 indexActive: yellow, indexInactive: '#fcfdf2',
                 buttonShadow: '0 8px 24px rgba(0,0,0,0.6)',
                 buttonShadowHover: '0 12px 32px rgba(0,0,0,0.8)'
             } : {
                 bg, bgSolid, bgEnd: undefined, text: '#000000', teal, tealDark: teal, yellow, coinCenter,
-                accent, accentFg,
+                accent, accentFg, footerAccent: accent,
                 black: '#000000', border: 'rgba(0,0,0,0.1)',
                 overlayBg: `rgba(${parseInt(bgSolid.slice(1,3),16)},${parseInt(bgSolid.slice(3,5),16)},${parseInt(bgSolid.slice(5,7),16)},0.96)`,
                 indexActive: '#000000', indexInactive: teal,
@@ -2449,8 +2459,8 @@
 
 
             const Slug = ({ extraClasses = "" }) => (
-                <p className={`text-[10px] sm:text-xs uppercase tracking-[0.25em] font-black ${extraClasses}`} style={{ color: colors.accent, transition: 'color 0.6s ease' }}>
-                    created by <a href="https://www.jotter.media" target="_blank" rel="noopener noreferrer" className="hover:text-current outline-none" style={{ color: colors.accent }}>jotter.media</a>
+                <p className={`text-[10px] sm:text-xs uppercase tracking-[0.25em] font-black ${extraClasses}`} style={{ color: colors.footerAccent, transition: 'color 0.6s ease' }}>
+                    created by <a href="https://www.jotter.media" target="_blank" rel="noopener noreferrer" className="hover:text-current outline-none" style={{ color: colors.footerAccent }}>jotter.media</a>
                 </p>
             );
 
@@ -2572,7 +2582,7 @@
                                 <Slug extraClasses={`transition-all duration-1000 ${audio.hasStarted ? 'opacity-60 hover:opacity-90' : 'opacity-100 animate-in'}`} />
                                 <button onClick={() => setIsAboutOpen(true)}
                                     className="p-1 rounded-full transition-all duration-300 hover:scale-110 active:scale-90 outline-none opacity-70 hover:opacity-100"
-                                    style={{ color: colors.accent, transition: 'color 0.6s ease' }}>
+                                    style={{ color: colors.footerAccent, transition: 'color 0.6s ease' }}>
                                     <Icon name="info" size="16" strokeWidth={1.5} fill="none" />
                                 </button>
                             </div>
