@@ -205,6 +205,28 @@
         header#header, .header, footer#footer, .footer { display: none !important; }
         #root, .fixed.inset-0 { top: 0 !important; height: 100vh !important; }
 
+        /* Window Controls Overlay — custom centered title bar for desktop PWA */
+        #wco-titlebar {
+            display: none;
+            position: fixed;
+            top: env(titlebar-area-y, 0);
+            left: env(titlebar-area-x, 0);
+            width: env(titlebar-area-width, 100%);
+            height: env(titlebar-area-height, 40px);
+            -webkit-app-region: drag;
+            app-region: drag;
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 1px;
+            pointer-events: none;
+        }
+        #wco-titlebar span { -webkit-app-region: no-drag; app-region: no-drag; }
+        @media (display-mode: window-controls-overlay) {
+            #wco-titlebar { display: flex; }
+        }
+
 
         @media (max-height: 500px) and (orientation: landscape) {
             .short\:landscape\:h-\[20vh\] { height: 30vh !important; }
@@ -259,6 +281,11 @@
     </script>
 </head>
 <body id="app-body">
+    <!-- Window Controls Overlay title bar — only visible in desktop PWA WCO mode -->
+    <div id="wco-titlebar">
+        <span style="font-size:11px;font-weight:800;letter-spacing:0.18em;text-transform:uppercase;font-family:sans-serif;opacity:0.85;">RELAY RAD.IO</span>
+        <span style="font-size:9px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;font-family:sans-serif;opacity:0.45;">Find Your Signal. Escape The Algorithm.</span>
+    </div>
     <div id="root"></div>
 
 
@@ -2227,9 +2254,9 @@
                 const h = window.innerHeight, w = window.innerWidth;
                 const landscape = w > h && h < 600;
                 if (landscape) return { landscape, desktop: false, pt: '0', pb: '0', coinSz: 200, titleH: '5rem' };
-                // Desktop: equal pt/pb so justify-center places coin+title at true viewport centre
+                // Desktop: pb reserves footer clearance; pt:0 keeps original layout
                 const desktop = !landscape && w >= 1024;
-                if (desktop) return { landscape: false, desktop: true, pt: '9rem', pb: '9rem', coinSz: 300, titleH: '8rem' };
+                if (desktop) return { landscape: false, desktop: true, pt: '0', pb: '9rem', coinSz: 300, titleH: '8rem' };
                 // Portrait mobile: pb reserves space for the footer so the coin (flex:1) sits
                 // perfectly centred between the station info and the footer buttons.
                 // Footer when playing ≈ h * 0.31. CoinSz smaller on short screens.
