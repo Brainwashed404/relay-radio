@@ -594,18 +594,19 @@
 
 
         // Each entry: lb/db = solid start (top), lb2/db2 = gradient end (bottom) — omit for solid bg
+        // la/da = accent color (most prominent/vibrant per mood) used for buttons, slider thumb, footer text
         const MOOD_PALETTES = {
-            '🥺': { lb:'#97B9FE', lb2:'#F6B9EE', db:'#21083E', db2:'#8B51F7' }, // baby blue→soft pink / eggplant→violet
-            '🤪': { lb:'#802E9C', lb2:'#FBD230', db:'#1F0D3A', db2:'#5BF675' }, // purple→gold / dark purple→neon green
-            '🤯': { lb:'#F567DD', lb2:'#7BF9C2', db:'#1B1416', db2:'#C40511' }, // magenta→mint / near-black→vivid red
-            '😴': { lb:'#073AF3', lb2:'#F1B4EE', db:'#020307', db2:'#A616B2' }, // vivid blue→soft pink / near-black→magenta
-            '😎': { lb:'#4992F9', lb2:'#DDFC3E', db:'#020704', db2:'#B6CE18' }, // blue→lime / near-black→lime green
-            '🧐': { lb:'#CCA200',               db:'#3C1700'               }, // solid amber / solid espresso
-            '☀️': { lb:'#024EAE', lb2:'#59DAE3', db:'#000005', db2:'#0C0AAD' }, // deep blue→cyan / near-black→royal blue
-            '☔️': { lb:'#818496', lb2:'#F6F7EC', db:'#302F31', db2:'#4F6285' }, // grey→cream / charcoal→deep blue-grey
-            '💪': { lb:'#FF3800', lb2:'#FFCC00', db:'#1A0000', db2:'#4A2000' }, // vivid red→amber / near-black→dark copper
-            '🚗': { lb:'#0CBFDE',               db:'#0D1016', db2:'#697081' }, // solid cyan / near-black→steel grey
-            '🧑‍🍳': { lb:'#CC7540',              db:'#233C00'               }, // solid terracotta / solid dark forest
+            '🥺': { lb:'#95B9FE', lb2:'#F8B9EE', db:'#1F063A', db2:'#8E52FB', la:'#95B9FE', da:'#8E52FB' }, // baby blue→soft pink / deep violet→vivid violet
+            '🤪': { lb:'#7C2C9D', lb2:'#FCD72C', db:'#001F39', db2:'#19952E', la:'#FCD72C', da:'#19952E' }, // purple→gold / deep navy→vivid green
+            '🤯': { lb:'#F864DD', lb2:'#79FCC2', db:'#181418', db2:'#FB01BC', la:'#F864DD', da:'#FB01BC' }, // magenta→mint / near-black→vivid magenta
+            '😴': { lb:'#0237F3', lb2:'#F6B6EE', db:'#010102', db2:'#AB15B5', la:'#0237F3', da:'#AB15B5' }, // royal blue→soft pink / near-black→vivid purple
+            '😎': { lb:'#488EFD', lb2:'#E2FC39', db:'#010302', db2:'#02D6FA', la:'#E2FC39', da:'#02D6FA' }, // blue→lime / near-black→cyan
+            '🧐': { lb:'#5C2714', lb2:'#F9FBE5', db:'#3D1600', db2:'#511520', la:'#D07030', da:'#9A3010' }, // dark brown→cream / dark espresso→deep burgundy
+            '☀️': { lb:'#014BAD', lb2:'#5BDDE5', db:'#000002', db2:'#0C0AB1', la:'#5BDDE5', da:'#5BDDE5' }, // deep blue→cyan / near-black→royal blue
+            '☔️': { lb:'#777778', lb2:'#F8F9ED', db:'#171717', db2:'#808CA2', la:'#9898B0', da:'#808CA2' }, // grey→cream / charcoal→steel blue-grey
+            '💪': { lb:'#FF3800', lb2:'#FFCC00', db:'#1A0000', db2:'#4A2000', la:'#FF3800', da:'#FFCC00' }, // vivid red→amber / near-black→dark copper
+            '🚗': { lb:'#F7F302', lb2:'#3EC2FA', db:'#181414', db2:'#F7A901', la:'#F7F302', da:'#F7A901' }, // vivid yellow→sky blue / near-black→amber
+            '🧑‍🍳': { lb:'#FE3C3C', lb2:'#F9F6F6', db:'#233C00',             la:'#FE3C3C', da:'#4A8040' }, // vivid red→off-white / solid dark forest
         };
 
         const getColors = (isNightMode, selectedMood) => {
@@ -616,6 +617,11 @@
             const teal     = isNightMode ? '#4a8b78' : '#7ec2ad';
             const yellow   = isNightMode ? '#bfa15f' : '#e5b84a';
             const coinCenter = '#111111';
+            // Accent: most prominent/vibrant mood color; falls back to teal when no mood active
+            const accent   = p ? (isNightMode ? p.da : p.la) : teal;
+            // accentFg: readable text color on top of accent background
+            const lum = (hex) => { if (!hex || hex.length < 7) return 0.5; const r=parseInt(hex.slice(1,3),16)/255, g=parseInt(hex.slice(3,5),16)/255, b=parseInt(hex.slice(5,7),16)/255; return 0.299*r+0.587*g+0.114*b; };
+            const accentFg = lum(accent) > 0.5 ? '#000000' : '#ffffff';
             if (p) {
                 // Mood active — white text on gradient/solid background
                 const r = parseInt(bgSolid.slice(1,3), 16);
@@ -623,6 +629,7 @@
                 const b = parseInt(bgSolid.slice(5,7), 16);
                 return {
                     bg, bgSolid, bgEnd, text: '#ffffff', teal, tealDark: teal, yellow, coinCenter,
+                    accent, accentFg,
                     black: '#ffffff', border: 'rgba(255,255,255,0.22)',
                     overlayBg: `rgba(${r},${g},${b},0.94)`,
                     indexActive: '#ffffff', indexInactive: 'rgba(255,255,255,0.65)',
@@ -632,12 +639,14 @@
             }
             return isNightMode ? {
                 bg, bgSolid, bgEnd: undefined, text: '#fcfdf2', teal, tealDark: teal, yellow, coinCenter,
+                accent, accentFg,
                 black: '#fcfdf2', border: '#333333', overlayBg: 'rgba(0,0,0,0.95)',
                 indexActive: yellow, indexInactive: '#fcfdf2',
                 buttonShadow: '0 8px 24px rgba(0,0,0,0.6)',
                 buttonShadowHover: '0 12px 32px rgba(0,0,0,0.8)'
             } : {
                 bg, bgSolid, bgEnd: undefined, text: '#000000', teal, tealDark: teal, yellow, coinCenter,
+                accent, accentFg,
                 black: '#000000', border: 'rgba(0,0,0,0.1)',
                 overlayBg: `rgba(${parseInt(bgSolid.slice(1,3),16)},${parseInt(bgSolid.slice(3,5),16)},${parseInt(bgSolid.slice(5,7),16)},0.96)`,
                 indexActive: '#000000', indexInactive: teal,
@@ -1092,7 +1101,7 @@
                         backgroundColor: active ? colors.text : 'transparent',
                         borderColor: active ? colors.text : colors.border,
                         color: active ? colors.bgSolid : colors.text,
-                        transition: 'background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease'
+                        transition: 'background-color 0.6s ease, color 0.6s ease, border-color 0.6s ease'
                     }}>
                     {text ? <span className="leading-none text-xl sm:text-2xl">{text}</span> : (icon ? <Icon name={icon} size="20" className="sm:w-[22px]" strokeWidth={iconFill && iconFill !== "none" ? 0 : 2} fill={iconFill || "none"} /> : null)}
                 </button>
@@ -1255,10 +1264,10 @@
                                 <button key={mode} onClick={() => setMovementMode(mode)}
                                     className="flex-1 py-2 rounded-xl text-[9px] sm:text-[10px] font-black tracking-widest uppercase transition-all"
                                     style={{
-                                        backgroundColor: movementMode === mode ? colors.yellow : 'transparent',
-                                        color: movementMode === mode ? colors.bgSolid : colors.text,
+                                        backgroundColor: movementMode === mode ? colors.accent : 'transparent',
+                                        color: movementMode === mode ? colors.accentFg : colors.text,
                                         opacity: movementMode === mode ? 1 : 0.45,
-                                        transition: 'background-color 0.3s ease, color 0.3s ease'
+                                        transition: 'background-color 0.5s ease, color 0.5s ease'
                                     }}>
                                     {mode.toUpperCase()}
                                 </button>
@@ -1272,7 +1281,7 @@
                                 <PointerSlider value={spinIntensity} min={0} max={100} step={1}
                                     onChange={v => setSpinIntensity(v)}
                                     trackColor={colors.text === '#000000' ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.15)'}
-                                    thumbColor="var(--teal)" />
+                                    thumbColor={colors.accent} />
                             </div>
                             <span className="text-[9px] font-black uppercase tracking-widest opacity-40 whitespace-nowrap" style={{ color: colors.text }}>{sliderLabelRight}</span>
                         </div>
@@ -2440,18 +2449,18 @@
 
 
             const Slug = ({ extraClasses = "" }) => (
-                <p className={`text-[10px] sm:text-xs uppercase tracking-[0.25em] font-black ${extraClasses}`} style={{ color: colors.text, transition: 'color 0.4s ease' }}>
-                    created by <a href="https://www.jotter.media" target="_blank" rel="noopener noreferrer" className="hover:text-current outline-none" style={{ color: colors.text }}>jotter.media</a>
+                <p className={`text-[10px] sm:text-xs uppercase tracking-[0.25em] font-black ${extraClasses}`} style={{ color: colors.accent, transition: 'color 0.6s ease' }}>
+                    created by <a href="https://www.jotter.media" target="_blank" rel="noopener noreferrer" className="hover:text-current outline-none" style={{ color: colors.accent }}>jotter.media</a>
                 </p>
             );
 
 
             return (
-                <div className="fixed inset-0 flex flex-col items-center select-none overflow-hidden touch-none" style={{ color: colors.text, transition: 'color 0.4s ease' }}>
+                <div className="fixed inset-0 flex flex-col items-center select-none overflow-hidden touch-none" style={{ color: colors.text, transition: 'color 0.6s ease' }}>
                     {/* BG layer 1: solid colour — transitions smoothly between all states */}
-                    <div className="absolute inset-0 -z-10" style={{ backgroundColor: colors.bgSolid, transition: 'background-color 0.5s ease' }} />
+                    <div className="absolute inset-0 -z-10" style={{ backgroundColor: colors.bgSolid, transition: 'background-color 0.8s ease' }} />
                     {/* BG layer 2: gradient overlay — fades in/out when gradient mood active */}
-                    <div className="absolute inset-0 -z-10" style={{ backgroundImage: colors.bgEnd ? `linear-gradient(to bottom, transparent, ${colors.bgEnd})` : 'none', opacity: colors.bgEnd ? 1 : 0, transition: 'opacity 0.5s ease' }} />
+                    <div className="absolute inset-0 -z-10" style={{ backgroundImage: colors.bgEnd ? `linear-gradient(to bottom, transparent, ${colors.bgEnd})` : 'none', opacity: colors.bgEnd ? 1 : 0, transition: 'opacity 0.8s ease' }} />
                     <audio ref={audio.audioTagRef} />
                     <div className="fixed inset-0 pointer-events-none z-50 opacity-[0.03] grayscale bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
 
@@ -2549,7 +2558,7 @@
                                                 backgroundColor: isCoinSliderOpen ? colors.text : 'transparent',
                                                 borderColor: isCoinSliderOpen ? colors.text : colors.border,
                                                 color: isCoinSliderOpen ? colors.bgSolid : colors.text,
-                                                transition: 'background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease'
+                                                transition: 'background-color 0.6s ease, color 0.6s ease, border-color 0.6s ease'
                                             }}>
                                             <Icon name="target" size="20" className="sm:w-[22px]" strokeWidth={2} fill="none" />
                                         </button>
@@ -2563,7 +2572,7 @@
                                 <Slug extraClasses={`transition-all duration-1000 ${audio.hasStarted ? 'opacity-60 hover:opacity-90' : 'opacity-100 animate-in'}`} />
                                 <button onClick={() => setIsAboutOpen(true)}
                                     className="p-1 rounded-full transition-all duration-300 hover:scale-110 active:scale-90 outline-none opacity-70 hover:opacity-100"
-                                    style={{ color: colors.text, transition: 'color 0.4s ease' }}>
+                                    style={{ color: colors.accent, transition: 'color 0.6s ease' }}>
                                     <Icon name="info" size="16" strokeWidth={1.5} fill="none" />
                                 </button>
                             </div>
