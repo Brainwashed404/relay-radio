@@ -1150,7 +1150,7 @@
                         backgroundColor: active ? colors.text : 'transparent',
                         borderColor: active ? colors.text : (colors.accentBorder || colors.border),
                         color: active ? colors.bgSolid : colors.text,
-                        transition: 'background-color 0.6s ease, color 0.6s ease, border-color 0.6s ease'
+                        transition: 'background-color 1s ease, color 1s ease, border-color 1s ease'
                     }}>
                     {text ? <span className="leading-none text-xl sm:text-2xl">{text}</span> : (icon ? <Icon name={icon} size="20" className="sm:w-[22px]" strokeWidth={iconFill && iconFill !== "none" ? 0 : 2} fill={iconFill || "none"} /> : null)}
                 </button>
@@ -1316,7 +1316,7 @@
                                         backgroundColor: movementMode === mode ? colors.accent : 'transparent',
                                         color: movementMode === mode ? colors.accentFg : colors.text,
                                         opacity: movementMode === mode ? 1 : 0.45,
-                                        transition: 'background-color 0.5s ease, color 0.5s ease'
+                                        transition: 'background-color 1s ease, color 1s ease'
                                     }}>
                                     {mode.toUpperCase()}
                                 </button>
@@ -2498,18 +2498,18 @@
 
 
             const Slug = ({ extraClasses = "" }) => (
-                <p className={`text-[10px] sm:text-xs uppercase tracking-[0.25em] font-black ${extraClasses}`} style={{ color: colors.footerAccent, transition: 'color 0.6s ease' }}>
+                <p className={`text-[10px] sm:text-xs uppercase tracking-[0.25em] font-black ${extraClasses}`} style={{ color: colors.footerAccent, transition: 'color 1s ease' }}>
                     created by <a href="https://www.jotter.media" target="_blank" rel="noopener noreferrer" className="hover:text-current outline-none" style={{ color: colors.footerAccent }}>jotter.media</a>
                 </p>
             );
 
 
             return (
-                <div className="fixed inset-0 flex flex-col items-center select-none overflow-hidden touch-none" style={{ color: colors.text, transition: 'color 0.6s ease' }}>
+                <div className="fixed inset-0 flex flex-col items-center select-none overflow-hidden touch-none" style={{ color: colors.text, transition: 'color 1s ease' }}>
                     {/* BG layer 1: solid colour — transitions smoothly between all states */}
-                    <div className="absolute inset-0 -z-10" style={{ backgroundColor: colors.bgSolid, transition: 'background-color 0.8s ease' }} />
+                    <div className="absolute inset-0 -z-10" style={{ backgroundColor: colors.bgSolid, transition: 'background-color 1s ease' }} />
                     {/* BG layer 2: gradient overlay — fades in/out when gradient mood active; supports optional mid-stop */}
-                    <div className="absolute inset-0 -z-10" style={{ backgroundImage: colors.bgEnd ? `linear-gradient(to bottom, transparent${colors.bgMid ? `, ${colors.bgMid} 45%` : ''}, ${colors.bgEnd})` : 'none', opacity: colors.bgEnd ? 1 : 0, transition: 'opacity 0.8s ease' }} />
+                    <div className="absolute inset-0 -z-10" style={{ backgroundImage: colors.bgEnd ? `linear-gradient(to bottom, transparent${colors.bgMid ? `, ${colors.bgMid} 45%` : ''}, ${colors.bgEnd})` : 'none', opacity: colors.bgEnd ? 1 : 0, transition: 'opacity 1s ease' }} />
                     <audio ref={audio.audioTagRef} />
                     <div className="fixed inset-0 pointer-events-none z-50 opacity-[0.03] grayscale bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
 
@@ -2564,7 +2564,7 @@
                         <div className="flex items-center justify-center w-full space-x-6 sm:space-x-12 md:space-x-20 flex-shrink-0"
                              style={isShortLandscape || isDesktop ? {} : {flexGrow: 1}}>
                             <div className={`transition-all duration-700 ${audio.hasStarted ? 'opacity-20 scale-100' : 'opacity-0 scale-75 pointer-events-none'}`}>
-                                <button onClick={nav.handlePrevious} className="p-2 outline-none transition-all active:scale-90" style={{ color: colors.accent, transition: 'color 0.6s ease' }}><Icon name="skip-back" size="48" strokeWidth={0} fill="currentColor" /></button>
+                                <button onClick={nav.handlePrevious} className="p-2 outline-none transition-all active:scale-90" style={{ color: colors.accent, transition: 'color 1s ease' }}><Icon name="skip-back" size="48" strokeWidth={0} fill="currentColor" /></button>
                             </div>
 
                             <JotterLogoButton
@@ -2584,7 +2584,7 @@
                             />
 
                             <div className={`transition-all duration-700 ${audio.hasStarted ? 'opacity-20 scale-100' : 'opacity-0 scale-75 pointer-events-none'}`}>
-                                <button onClick={nav.handleNext} className="p-2 outline-none transition-all active:scale-90" style={{ color: colors.accent, transition: 'color 0.6s ease' }}><Icon name="skip-forward" size="48" strokeWidth={0} fill="currentColor" /></button>
+                                <button onClick={nav.handleNext} className="p-2 outline-none transition-all active:scale-90" style={{ color: colors.accent, transition: 'color 1s ease' }}><Icon name="skip-forward" size="48" strokeWidth={0} fill="currentColor" /></button>
                             </div>
                         </div>
                     </main>
@@ -2607,7 +2607,7 @@
                                                 backgroundColor: isCoinSliderOpen ? colors.text : 'transparent',
                                                 borderColor: isCoinSliderOpen ? colors.text : (colors.accentBorder || colors.border),
                                                 color: isCoinSliderOpen ? colors.bgSolid : colors.text,
-                                                transition: 'background-color 0.6s ease, color 0.6s ease, border-color 0.6s ease'
+                                                transition: 'background-color 1s ease, color 1s ease, border-color 1s ease'
                                             }}>
                                             <Icon name="target" size="20" className="sm:w-[22px]" strokeWidth={2} fill="none" />
                                         </button>
@@ -2621,7 +2621,7 @@
                                 <Slug extraClasses={`transition-all duration-1000 ${audio.hasStarted ? 'opacity-60 hover:opacity-90' : 'opacity-100 animate-in'}`} />
                                 <button onClick={() => setIsAboutOpen(true)}
                                     className="p-1 rounded-full transition-all duration-300 hover:scale-110 active:scale-90 outline-none opacity-70 hover:opacity-100"
-                                    style={{ color: colors.footerAccent, transition: 'color 0.6s ease' }}>
+                                    style={{ color: colors.footerAccent, transition: 'color 1s ease' }}>
                                     <Icon name="info" size="16" strokeWidth={1.5} fill="none" />
                                 </button>
                             </div>
